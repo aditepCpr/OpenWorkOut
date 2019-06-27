@@ -63,9 +63,9 @@ class OpenWorkout:
                 detect_body(frame, bodyKeypoints)
             except Exception as e:
                 print(e)
-            # print(datum)
-            # print("Body keypoints: \n" + str(datum.poseKeypoints))
-            # bodyKeypoints = str(datum.poseKeypoints)
+
+            print("Body keypoints: \n" + str(datum.poseKeypoints))
+
 
             try:
                 # json
