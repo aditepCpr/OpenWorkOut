@@ -6,7 +6,7 @@ def draw_boundary(img, classifier, scaleFactor, minNeighbors, color, clf):
     coords = []
 
     for (x, y, w, h) in features:
-        print('face',features)
+        # print('face',features)
         cv2.rectangle(img, (x, y), (x + w, y + h), color, 2)
         # id กับ ค่าความผิดพลาด
         id, con = clf.predict(gray[y:y + h, x:x + w])
@@ -21,7 +21,7 @@ def draw_boundary(img, classifier, scaleFactor, minNeighbors, color, clf):
         else:
             con = "{0}%".format(round(100 - con))
         img = cv2.putText(img, str(con), (10, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
-        print(str(con))
+        # print(str(con))
 
         coords = [x, y, w, h]
     return img, coords

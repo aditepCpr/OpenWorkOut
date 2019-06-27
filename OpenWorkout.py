@@ -64,21 +64,23 @@ class OpenWorkout:
             except Exception as e:
                 print(e)
 
-            print("Body keypoints: \n" + str(datum.poseKeypoints))
+            # print("Body keypoints: \n" + str(datum.poseKeypoints))
 
 
-            try:
-                # json
-                keypose = str(datum.poseKeypoints)
-                key = open('keypose.json','w')
-                # key = open('keypose.json','a')
-                js.dump(keypose, key, indent=4)
-            except  IOError as e :
-                print(e)
+            # try:
+            #     # json
+            #     keypose = str(datum.poseKeypoints)
+            #     key = open('keypose.json','w')
+            #     # key = open('keypose.json','a')
+            #     js.dump(keypose, key, indent=4)
+            # except  IOError as e :
+            #     print(e)
             # show all
             # cv2.imshow('frame', datum.cvOutputData)
             # show face
-            cv2.imshow('frame',f1)
+
+            cv2.imshow('OpenWorkOut',f1)
+
             if (cv2.waitKey(1) & 0xFF == ord('q')):
                 break
         imageToProcess.release()

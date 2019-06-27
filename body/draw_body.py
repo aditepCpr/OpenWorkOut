@@ -1,6 +1,8 @@
 import cv2
 import numpy as np
 from body.KeyPoints import KeyPoints
+import LAB.knn.k_sklearn.labsklean.lab01 as lab01
+import CreateJson as Cjson
 def draw_boundary(img, bodyKeypoints, color,kp):
 
     # แขนขวา
@@ -49,3 +51,6 @@ def detect_body(img, bodyKeypoints):
 
     color = (0,0,255)
     img = draw_boundary(img, bodyKeypoints, color,kp)
+
+    # lab01.Lab(bodyKeypoints)
+    Cjson.CreateJson(kp)

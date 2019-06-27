@@ -149,3 +149,6 @@ class KeyPoints:
 
     def getRAnkle2(self):
         return self.RAnkle2
+
+    def getBodyKeypoints(self):
+        return self.bkp
