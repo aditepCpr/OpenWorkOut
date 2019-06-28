@@ -77,7 +77,7 @@ class OpenWorkout:
             #     print(e)
             # show all
             # cv2.imshow('frame', datum.cvOutputData)
-            # show face
+            # show faceq
 
             cv2.imshow('OpenWorkOut',f1)
             img_id += 1
