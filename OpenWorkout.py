@@ -56,6 +56,7 @@ class OpenWorkout:
             f1 = detect_face(frame, faceCascade, img_id, clf)
 
             # datum.openpose input data
+
             datum.cvInputData = frame
             opWrapper.emplaceAndPop([datum])
             bodyKeypoints = datum.poseKeypoints
@@ -66,18 +67,6 @@ class OpenWorkout:
 
             # print("Body keypoints: \n" + str(datum.poseKeypoints))
 
-
-            # try:
-            #     # json
-            #     keypose = str(datum.poseKeypoints)
-            #     key = open('keypose.json','w')
-            #     # key = open('keypose.json','a')
-            #     js.dump(keypose, key, indent=4)
-            # except  IOError as e :
-            #     print(e)
-            # show all
-            # cv2.imshow('frame', datum.cvOutputData)
-            # show faceq
 
             cv2.imshow('OpenWorkOut',f1)
             img_id += 1

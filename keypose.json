@@ -1,4 +1,4 @@
-[
+[            # print("Body keypoints: \n" + str(datum.poseKeypoints))
     [
         0.0,
         0.0

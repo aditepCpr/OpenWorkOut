@@ -11,7 +11,7 @@ class CreateData:
         self.idc = 1
         self.xy = xy
         self.xx = xx
-
+    # อ่านข้อมูลจากไฟล์
     def train_classifier(self):
         path = [os.path.join(self.data_dir, f) for f in os.listdir(self.data_dir)]
 
@@ -84,7 +84,7 @@ class CreateData:
             oxy = CreateData.xy(xx, yy)
             z = CreateData.c(xx, yy, idc)
             Z = np.array(z[:])
-            idc = + 1
+            idc += 1
             nxy.append(oxy)
             Zc.append(Z)
         return nxy,Zc

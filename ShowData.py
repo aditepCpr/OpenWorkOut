@@ -3,7 +3,8 @@ import numpy as np
 import time
 squat = cd("dataSet/squat")
 curl = cd("dataSet/curl")
-path = [squat,curl]
+pushup = cd('dataSet/pushup')
+path = [squat,curl,pushup]
 idc = 0
 
 
@@ -12,7 +13,7 @@ xxx = cd.xx(nxy)
 yyy = cd.yy(nxy)
 z = cd.cen_z(z)
 supperxy = np.stack((xxx,yyy),axis=1)
-
+print(z)
 
 import matplotlib.pyplot as plt
 
