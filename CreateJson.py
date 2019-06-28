@@ -1,10 +1,11 @@
 from body.KeyPoints import *
-import json as js
+import codecs, json
 import numpy as np
 class CreateJson():
 
-    def __init__(self,kp):
+    def __init__(self,kp,img_id):
         self.kp = kp
+        self.img_id = img_id
 
         # print(KeyPoints.getBodyKeypoints(self.kp))
         KeyPoints.getMidHip1(kp)
@@ -16,16 +17,17 @@ class CreateJson():
                             [KeyPoints.getRHip1(kp),KeyPoints.getRHip2(kp)],[KeyPoints.getRKnee1(kp),KeyPoints.getRKnee2(kp)],
                             [KeyPoints.getRAnkle1(kp),KeyPoints.getRAnkle2(kp)],[KeyPoints.getLHip1(kp),KeyPoints.getLHip2(kp)],
                             [KeyPoints.getLKnee1(kp),KeyPoints.getLKnee2(kp)],[KeyPoints.getLAnkle1(kp),KeyPoints.getLAnkle2(kp)]])
-        print(BodyKey)
-    #
-    # try:
-    #     # json
-    #     keypose = str()
-    #     key = open('keypose.json', 'w')
-    #     # key = open('keypose.json','a')
-    #     js.dump(keypose, key, indent=4)
-    # except  IOError as e:
-    #     print(e)
-    #
-    #
+        # print(BodyKey)
+        print(BodyKey.shape)
+        try:
+            # json
+            b = BodyKey.tolist()
+            file_path = ('dataSet/keypose.'+str(self.img_id)+".json")
+            json.dump(b, codecs.open(file_path, 'w', encoding='utf-8'), separators=(',', ':'), sort_keys=True,
+                      indent=4)
+            # key = open('keypose.json','a')
+        except  IOError as e:
+            print(e)
+
+
 

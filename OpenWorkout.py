@@ -48,7 +48,7 @@ class OpenWorkout:
         # Process Image
         datum = op.Datum()
         imageToProcess = cv2.VideoCapture(0)
-
+        img_id = 0
         while (True):
             # Read Video
             ret, frame = imageToProcess.read()
@@ -60,7 +60,7 @@ class OpenWorkout:
             opWrapper.emplaceAndPop([datum])
             bodyKeypoints = datum.poseKeypoints
             try:
-                detect_body(frame, bodyKeypoints)
+                detect_body(frame, bodyKeypoints,img_id)
             except Exception as e:
                 print(e)
 
@@ -80,7 +80,7 @@ class OpenWorkout:
             # show face
 
             cv2.imshow('OpenWorkOut',f1)
-
+            img_id += 1
             if (cv2.waitKey(1) & 0xFF == ord('q')):
                 break
         imageToProcess.release()
