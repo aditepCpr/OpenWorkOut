@@ -1,8 +1,11 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*- 
 import cv2
 import numpy as np
 from body.KeyPoints import KeyPoints
 import LAB.knn.k_sklearn.labsklean.lab01 as lab01
 import CreateJson as Cjson
+
 def draw_boundary(img, bodyKeypoints, color,kp):
 
     # แขนขวา

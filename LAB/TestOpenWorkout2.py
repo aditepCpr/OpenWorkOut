@@ -33,7 +33,7 @@ except ImportError as e:
         'Error: OpenPose library could not be found. Did you enable `BUILD_PYTHON` in CMake and have this Python script in the right folder?')
     raise e
 
-class OpenWorkpout:
+class OpenWorkpout2:
 
     def __init__(self,filename):
         self.filename = filename
