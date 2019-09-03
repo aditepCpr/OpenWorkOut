@@ -32,7 +32,7 @@ class CreateJson():
             # json
             b = BodyKey.tolist()
             print('test__', self.nameEx)
-            file_path = ('dataSet/', self.nameEx, '/keypose.' + str(self.img_id) + ".json")
+            file_path = ('dataSet/' + str(self.nameEx) + '/keypose.' + str(self.img_id) + ".json")
             # file_path = ('dataSet/squat/keypose.' + str(self.img_id) + ".json")
             # file_path = ('dataSet/pushup/keypose.' + str(self.img_id) + ".json")
             json.dump(b, codecs.open(file_path, 'w', encoding='utf-8'), separators=(',', ':'), sort_keys=True,

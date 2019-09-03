@@ -76,7 +76,6 @@ class OpenWorkpout:
                 bodyKeypoints = datum.poseKeypoints
                 try:
                     detect_body(frame, bodyKeypoints, img_id,self.nameEx)
-
                 except Exception as e:
                     print(e)
 

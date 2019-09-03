@@ -2,9 +2,11 @@ from createData import CreateData as cd
 import numpy as np
 import time
 
-squat = cd("dataSet/squat")
-curl = cd("dataSet/curl")
-pushup = cd('dataSet/pushup')
+squat = cd("dataSet/Squat")
+curl = cd("dataSet/Barbell Curl")
+pushup = cd('dataSet/Push Ups')
+dumbbellShoulderPress = cd('dataSet/Dumbbell Shoulder Press')
+deadlift = cd('dataSet/Deadlift')
 path = [squat, curl, pushup]
 idc = 0
 
