@@ -3,7 +3,8 @@ from tkinter import *
 from tkinter import Button, Menu
 from tkinter import filedialog
 from tkinter import ttk
-import OpenWorkout as Owk
+# import OpenWorkout as Owk
+from body.draw_body import detect_body
 
 selectionnFilename = None
 
@@ -61,7 +62,8 @@ class MainPage():
     def pageTrain(self):
         def Train():
             label1.configure(text=comboExs.get())
-            owk = Owk.OpenWorkpout(root.filename)
+            print(comboExs.get())
+            owk = Owk.OpenWorkpout(root.filename,comboExs.get())
             owk._OpenCVpose()
 
         fileTrain = Toplevel(root)

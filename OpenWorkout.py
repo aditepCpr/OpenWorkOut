@@ -35,8 +35,9 @@ except ImportError as e:
 
 class OpenWorkpout:
 
-    def __init__(self,filename):
+    def __init__(self,filename,nameEx):
         self.filename = filename
+        self.nameEx = nameEx
 
     def _OpenCVpose(self):
         print(type(self.filename),self.filename)
@@ -74,7 +75,8 @@ class OpenWorkpout:
                 opWrapper.emplaceAndPop([datum])
                 bodyKeypoints = datum.poseKeypoints
                 try:
-                    detect_body(frame, bodyKeypoints, img_id)
+                    detect_body(frame, bodyKeypoints, img_id,self.nameEx)
+
                 except Exception as e:
                     print(e)
 

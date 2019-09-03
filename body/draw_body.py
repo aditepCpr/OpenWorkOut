@@ -48,7 +48,7 @@ def draw_boundary(img, bodyKeypoints, color,kp):
 
 
 
-def detect_body(img, bodyKeypoints,img_id):
+def detect_body(img, bodyKeypoints,img_id,nameEx):
 
     kp = KeyPoints(bodyKeypoints)
 
@@ -56,4 +56,4 @@ def detect_body(img, bodyKeypoints,img_id):
     img = draw_boundary(img, bodyKeypoints, color,kp)
 
     # create Json file
-    # Cjson.CreateJson(kp,img_id)
+    Cjson.CreateJson(kp,img_id,nameEx)
