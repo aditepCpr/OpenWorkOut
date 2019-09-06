@@ -18,7 +18,7 @@ xxx = cd.xx(nxy)
 yyy = cd.yy(nxy)
 z = cd.cen_z(z)
 supperxy = np.stack((xxx, yyy), axis=1)
-print('Showdata OK')
+print('Showdata OK...')
 # print(z)
 def show():
     plt.gca(aspect=1).scatter(supperxy[:, 0], supperxy[:, 1], c=z, s=30, edgecolor='k', cmap='rainbow')

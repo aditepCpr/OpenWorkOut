@@ -26,7 +26,7 @@ except ImportError as e:
     raise e
 
 class OpenWorkpout:
-    print('openWorkout Ok')
+    print('OpenWorkout Ok...')
 
     def __init__(self, filename, nameEx):
         self.filename = filename

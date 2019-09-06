@@ -46,7 +46,7 @@ def draw_boundary(img, bodyKeypoints, color, kp):
 
 
 def detect_body(img, bodyKeypoints, img_id, nameEx):
-    print('detect_body ok')
+    print('detect_body Ok...')
     kp = KeyPoints(bodyKeypoints)
 
     color = (0, 0, 255)

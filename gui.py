@@ -10,6 +10,7 @@ selectionnFilename = None
 
 
 class MainPage():
+    print('MainPage Ok...')
     def __init__(self, root):
         self.root = root
         self.pageMain()
@@ -24,6 +25,7 @@ class MainPage():
             print(e)
 
     def pageMain(self):
+        print('GUI Start...')
         root.title("Training")
         root.geometry('300x300')
         p1 = PanedWindow(bg='black', orient=VERTICAL)
@@ -86,6 +88,7 @@ class MainPage():
 
 
     def pageTrain(self):
+        print('Train')
         def Train():
             label1.configure(text=comboExs.get())
             print(comboExs.get())
@@ -116,14 +119,14 @@ class MainPage():
 
         label1 = Label(fileTrain, text="")
 
-        print(dict(comboExs))
+        # print(dict(comboExs))
         pwTrain1.add(comboExs)
         pwTrain1.add(bBrowse)
         pwTrain1.add(label1)
         pwTrain1.add(bsubmit)
 
-        print(comboExs.current(), comboExs.get())
-        print(str(bBrowse))
+        # print(comboExs.current(), comboExs.get())
+        # print(str(bBrowse))
 
 
 if __name__ == '__main__':
