@@ -27,11 +27,11 @@ class CreateJson():
                             [KeyPoints.getLKnee1(kp), KeyPoints.getLKnee2(kp)],
                             [KeyPoints.getLAnkle1(kp), KeyPoints.getLAnkle2(kp)]])
         # print(BodyKey)
-        print(BodyKey.shape)
+        # print(BodyKey.shape)
         try:
             # json
             b = BodyKey.tolist()
-            print('test__', self.nameEx)
+            print('Write__>>', self.nameEx+'/keypose',+self.img_id)
             file_path = ('dataSet/' + str(self.nameEx) + '/keypose.' + str(self.img_id) + ".json")
             # file_path = ('dataSet/squat/keypose.' + str(self.img_id) + ".json")
             # file_path = ('dataSet/pushup/keypose.' + str(self.img_id) + ".json")
