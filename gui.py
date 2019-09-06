@@ -4,7 +4,7 @@ from tkinter import Button, Menu
 from tkinter import filedialog
 from tkinter import ttk
 import OpenWorkout as Owk
-from body.draw_body import detect_body
+import ShowData as sd
 
 selectionnFilename = None
 
@@ -41,6 +41,7 @@ class MainPage():
         filemenu = Menu(menubar, tearoff=0)
         filemenu.add_command(label="New", command=self.donothing)
         filemenu.add_command(label="Training", command=self.pageTrain)
+        filemenu.add_command(label="Show", command=self.pageShow)
         filemenu.add_separator()  # --------------- #
 
         filemenu.add_command(label="Exit", command=self.click_exit)
@@ -67,6 +68,22 @@ class MainPage():
         filewin = Toplevel(root)
         button = Button(filewin, text="Do nothing button")
         button.pack()
+
+    def pageShow(self):
+        fileshow = Toplevel(root)
+        fileshow.geometry('300x200')
+        fileshow.title("ShowData")
+        pwshow = PanedWindow(fileshow, bg='red', orient=VERTICAL)
+        pwshow.pack(fill=BOTH, expand=1)
+        bshow = Button(fileshow, text="1",command=sd.show)
+        bshow2 = Button(fileshow, text="2",command=sd.show2)
+        bshow3 = Button(fileshow,  text="3",command=sd.show3)
+        bshow4 = Button(fileshow,  text="4",command=sd.show4)
+        pwshow.add(bshow)
+        pwshow.add(bshow2)
+        pwshow.add(bshow3)
+        pwshow.add(bshow4)
+
 
     def pageTrain(self):
         def Train():

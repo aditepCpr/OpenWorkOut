@@ -1,17 +1,9 @@
-import json as js
-import sys
 import cv2
 import os
 from sys import platform
 from face.draw_boundary import detect_face
 from body.draw_body import detect_body
-import tkinter as tk
-from tkinter import ttk
 from tkinter import *
-from tkinter import Button
-from tkinter import filedialog
-
-
 
 # Import Openpose (Windows/Ubuntu/OSX)
 dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -33,14 +25,16 @@ except ImportError as e:
         'Error: OpenPose library could not be found. Did you enable `BUILD_PYTHON` in CMake and have this Python script in the right folder?')
     raise e
 
-class OpenWorkpout:
 
-    def __init__(self,filename,nameEx):
+class OpenWorkpout:
+    print('openWorkout Ok')
+
+    def __init__(self, filename, nameEx):
         self.filename = filename
         self.nameEx = nameEx
 
     def _OpenCVpose(self):
-        print(type(self.filename),self.filename)
+        print(type(self.filename), self.filename)
         # Custom Params (refer to include/openpose/flags.hpp for more parameters)
         params = dict()
         params["model_folder"] = "body/models/"
@@ -76,7 +70,7 @@ class OpenWorkpout:
                 opWrapper.emplaceAndPop([datum])
                 bodyKeypoints = datum.poseKeypoints
                 try:
-                    detect_body(frame, bodyKeypoints, img_id,self.nameEx)
+                    detect_body(frame, bodyKeypoints, img_id, self.nameEx)
                 except Exception as e:
                     print(e)
 
