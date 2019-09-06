@@ -16,17 +16,25 @@ class MainPage():
         self._createMenu()
         self.selectionnFilename = selectionnFilename
 
+    def pageLive(self):
+        try:
+            owk = Owk.OpenWorkpout(0,'cam')
+            owk._OpenCVpose()
+        except Exception as e:
+            print(e)
+
     def pageMain(self):
         root.title("Training")
-        root.geometry('800x800')
+        root.geometry('300x300')
         p1 = PanedWindow(bg='black', orient=VERTICAL)
         p1.pack(fill=BOTH, expand=1)
         top = Label(p1, text="python")
-        cen = Label(p1, text="top pane")
+        cen = Label(p1, text="OpenWorkOut by Aditep  campira")
         botton = Label(p1, text="top pane")
+        blive = Button(p1, text=' live ', bd=3, font=('', 10), padx=5, pady=5, command=self.pageLive)
         p1.add(top)
         p1.add(cen)
-        p1.add(botton)
+        p1.add(blive)
 
     def _createMenu(self):
         menubar = Menu(root)
@@ -54,6 +62,7 @@ class MainPage():
 
         print(root.filename)
 
+
     def donothing(self):
         filewin = Toplevel(root)
         button = Button(filewin, text="Do nothing button")
@@ -65,6 +74,8 @@ class MainPage():
             print(comboExs.get())
             owk = Owk.OpenWorkpout(root.filename,comboExs.get())
             owk._OpenCVpose()
+
+
 
         fileTrain = Toplevel(root)
         fileTrain.geometry('300x200')
@@ -85,6 +96,7 @@ class MainPage():
         comboExs.current(1)
         bsubmit = Button(fileTrain, text="Click Here", command=Train)
         bBrowse = Button(fileTrain, text=' Browse ', bd=3, font=('', 10), padx=5, pady=5, command=self.selection)
+
         label1 = Label(fileTrain, text="")
 
         print(dict(comboExs))
@@ -92,6 +104,7 @@ class MainPage():
         pwTrain1.add(bBrowse)
         pwTrain1.add(label1)
         pwTrain1.add(bsubmit)
+
         print(comboExs.current(), comboExs.get())
         print(str(bBrowse))
 

@@ -7,7 +7,8 @@ curl = cd("dataSet/Barbell Curl")
 pushup = cd('dataSet/Push Ups')
 dumbbellShoulderPress = cd('dataSet/Dumbbell Shoulder Press')
 deadlift = cd('dataSet/Deadlift')
-path = [squat, curl, pushup]
+cam = cd('dataSet/cam')
+path = [squat, curl, pushup,dumbbellShoulderPress,deadlift,cam]
 idc = 0
 
 nxy, z = cd.allpath(path, idc)

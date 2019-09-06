@@ -61,6 +61,7 @@ class OpenWorkpout:
             # Process Image
             datum = op.Datum()
             # imageToProcess = cv2.VideoCapture(0)
+
             imageToProcess = cv2.VideoCapture(self.filename)
             img_id = 0
             while (True):
@@ -92,3 +93,9 @@ class OpenWorkpout:
         except Exception as e:
             print(e)
             sys.exit(-1)
+
+# test
+# if __name__ == '__main__':
+#     opw = OpenWorkpout(0,'cam')
+#     opw._OpenCVpose()
+#
