@@ -312,5 +312,5 @@ def show5():
 
 if __name__ == '__main__':
     # show2()
-    show4()
-    # show5()
+    # show4()
+    show5()

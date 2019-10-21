@@ -3,92 +3,99 @@ import numpy as np
 import time
 import matplotlib.pyplot as plt
 from sklearn.neighbors import KNeighborsClassifier as Knn
-from unagi import Affin,Sigmoid,Relu,Softmax_entropy,Sigmoid_entropy,ha_1h
+from unagi import Affin, Sigmoid, Relu, Softmax_entropy, Sigmoid_entropy, ha_1h
 
 
 class Sgd:
-    def __init__(self,param,eta=0.01):
+    def __init__(self, param, eta=0.01):
         self.param = param
         self.eta = eta
 
     def __call__(self):
         for p in self.param:
-            p.kha -= self.eta*p.g
+            p.kha -= self.eta * p.g
             p.g = 0
 
+
 class Mmtsgd:
-    def __init__(self,param,eta=0.01,mmt=0.9):
+    def __init__(self, param, eta=0.01, mmt=0.9):
         self.param = param
         self.eta = eta
         self.mmt = mmt
-        self.d = [0]*len(param)
+        self.d = [0] * len(param)
 
     def __call__(self):
-        for i,p in enumerate(self.param):
-            self.d[i] = self.mmt*self.d[i]-self.eta*p.g
+        for i, p in enumerate(self.param):
+            self.d[i] = self.mmt * self.d[i] - self.eta * p.g
             p.kha += self.d[i]
             p.g = 0
 
+
 class Nag:
-    def __init__(self,param,eta=0.01,mmt=0.9):
+    def __init__(self, param, eta=0.01, mmt=0.9):
         self.param = param
         self.eta = eta
         self.mmt = mmt
-        self.d = [0]*len(param)
+        self.d = [0] * len(param)
         self.g0 = np.nan
 
     def __call__(self):
-        if(self.g0 is np.nan):
+        if (self.g0 is np.nan):
             self.g0 = [p.g for p in self.param]
-        for i,p in enumerate(self.param):
-            self.d[i] = self.mmt*self.d[i]-self.eta*(p.g+self.mmt*(p.g-self.g0[i]))
+        for i, p in enumerate(self.param):
+            self.d[i] = self.mmt * self.d[i] - self.eta * (p.g + self.mmt * (p.g - self.g0[i]))
             self.g0[i] = p.g
             p.kha += self.d[i]
             p.g = 0
 
+
 class Adagrad:
-    def __init__(self,param,eta=0.01):
+    def __init__(self, param, eta=0.01):
         self.param = param
         self.eta = eta
-        self.G = [1e-7]*len(param)
+        self.G = [1e-7] * len(param)
 
     def __call__(self):
-        for i,p in enumerate(self.param):
-            self.G[i] += p.g**2
-            p.kha += -self.eta*p.g/np.sqrt(self.G[i])
+        for i, p in enumerate(self.param):
+            self.G[i] += p.g ** 2
+            p.kha += -self.eta * p.g / np.sqrt(self.G[i])
             p.g = 0
 
+
 class Adadelta:
-    def __init__(self,param,eta=0.01,rho=0.95):
+    def __init__(self, param, eta=0.01, rho=0.95):
         self.param = param
         self.eta = eta
         self.rho = rho
-        self.G = [1e-7]*len(param)
+        self.G = [1e-7] * len(param)
 
     def __call__(self):
-        for i,p in enumerate(self.param):
-            self.G[i] = self.rho*self.G[i]+(1-self.rho)*p.g**2
-            p.kha += -self.eta*p.g/np.sqrt(self.G[i])
+        for i, p in enumerate(self.param):
+            self.G[i] = self.rho * self.G[i] + (1 - self.rho) * p.g ** 2
+            p.kha += -self.eta * p.g / np.sqrt(self.G[i])
             p.g = 0
 
+
 class Adam:
-    def __init__(self,param,eta=0.001,beta1=0.9,beta2=0.999):
+    def __init__(self, param, eta=0.001, beta1=0.9, beta2=0.999):
         self.param = param
         self.eta = eta
         self.beta1 = beta1
         self.beta2 = beta2
         n = len(param)
-        self.m = [0]*n
-        self.v = [1e-7]*n
+        self.m = [0] * n
+        self.v = [1e-7] * n
         self.t = 1
 
     def __call__(self):
-        for i,p in enumerate(self.param):
-            self.m[i] = self.beta1*self.m[i]+(1-self.beta1)*p.g
-            self.v[i] = self.beta2*self.v[i]+(1-self.beta2)*p.g**2
-            p.kha += -self.eta*np.sqrt(1-self.beta2**self.t)/(1-self.beta1**self.t)*self.m[i]/np.sqrt(self.v[i])
+        for i, p in enumerate(self.param):
+            self.m[i] = self.beta1 * self.m[i] + (1 - self.beta1) * p.g
+            self.v[i] = self.beta2 * self.v[i] + (1 - self.beta2) * p.g ** 2
+            p.kha += -self.eta * np.sqrt(1 - self.beta2 ** self.t) / (1 - self.beta1 ** self.t) * self.m[i] / np.sqrt(
+                self.v[i])
             self.t += 1
             p.g = 0
+
 
 class Prasat:
     def __init__(self, m, sigma=1, eta=0.1, kratun='relu', opt='adam'):
@@ -132,8 +139,6 @@ class Prasat:
         return X.kha.argmax(1)
 
 
-
-
 squat = cd("dataSet/Squat")
 curl = cd("dataSet/Barbell Curl")
 pushup = cd('dataSet/Push Ups')
@@ -142,9 +147,10 @@ deadlift = cd('dataSet/Deadlift')
 cam = cd('dataSet/cam')
 # target_names = np.array(['curl','pushup', 'squat', 'deadlift'], dtype='<U10')
 target_names = np.array(['squat', 'curl', 'pushup', 'dumbbellShoulderPress', 'deadlift'], dtype='<U10')
+# target_names = np.array(['squat', 'pushup', 'pushup', 'dumbbellShoulderPress', 'deadlift'], dtype='<U10')
 
-# path = [squat, curl,pushup, dumbbellShoulderPress, deadlift]
-path = [squat,pushup]
+path = [squat, curl,pushup, dumbbellShoulderPress, deadlift]
+# path = [squat, curl]
 idc = 0
 nxy, z = cd.allpath(path, idc)
 x = cd.xx(nxy)
@@ -153,65 +159,171 @@ z = cd.cen_z(z)
 X = np.stack((x, y), axis=1)
 z = np.array(z)
 print('Showdata OK...')
-plt.scatter(X[:,0],X[:,1],50,c=z,edgecolor='k',cmap='rainbow')
+plt.scatter(X[:, 0], X[:, 1], 50, c=z, edgecolor='k', cmap='rainbow')
 plt.show()
 
+path2 = [cam]
+idc2 = 0
+nxy2, z2 = cd.allpath(path2, idc2)
+x2 = cd.xx(nxy2)
+y2 = cd.yy(nxy2)
+z2 = cd.cen_z(z2)
+X2 = np.stack((x2, y2), axis=1)
+plt.scatter(X2[:, 0], X2[:, 1], 50, c=z2, edgecolor='k', cmap='rainbow')
+plt.show()
+
+import seaborn as sns
+
 #####################################################################################
-def Knn_v1():
-    knn = Knn(n_neighbors=1, p=1)
-    knn.fit(X, z)
-    nmesh = 200
-    mx, my = np.meshgrid(np.linspace(X[:, 0].min(), X[:, 0].max(), nmesh),
-                         np.linspace(X[:, 1].min(), X[:, 1].max(), nmesh))
-    mX = np.stack([mx.ravel(), my.ravel()], 1)
-    mz = knn.predict(mX).reshape(nmesh, nmesh)
-    plt.gca(xlim=[X[:, 0].min(), X[:, 0].max()], ylim=[X[:, 1].min(), X[:, 1].max()],
-            aspect=1)
-    plt.contourf(mx, my, mz, alpha=0.1, cmap='rainbow')
-    plt.contour(mx, my, mz, colors='#222222')
-    plt.scatter(X[:, 0], X[:, 1], c=z, edgecolor='k', cmap='rainbow')
-    plt.show()
+class Knn_v1:
+    mz = []
+    mx = []
+    my = []
+    mX = []
+
+    def __init__(self, X, z, X2, z2):
+        self.X = X
+        self.z = z
+        self.X2 = X2
+        self.z2 = z2
+        self.mz = self.mz
+        self.mx = self.mx
+        self.my = self.my
+        self.mX = self.mX
+        self.nmesh = 200
+
+    def Knn_v1(self):
+        # for al in ['ball_tree', 'kd_tree', 'brute', 'auto']:
+        #     t1 = time.time()
+        # from sklearn.preprocessing import StandardScaler
+        # scaler = StandardScaler()
+        # X = scaler.fit_transform(self.X,)
+
+        knn = Knn(n_neighbors=5, p=1 ,algorithm='kd_tree',n_jobs=-1)
+        knn.fit(self.X, self.z)
+        self.mx, self.my = np.meshgrid(np.linspace(self.X2[:, 0].min(), self.X2[:, 0].max(), self.nmesh),
+                                       np.linspace(self.X2[:, 1].min(), self.X2[:, 1].max(), self.nmesh))
+        self.mX = np.stack([self.mx.ravel(), self.my.ravel()], 1)
+
+        self.mz = knn.predict(self.mX).reshape(self.nmesh, self.nmesh)
+
+        plt.gca(xlim=[self.X2[:, 0].min(), self.X2[:, 0].max()], ylim=[self.X2[:, 1].min(), self.X2[:, 1].max()],
+                aspect=1)
+        plt.contourf(self.mx, self.my, self.mz, alpha=0.1, cmap='rainbow')
+        plt.contour(self.mx, self.my, self.mz, colors='#222222')
+        plt.scatter(self.X2[:, 0], self.X2[:, 1], c=self.z2, edgecolor='k', cmap='rainbow')
+        plt.show()
+
+        self.mz = knn.predict_proba(self.mX)[:, 4].reshape(self.nmesh, self.nmesh)
+        plt.gca(xlim=[self.X2[:, 0].min(), self.X2[:, 0].max()], ylim=[self.X2[:, 1].min(), self.X2[:, 1].max()],
+                aspect=1)
+        plt.contourf(self.mx, self.my, self.mz, alpha=0.1, cmap='rainbow')
+        plt.contour(self.mx, self.my, self.mz, colors='#222222')
+        plt.scatter(self.X2[:, 0], self.X2[:, 1], c=self.z2, edgecolor='k', cmap='rainbow')
+        plt.show()
+
+
+        # print(u'%s: %.3f วินาที' % (al, time.time() - t1))
+        k = knn.kneighbors(X)
+        print(k[0])
+        print(k[1])
+        for i in range(8):
+            print(', '.join(['%d > %.2f' % (k[1][i][j], k[0][i][j]) for j in range(3)]))
 
 
 ###################################################################################
-def nn_v1():
-    prasat = Prasat(m=[2,100,100,100,100,100,100,2],eta=0.005)
-    prasat.rianru(X,z,n_thamsam=1000)
-    mx,my = np.meshgrid(np.linspace(X[:,0].min(),X[:,0].max(),200),np.linspace(X[:,1].min(),X[:,1].max(),200))
-    mX = np.array([mx.ravel(),my.ravel()]).T
-    mz = prasat.thamnai(mX).reshape(200,-1)
-    print(mz)
-    plt.gca(aspect=1,xlim=(X[:,0].min(),X[:,0].max()),ylim=(X[:,1].min(),X[:,1].max()))
-    plt.contourf(mx,my,mz,cmap='rainbow',alpha=0.2)
-    plt.scatter(X[:,0],X[:,1],50,c=z,edgecolor='k',cmap='rainbow')
-    plt.show()
+class Nn_v1:
+    mz = []
+    def __init__(self, X, z, X2, z2):
+        self.X = X
+        self.z = z
+        self.X2 = X2
+        self.z2 = z2
+        self.mz = self.mz
 
-    plt.figure(figsize=[6,10])
-    ax1 = plt.subplot(211,xticks=[])
-    ax1.set_title(u'entropy')
-    ax2 = plt.subplot(212)
-    ax2.set_title(u'Score')
-    for Opt in [Sgd,Mmtsgd,Nag,Adagrad,Adadelta,Adam]:
-        chan = [Affin(2,60,1),Sigmoid(),Affin(60,1,1),Sigmoid_entropy()]
-        opt = Opt(chan[0].param+chan[2].param,eta=0.02)
-        lis_entropy = []
-        lis_khanaen = []
-        for i in range(200):
-            X_ = X
-            for c in chan[:-1]:
-                X_ = c(X_)
-            lis_khanaen.append(((X_.kha.ravel()>0)==z).mean())
-            entropy = chan[-1](X_,z)
-            lis_entropy.append(entropy.kha)
-            entropy.phraeyon()
-            opt()
-        si = np.random.random(3)
-        ax1.plot(lis_entropy,color=si)
-        ax2.plot(lis_khanaen,color=si)
-    plt.legend(['SGD','Momentum','NAG','AdaGrad','AdaDelta','Adam'],ncol=2)
-    plt.tight_layout()
-    plt.show()
+    def nn_v1(self):
+        prasat = Prasat(m=[2, 100, 100, 100, 100, 100, 100, 2], eta=0.005)
+        prasat.rianru(self.X, self.z, n_thamsam=1000)
+        mx, my = np.meshgrid(np.linspace(self.X2[:, 0].min(), self.X2[:, 0].max(), 200), np.linspace(self.X2[:, 1].min(), self.X2[:, 1].max(), 200))
+        mX = np.array([mx.ravel(), my.ravel()]).T
+        self.mz = prasat.thamnai(mX).reshape(200, -1)
+        plt.gca(aspect=1, xlim=(self.X2[:, 0].min(), self.X2[:, 0].max()), ylim=(self.X2[:, 1].min(), self.X2[:, 1].max()))
+        plt.contourf(mx, my, self.mz, cmap='rainbow', alpha=0.2)
+        plt.scatter(self.X2[:, 0], self.X2[:, 1], 50, c=self.z2, edgecolor='k', cmap='rainbow')
+        plt.show()
+
+        plt.figure(figsize=[6, 10])
+        ax1 = plt.subplot(211, xticks=[])
+        ax1.set_title(u'entropy')
+        ax2 = plt.subplot(212)
+        ax2.set_title(u'Score')
+        for Opt in [Sgd, Mmtsgd, Nag, Adagrad, Adadelta, Adam]:
+            chan = [Affin(2, 60, 1), Sigmoid(), Affin(60, 1, 1), Sigmoid_entropy()]
+            opt = Opt(chan[0].param + chan[2].param, eta=0.02)
+            lis_entropy = []
+            lis_khanaen = []
+            for i in range(200):
+                X_ = self.X
+                for c in chan[:-1]:
+                    X_ = c(X_)
+                lis_khanaen.append(((X_.kha.ravel() > 0) == z).mean())
+                entropy = chan[-1](X_, z)
+                lis_entropy.append(entropy.kha)
+                entropy.phraeyon()
+                opt()
+            si = np.random.random(3)
+            ax1.plot(lis_entropy, color=si)
+            ax2.plot(lis_khanaen, color=si)
+        plt.legend(['SGD', 'Momentum', 'NAG', 'AdaGrad', 'AdaDelta', 'Adam'], ncol=2)
+        plt.tight_layout()
+        plt.show()
+
+
+def tuni(mz,name):
+    print(name)
+    x0 = 0
+    x1 = 0
+    x2 = 0
+    x3 = 0
+    x4 = 0
+
+    for h in mz:
+        # print(h)
+        for h1 in h:
+            if h1 == 0:
+                x0 += 1
+            elif h1 == 1:
+                x1 += 1
+            elif h1 == 2:
+                x2 += 1
+            elif h1 == 3:
+                x3 += 1
+            elif h1 == 4:
+                x4 += 1
+
+    max_h = max(x0, x1, x2, x3, x4)
+    print(name,target_names[0], 'x0', x0)
+    print(name,target_names[1], 'x1', x1)
+    print(name,target_names[2], 'x2', x2)
+    print(name,target_names[3], 'x3', x3)
+    print(name,target_names[4], 'x4', x4)
+    if x0 == max_h:
+        print(target_names[0])
+    if x1 == max_h:
+        print(target_names[1])
+    if x2 == max_h:
+        print(target_names[2])
+    if x3 == max_h:
+        print(target_names[3])
+    if x4 == max_h:
+        print(target_names[4])
+
 
 if __name__ == '__main__':
-    Knn_v1()
-    nn_v1()
+    print(__name__)
+    knn_v1 = Knn_v1(X=X, z=z, X2=X2, z2=z2)
+    knn_v1.Knn_v1()
+    # nn_v1 = Nn_v1(X,z,X2,z2)
+    # nn_v1.nn_v1()
+    # tuni(knn_v1.mz,'Knn')
+    # tuni(nn_v1.mz,'Nn')
