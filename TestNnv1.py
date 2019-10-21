@@ -23,7 +23,7 @@ z = cd.cen_z(z)
 supperxy = np.stack((xxx, yyy), axis=1)
 print('Showdata OK...')
 
-path2 = [cam]
+path2 = [curl]
 idcz = 0
 nxyz, zz = cd.allpath(path2, idcz)
 xxxz = cd.xx(nxyz)
