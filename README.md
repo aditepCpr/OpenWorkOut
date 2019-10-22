@@ -8,3 +8,5 @@
   - 04/9/2019.01 สามารถใช้ combo และเลือก VDO เมื้อกดลันจะเขียน json ไปที่โฟนเดอร์ที่เลือก
   - 07/9/2019.01 เพิ่ม live และ menu show data
   - 20/10/2019.01 ทดลองใช้ knn และ unsupervised learning decomposition
+  - 21/10/2019.01 ทดลองใช้ nn,decision tree
+  - 22/10/2019.01 ทดลองใช้ nn activation function แบบต่างๆ 'Lrelu', 'Elu', 'Selu', 'Tanh', 'Softsign', 'Softplus' , 'Relu''

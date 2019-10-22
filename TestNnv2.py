@@ -4,7 +4,8 @@ import time
 import pickle
 import matplotlib.pyplot as plt
 from sklearn.neighbors import KNeighborsClassifier as Knn
-from unagi import Affin, Sigmoid, Relu, Softmax_entropy, Sigmoid_entropy, ha_1h
+from unagi import Affin, Softmax_entropy, Sigmoid_entropy, ha_1h
+from unagi import Sigmoid, Relu, Lrelu, Prelu, Elu, Selu, Tanh, Softsign, Softplus
 from sklearn.ensemble import RandomForestClassifier as Rafo
 
 
@@ -252,43 +253,42 @@ class Nn_v1:
     def nn_v1(self):
         prasat = Prasat(m=[2, 100, 100, 100, 100, len(path)], eta=0.005)
         prasat.rianru(self.X, self.z, n_thamsam=1000)
-        print(prasat.rianru(self.X, self.z, n_thamsam=1000))
-        # mx, my = np.meshgrid(np.linspace(self.X2[:, 0].min(), self.X2[:, 0].max(), 200),
-        #                      np.linspace(self.X2[:, 1].min(), self.X2[:, 1].max(), 200))
-        # mX = np.array([mx.ravel(), my.ravel()]).T
-        # self.mz = prasat.thamnai(mX).reshape(200, -1)
-        # plt.gca(aspect=1, xlim=(self.X2[:, 0].min(), self.X2[:, 0].max()),
-        #         ylim=(self.X2[:, 1].min(), self.X2[:, 1].max()))
-        # plt.contourf(mx, my, self.mz, cmap='rainbow', alpha=0.2)
-        # plt.scatter(self.X2[:, 0], self.X2[:, 1], 50, c=self.z2, edgecolor='k', cmap='rainbow')
-        # plt.show()
-        #
-        # plt.figure(figsize=[6, 10])
-        # ax1 = plt.subplot(211, xticks=[])
-        # ax1.set_title(u'entropy')
-        # ax2 = plt.subplot(212)
-        # ax2.set_title(u'Score')
-        # for Opt in [Sgd, Mmtsgd, Nag, Adagrad, Adadelta, Adam]:
-        #     chan = [Affin(2, 60, 1), Sigmoid(), Affin(60, 1, 1), Sigmoid_entropy()]
-        #     opt = Opt(chan[0].param + chan[2].param, eta=0.02)
-        #     lis_entropy = []
-        #     lis_khanaen = []
-        #     for i in range(200):
-        #         X_ = self.X
-        #         for c in chan[:-1]:
-        #             X_ = c(X_)
-        #         lis_khanaen.append(((X_.kha.ravel() > 0) == z).mean())
-        #         entropy = chan[-1](X_, z)
-        #         lis_entropy.append(entropy.kha)
-        #         entropy.phraeyon()
-        #         opt()
-        #     si = np.random.random(3)
-        #     ax1.plot(lis_entropy, color=si)
-        #     ax2.plot(lis_khanaen, color=si)
-        # plt.legend(['SGD', 'Momentum', 'NAG', 'AdaGrad', 'AdaDelta', 'Adam'], ncol=2)
-        # plt.tight_layout()
-        # plt.show()
-        #
+        mx, my = np.meshgrid(np.linspace(self.X2[:, 0].min(), self.X2[:, 0].max(), 200),
+                             np.linspace(self.X2[:, 1].min(), self.X2[:, 1].max(), 200))
+        mX = np.array([mx.ravel(), my.ravel()]).T
+        self.mz = prasat.thamnai(mX).reshape(200, -1)
+        plt.gca(aspect=1, xlim=(self.X2[:, 0].min(), self.X2[:, 0].max()),
+                ylim=(self.X2[:, 1].min(), self.X2[:, 1].max()))
+        plt.contourf(mx, my, self.mz, cmap='rainbow', alpha=0.2)
+        plt.scatter(self.X2[:, 0], self.X2[:, 1], 50, c=self.z2, edgecolor='k', cmap='rainbow')
+        plt.show()
+
+        plt.figure(figsize=[6, 10])
+        ax1 = plt.subplot(211, xticks=[])
+        ax1.set_title(u'entropy')
+        ax2 = plt.subplot(212)
+        ax2.set_title(u'Score')
+        for Opt in [Sgd, Mmtsgd, Nag, Adagrad, Adadelta, Adam]:
+            chan = [Affin(2, 60, 1), Sigmoid(), Affin(60, 1, 1), Sigmoid_entropy()]
+            opt = Opt(chan[0].param + chan[2].param, eta=0.02)
+            lis_entropy = []
+            lis_khanaen = []
+            for i in range(200):
+                X_ = self.X
+                for c in chan[:-1]:
+                    X_ = c(X_)
+                lis_khanaen.append(((X_.kha.ravel() > 0) == z).mean())
+                entropy = chan[-1](X_, z)
+                lis_entropy.append(entropy.kha)
+                entropy.phraeyon()
+                opt()
+            si = np.random.random(3)
+            ax1.plot(lis_entropy, color=si)
+            ax2.plot(lis_khanaen, color=si)
+        plt.legend(['SGD', 'Momentum', 'NAG', 'AdaGrad', 'AdaDelta', 'Adam'], ncol=2)
+        plt.tight_layout()
+        plt.show()
+
         # f = open('nn.pkl', 'wb')
         # pickle.dump(prasat, f)
         # f.close()
