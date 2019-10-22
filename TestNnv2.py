@@ -1,9 +1,11 @@
 from createData import CreateData as cd
 import numpy as np
 import time
+import pickle
 import matplotlib.pyplot as plt
 from sklearn.neighbors import KNeighborsClassifier as Knn
 from unagi import Affin, Sigmoid, Relu, Softmax_entropy, Sigmoid_entropy, ha_1h
+from sklearn.ensemble import RandomForestClassifier as Rafo
 
 
 class Sgd:
@@ -149,8 +151,8 @@ cam = cd('dataSet/cam')
 target_names = np.array(['squat', 'curl', 'pushup', 'dumbbellShoulderPress', 'deadlift'], dtype='<U10')
 # target_names = np.array(['squat', 'pushup', 'pushup', 'dumbbellShoulderPress', 'deadlift'], dtype='<U10')
 
-path = [squat, curl,pushup, dumbbellShoulderPress, deadlift]
-# path = [squat, curl]
+# path = [squat, curl,pushup, dumbbellShoulderPress, deadlift]
+path = [squat, curl]
 idc = 0
 nxy, z = cd.allpath(path, idc)
 x = cd.xx(nxy)
@@ -162,7 +164,7 @@ print('Showdata OK...')
 plt.scatter(X[:, 0], X[:, 1], 50, c=z, edgecolor='k', cmap='rainbow')
 plt.show()
 
-path2 = [cam]
+path2 = [squat]
 idc2 = 0
 nxy2, z2 = cd.allpath(path2, idc2)
 x2 = cd.xx(nxy2)
@@ -173,6 +175,7 @@ plt.scatter(X2[:, 0], X2[:, 1], 50, c=z2, edgecolor='k', cmap='rainbow')
 plt.show()
 
 import seaborn as sns
+
 
 #####################################################################################
 class Knn_v1:
@@ -199,8 +202,8 @@ class Knn_v1:
         # scaler = StandardScaler()
         # X = scaler.fit_transform(self.X,)
 
-        knn = Knn(n_neighbors=5, p=1 ,algorithm='kd_tree',n_jobs=-1)
-        knn.fit(self.X, self.z)
+        knn = Knn(n_neighbors=5, p=1, algorithm='kd_tree', n_jobs=-1)
+        knn = knn.fit(self.X, self.z)
         self.mx, self.my = np.meshgrid(np.linspace(self.X2[:, 0].min(), self.X2[:, 0].max(), self.nmesh),
                                        np.linspace(self.X2[:, 1].min(), self.X2[:, 1].max(), self.nmesh))
         self.mX = np.stack([self.mx.ravel(), self.my.ravel()], 1)
@@ -214,7 +217,7 @@ class Knn_v1:
         plt.scatter(self.X2[:, 0], self.X2[:, 1], c=self.z2, edgecolor='k', cmap='rainbow')
         plt.show()
 
-        self.mz = knn.predict_proba(self.mX)[:, 4].reshape(self.nmesh, self.nmesh)
+        self.mz = knn.predict_proba(self.mX)[:, len(path2)].reshape(self.nmesh, self.nmesh)
         plt.gca(xlim=[self.X2[:, 0].min(), self.X2[:, 0].max()], ylim=[self.X2[:, 1].min(), self.X2[:, 1].max()],
                 aspect=1)
         plt.contourf(self.mx, self.my, self.mz, alpha=0.1, cmap='rainbow')
@@ -222,18 +225,23 @@ class Knn_v1:
         plt.scatter(self.X2[:, 0], self.X2[:, 1], c=self.z2, edgecolor='k', cmap='rainbow')
         plt.show()
 
+        import pickle
+        f = open('knn.pkl', 'wb')
+        pickle.dump(knn, f)
+        f.close()
 
         # print(u'%s: %.3f วินาที' % (al, time.time() - t1))
-        k = knn.kneighbors(X)
-        print(k[0])
-        print(k[1])
-        for i in range(8):
-            print(', '.join(['%d > %.2f' % (k[1][i][j], k[0][i][j]) for j in range(3)]))
+        # k = knn.kneighbors(X)
+        # print(k[0])
+        # print(k[1])
+        # for i in range(8):
+        #     print(', '.join(['%d > %.2f' % (k[1][i][j], k[0][i][j]) for j in range(3)]))
 
 
 ###################################################################################
 class Nn_v1:
     mz = []
+
     def __init__(self, X, z, X2, z2):
         self.X = X
         self.z = z
@@ -242,44 +250,52 @@ class Nn_v1:
         self.mz = self.mz
 
     def nn_v1(self):
-        prasat = Prasat(m=[2, 100, 100, 100, 100, 100, 100, 2], eta=0.005)
+        prasat = Prasat(m=[2, 100, 100, 100, 100, len(path)], eta=0.005)
         prasat.rianru(self.X, self.z, n_thamsam=1000)
-        mx, my = np.meshgrid(np.linspace(self.X2[:, 0].min(), self.X2[:, 0].max(), 200), np.linspace(self.X2[:, 1].min(), self.X2[:, 1].max(), 200))
-        mX = np.array([mx.ravel(), my.ravel()]).T
-        self.mz = prasat.thamnai(mX).reshape(200, -1)
-        plt.gca(aspect=1, xlim=(self.X2[:, 0].min(), self.X2[:, 0].max()), ylim=(self.X2[:, 1].min(), self.X2[:, 1].max()))
-        plt.contourf(mx, my, self.mz, cmap='rainbow', alpha=0.2)
-        plt.scatter(self.X2[:, 0], self.X2[:, 1], 50, c=self.z2, edgecolor='k', cmap='rainbow')
-        plt.show()
+        print(prasat.rianru(self.X, self.z, n_thamsam=1000))
+        # mx, my = np.meshgrid(np.linspace(self.X2[:, 0].min(), self.X2[:, 0].max(), 200),
+        #                      np.linspace(self.X2[:, 1].min(), self.X2[:, 1].max(), 200))
+        # mX = np.array([mx.ravel(), my.ravel()]).T
+        # self.mz = prasat.thamnai(mX).reshape(200, -1)
+        # plt.gca(aspect=1, xlim=(self.X2[:, 0].min(), self.X2[:, 0].max()),
+        #         ylim=(self.X2[:, 1].min(), self.X2[:, 1].max()))
+        # plt.contourf(mx, my, self.mz, cmap='rainbow', alpha=0.2)
+        # plt.scatter(self.X2[:, 0], self.X2[:, 1], 50, c=self.z2, edgecolor='k', cmap='rainbow')
+        # plt.show()
+        #
+        # plt.figure(figsize=[6, 10])
+        # ax1 = plt.subplot(211, xticks=[])
+        # ax1.set_title(u'entropy')
+        # ax2 = plt.subplot(212)
+        # ax2.set_title(u'Score')
+        # for Opt in [Sgd, Mmtsgd, Nag, Adagrad, Adadelta, Adam]:
+        #     chan = [Affin(2, 60, 1), Sigmoid(), Affin(60, 1, 1), Sigmoid_entropy()]
+        #     opt = Opt(chan[0].param + chan[2].param, eta=0.02)
+        #     lis_entropy = []
+        #     lis_khanaen = []
+        #     for i in range(200):
+        #         X_ = self.X
+        #         for c in chan[:-1]:
+        #             X_ = c(X_)
+        #         lis_khanaen.append(((X_.kha.ravel() > 0) == z).mean())
+        #         entropy = chan[-1](X_, z)
+        #         lis_entropy.append(entropy.kha)
+        #         entropy.phraeyon()
+        #         opt()
+        #     si = np.random.random(3)
+        #     ax1.plot(lis_entropy, color=si)
+        #     ax2.plot(lis_khanaen, color=si)
+        # plt.legend(['SGD', 'Momentum', 'NAG', 'AdaGrad', 'AdaDelta', 'Adam'], ncol=2)
+        # plt.tight_layout()
+        # plt.show()
+        #
+        # f = open('nn.pkl', 'wb')
+        # pickle.dump(prasat, f)
+        # f.close()
 
-        plt.figure(figsize=[6, 10])
-        ax1 = plt.subplot(211, xticks=[])
-        ax1.set_title(u'entropy')
-        ax2 = plt.subplot(212)
-        ax2.set_title(u'Score')
-        for Opt in [Sgd, Mmtsgd, Nag, Adagrad, Adadelta, Adam]:
-            chan = [Affin(2, 60, 1), Sigmoid(), Affin(60, 1, 1), Sigmoid_entropy()]
-            opt = Opt(chan[0].param + chan[2].param, eta=0.02)
-            lis_entropy = []
-            lis_khanaen = []
-            for i in range(200):
-                X_ = self.X
-                for c in chan[:-1]:
-                    X_ = c(X_)
-                lis_khanaen.append(((X_.kha.ravel() > 0) == z).mean())
-                entropy = chan[-1](X_, z)
-                lis_entropy.append(entropy.kha)
-                entropy.phraeyon()
-                opt()
-            si = np.random.random(3)
-            ax1.plot(lis_entropy, color=si)
-            ax2.plot(lis_khanaen, color=si)
-        plt.legend(['SGD', 'Momentum', 'NAG', 'AdaGrad', 'AdaDelta', 'Adam'], ncol=2)
-        plt.tight_layout()
-        plt.show()
 
-
-def tuni(mz,name):
+###################################################################################
+def tuni(mz, name):
     print(name)
     x0 = 0
     x1 = 0
@@ -302,11 +318,11 @@ def tuni(mz,name):
                 x4 += 1
 
     max_h = max(x0, x1, x2, x3, x4)
-    print(name,target_names[0], 'x0', x0)
-    print(name,target_names[1], 'x1', x1)
-    print(name,target_names[2], 'x2', x2)
-    print(name,target_names[3], 'x3', x3)
-    print(name,target_names[4], 'x4', x4)
+    print(name, target_names[0], 'x0', x0)
+    print(name, target_names[1], 'x1', x1)
+    print(name, target_names[2], 'x2', x2)
+    print(name, target_names[3], 'x3', x3)
+    print(name, target_names[4], 'x4', x4)
     if x0 == max_h:
         print(target_names[0])
     if x1 == max_h:
@@ -319,11 +335,55 @@ def tuni(mz,name):
         print(target_names[4])
 
 
+###################################################################################
+class D_tree:
+    mz = []
+    mx = []
+    my = []
+    mX = []
+
+    def __init__(self, X, z, X2, z2):
+        self.X = X
+        self.z = z
+        self.X2 = X2
+        self.z2 = z2
+        self.mz = self.mz
+        self.mx = self.mx
+        self.my = self.my
+        self.mX = self.mX
+
+    def d_tree(self):
+        rafo = Rafo(n_estimators=100)
+        rafo = rafo.fit(self.X, self.z)
+        print(len(rafo.estimators_))
+        print(rafo.estimators_[0])
+        nmesh = 2000
+        self.mx, self.my = np.meshgrid(np.linspace(self.X2[:, 0].min(), self.X2[:, 0].max(), nmesh),
+                                       np.linspace(self.X2[:, 1].min(), self.X2[:, 1].max(), nmesh))
+        self.mX = np.stack([self.mx.ravel(), self.my.ravel()], 1)
+        self.mz = rafo.predict(self.mX).reshape(nmesh, nmesh)
+        self.plottassimo(self.X2, self.z2, self.mx, self.my, self.mz)
+
+        f = open('d_t.pkl', 'wb')
+        pickle.dump(rafo, f)
+        f.close()
+
+    def plottassimo(self, X, z, mx, my, mz):
+        plt.figure().gca(aspect=1, xlim=[mx.min(), mx.max()], ylim=[my.min(), my.max()])
+        plt.scatter(X[:, 0], X[:, 1], alpha=0.6, c=z, edgecolor='k', cmap='rainbow')
+        plt.contourf(mx, my, mz, alpha=0.4, cmap='rainbow', zorder=0)
+        plt.show()
+
+
+###################################################################################
 if __name__ == '__main__':
     print(__name__)
-    knn_v1 = Knn_v1(X=X, z=z, X2=X2, z2=z2)
-    knn_v1.Knn_v1()
-    # nn_v1 = Nn_v1(X,z,X2,z2)
-    # nn_v1.nn_v1()
-    # tuni(knn_v1.mz,'Knn')
-    # tuni(nn_v1.mz,'Nn')
+    # knn_v1 = Knn_v1(X=X, z=z, X2=X2, z2=z2)
+    # knn_v1.Knn_v1()
+    nn_v1 = Nn_v1(X, z, X2, z2)
+    nn_v1.nn_v1()
+    # d_tree = D_tree(X, z, X2, z2)
+    # d_tree.d_tree()
+    # tuni(knn_v1.mz, 'Knn')
+    # tuni(nn_v1.mz, 'Nn')
+    # tuni(d_tree.mz, 'd_t')
