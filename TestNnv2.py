@@ -12,6 +12,8 @@ from sklearn.preprocessing import StandardScaler as Sta
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report
 from sklearn.model_selection import GridSearchCV
+
+
 class Sgd:
     def __init__(self, param, eta=0.01):
         self.param = param
@@ -199,7 +201,7 @@ class Knn_v1:
     my = []
     mX = []
 
-    def __init__(self, X, z, X2, z2):
+    def __init__(self, X, z, X2, z2,target_names):
         self.X = X
         self.z = z
         self.X2 = X2
@@ -209,9 +211,10 @@ class Knn_v1:
         self.my = self.my
         self.mX = self.mX
         self.nmesh = 200
+        self.target_names = target_names
 
     def Knn_v1(self):
-        from sklearn.model_selection import GridSearchCV
+
         knn = Knn(n_neighbors=1, p=1, algorithm='kd_tree', n_jobs=-1)
         knn = knn.fit(self.X, self.z)
 
@@ -247,7 +250,7 @@ class Knn_v1:
         knn_best.fit(self.X, self.z)
         knn_best.best_estimator_
         self.mz = knn_best.predict(self.X2)
-        print(classification_report(self.z2, self.mz))
+        print(classification_report(self.z2, self.mz,target_names=self.target_names))
         self.mx, self.my = np.meshgrid(np.linspace(self.X2[:, 0].min(), self.X2[:, 0].max(), self.nmesh),
                                        np.linspace(self.X2[:, 1].min(), self.X2[:, 1].max(), self.nmesh))
         self.mX = np.stack([self.mx.ravel(), self.my.ravel()], 1)
@@ -262,12 +265,10 @@ class Knn_v1:
         plt.scatter(self.X2[:, 0], self.X2[:, 1], c=self.z2, edgecolor='k', cmap='rainbow')
         plt.show()
 
-
         import pickle
         f = open('knn.pkl', 'wb')
         pickle.dump(knn_best, f)
         f.close()
-
 
 
 ###################################################################################
@@ -384,15 +385,16 @@ class D_tree:
         self.mX = self.mX
         self.khanaen_fuek = []
         self.khanaen_truat = []
+
     def d_tree(self):
         nmesh = 2000
         for i in range(1, 21):
-            rafo = Rafo(n_estimators=100,max_depth=i)
+            rafo = Rafo(n_estimators=100, max_depth=i)
             rafo = rafo.fit(self.X, self.z)
             self.khanaen_fuek.append(rafo.score(self.X, self.z))
             self.khanaen_truat.append(rafo.score(self.X2, self.z2))
-        self.mz  = rafo.predict(self.X2)
-        print(classification_report(self.z2, self.mz))
+        self.mz = rafo.predict(self.X2)
+        print(classification_report(self.z2, self.mz, target_names=target_names))
 
         self.mx, self.my = np.meshgrid(np.linspace(self.X2[:, 0].min(), self.X2[:, 0].max(), nmesh),
                                        np.linspace(self.X2[:, 1].min(), self.X2[:, 1].max(), nmesh))
@@ -413,17 +415,14 @@ class D_tree:
 
         plt.plot(range(1, 21), self.khanaen_fuek, '#771133')
         plt.plot(range(1, 21), self.khanaen_truat, '#117733')
-        plt.legend([u'Training', u'Test'], prop={'family': 'Tacoma'})
+        plt.legend([u'Training', u'Test'])
         plt.show()
-
-
-
 
 
 ###################################################################################
 if __name__ == '__main__':
     print(__name__)
-    knn_v1 = Knn_v1(X_train, z_train, X_test, z_test)
+    knn_v1 = Knn_v1(X_train, z_train, X_test, z_test,target_names)
     knn_v1.Knn_v1()
     # nn_v1 = Nn_v1(X, z, X2, z2)
     # nn_v1.nn_v1()
