@@ -12,10 +12,9 @@ class CreateData:
         self.xy = xy
         self.xx = xx
     # อ่านข้อมูลจากไฟล์
-    def train_classifier(self):
+    def create_allxyz(self):
+        print(self.data_dir)
         path = [os.path.join(self.data_dir, f) for f in os.listdir(self.data_dir)]
-
-        # print(path)
         xy = []
         for kpose in path:
             try:
@@ -39,6 +38,7 @@ class CreateData:
                     # print(x2)
         return xx
 
+
     def yy(xy):
         yy = []
         for x in xy:
@@ -49,6 +49,7 @@ class CreateData:
                     yy.append(y2)
                     # print(y2)
         return yy
+
 
     def c(xx,yy,idc):
         xy = np.stack((xx, yy), axis=1)
@@ -78,7 +79,7 @@ class CreateData:
         nxy = []
         Zc = []
         for p in path:
-            oxy = p.train_classifier()
+            oxy = p.create_allxyz()
             xx = CreateData.xx(oxy)
             yy = CreateData.yy(oxy)
             oxy = CreateData.xy(xx, yy)

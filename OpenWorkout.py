@@ -44,7 +44,6 @@ class OpenWorkpout:
         # impost classifier
         clf = cv2.face.LBPHFaceRecognizer_create()
         clf.read("face/model/classifier.xml")
-        img_id = 0
         try:
             # Starting OpenPose
             opWrapper = op.WrapperPython()
@@ -56,7 +55,10 @@ class OpenWorkpout:
             # imageToProcess = cv2.VideoCapture(0)
 
             imageToProcess = cv2.VideoCapture(self.filename)
-            img_id = 0
+            img_id = 1
+            path = [os.path.join('dataSet/'+self.nameEx, f) for f in os.listdir('dataSet/'+self.nameEx)]
+            if len(path) >= 1:
+                img_id = len(path)
             while (True):
                 # Read Video
                 ret, frame = imageToProcess.read()
@@ -83,7 +85,7 @@ class OpenWorkpout:
             cv2.destroyAllWindows()
 
 
-        except Exception as e:
+        except IOError as e:
             print(e)
             sys.exit(-1)
 

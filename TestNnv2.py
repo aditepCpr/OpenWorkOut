@@ -1,4 +1,5 @@
-from createData import CreateData as cd
+from ReadData import CreateData as cd
+# from ReadData_2 import CreateData2 as cd
 import numpy as np
 import time
 import pickle
@@ -7,8 +8,10 @@ from sklearn.neighbors import KNeighborsClassifier as Knn
 from unagi import Affin, Softmax_entropy, Sigmoid_entropy, ha_1h
 from unagi import Sigmoid, Relu, Lrelu, Prelu, Elu, Selu, Tanh, Softsign, Softplus
 from sklearn.ensemble import RandomForestClassifier as Rafo
-
-
+from sklearn.preprocessing import StandardScaler as Sta
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import classification_report
+from sklearn.model_selection import GridSearchCV
 class Sgd:
     def __init__(self, param, eta=0.01):
         self.param = param
@@ -150,10 +153,10 @@ deadlift = cd('dataSet/Deadlift')
 cam = cd('dataSet/cam')
 # target_names = np.array(['curl','pushup', 'squat', 'deadlift'], dtype='<U10')
 target_names = np.array(['squat', 'curl', 'pushup', 'dumbbellShoulderPress', 'deadlift'], dtype='<U10')
-# target_names = np.array(['squat', 'pushup', 'pushup', 'dumbbellShoulderPress', 'deadlift'], dtype='<U10')
+# target_names = np.array(['dumbbellShoulderPress', 'squat'], dtype='<U10')
 
-# path = [squat, curl,pushup, dumbbellShoulderPress, deadlift]
-path = [squat, curl]
+path = [squat, curl, pushup, dumbbellShoulderPress, deadlift]
+# path = [squat,curl]
 idc = 0
 nxy, z = cd.allpath(path, idc)
 x = cd.xx(nxy)
@@ -161,19 +164,30 @@ y = cd.yy(nxy)
 z = cd.cen_z(z)
 X = np.stack((x, y), axis=1)
 z = np.array(z)
+xy_sta = (X - X.mean(0)) / X.std(0)
+X = xy_sta
 print('Showdata OK...')
-plt.scatter(X[:, 0], X[:, 1], 50, c=z, edgecolor='k', cmap='rainbow')
+plt.scatter(xy_sta[:, 0], xy_sta[:, 1], 50, c=z, edgecolor='k', cmap='rainbow')
 plt.show()
+X_train, X_test, z_train, z_test = train_test_split(X, z, test_size=0.2)
 
-path2 = [squat]
-idc2 = 0
-nxy2, z2 = cd.allpath(path2, idc2)
-x2 = cd.xx(nxy2)
-y2 = cd.yy(nxy2)
-z2 = cd.cen_z(z2)
-X2 = np.stack((x2, y2), axis=1)
-plt.scatter(X2[:, 0], X2[:, 1], 50, c=z2, edgecolor='k', cmap='rainbow')
-plt.show()
+# sta = Sta()
+# sta.fit(X)
+# xy_sta = sta.transform(X)
+# plt.scatter(xy_sta[:, 0], xy_sta[:, 1], 50, c=z, edgecolor='k', cmap='rainbow')
+# plt.show()
+
+# path2 = [dumbbellShoulderPress]
+# idc2 = 0
+# nxy2, z2 = cd.allpath(path2, idc2)
+# x2 = cd.xx(nxy2)
+# y2 = cd.yy(nxy2)
+# z2 = cd.cen_z(z2)
+# X2 = np.stack((x2, y2), axis=1)
+# xy_sta2 = (X2 - X2.mean(0)) / X2.std(0)
+# X2 = xy_sta2
+# plt.scatter(xy_sta2[:, 0], xy_sta2[:, 1], 50, c=z2, edgecolor='k', cmap='rainbow')
+# plt.show()
 
 import seaborn as sns
 
@@ -197,46 +211,63 @@ class Knn_v1:
         self.nmesh = 200
 
     def Knn_v1(self):
-        # for al in ['ball_tree', 'kd_tree', 'brute', 'auto']:
-        #     t1 = time.time()
-        # from sklearn.preprocessing import StandardScaler
-        # scaler = StandardScaler()
-        # X = scaler.fit_transform(self.X,)
-
-        knn = Knn(n_neighbors=5, p=1, algorithm='kd_tree', n_jobs=-1)
+        from sklearn.model_selection import GridSearchCV
+        knn = Knn(n_neighbors=1, p=1, algorithm='kd_tree', n_jobs=-1)
         knn = knn.fit(self.X, self.z)
+
+        ### KNN ธรรมดา
+        # self.mz = knn.predict(self.X2)
+        # print(classification_report(self.z2, self.mz))
+        # self.mx, self.my = np.meshgrid(np.linspace(self.X2[:, 0].min(), self.X2[:, 0].max(), self.nmesh),
+        #                                np.linspace(self.X2[:, 1].min(), self.X2[:, 1].max(), self.nmesh))
+        # self.mX = np.stack([self.mx.ravel(), self.my.ravel()], 1)
+        #
+        # self.mz = knn.predict(self.mX).reshape(self.nmesh, self.nmesh)
+        #
+        # plt.gca(xlim=[self.X2[:, 0].min(), self.X2[:, 0].max()], ylim=[self.X2[:, 1].min(), self.X2[:, 1].max()],
+        #         aspect=1)
+        # plt.contourf(self.mx, self.my, self.mz, alpha=0.1, cmap='rainbow')
+        # plt.contour(self.mx, self.my, self.mz, colors='#222222')
+        # plt.title("KNN")
+        # plt.scatter(self.X2[:, 0], self.X2[:, 1], c=self.z2, edgecolor='k', cmap='rainbow')
+        # plt.show()
+
+        #### knn แบบ การคำนวณความน่าจะเป็น
+        # self.mz = knn.predict_proba(self.mX)[:, len(path2)].reshape(self.nmesh, self.nmesh)
+        # plt.gca(xlim=[self.X2[:, 0].min(), self.X2[:, 0].max()], ylim=[self.X2[:, 1].min(), self.X2[:, 1].max()],
+        #         aspect=1)
+        # plt.contourf(self.mx, self.my, self.mz, alpha=0.1, cmap='rainbow')
+        # plt.contour(self.mx, self.my, self.mz, colors='#222222')
+        # plt.scatter(self.X2[:, 0], self.X2[:, 1], c=self.z2, edgecolor='k', cmap='rainbow')
+        # plt.show()
+
+        #### knn แบบปรับ parameter
+        parameters = {'n_neighbors': range(1, 11)}
+        knn_best = GridSearchCV(knn, parameters, cv=5)
+        knn_best.fit(self.X, self.z)
+        knn_best.best_estimator_
+        self.mz = knn_best.predict(self.X2)
+        print(classification_report(self.z2, self.mz))
         self.mx, self.my = np.meshgrid(np.linspace(self.X2[:, 0].min(), self.X2[:, 0].max(), self.nmesh),
                                        np.linspace(self.X2[:, 1].min(), self.X2[:, 1].max(), self.nmesh))
         self.mX = np.stack([self.mx.ravel(), self.my.ravel()], 1)
 
-        self.mz = knn.predict(self.mX).reshape(self.nmesh, self.nmesh)
+        self.mz = knn_best.predict(self.mX).reshape(self.nmesh, self.nmesh)
 
         plt.gca(xlim=[self.X2[:, 0].min(), self.X2[:, 0].max()], ylim=[self.X2[:, 1].min(), self.X2[:, 1].max()],
                 aspect=1)
         plt.contourf(self.mx, self.my, self.mz, alpha=0.1, cmap='rainbow')
         plt.contour(self.mx, self.my, self.mz, colors='#222222')
+        plt.title("KNN_best")
         plt.scatter(self.X2[:, 0], self.X2[:, 1], c=self.z2, edgecolor='k', cmap='rainbow')
         plt.show()
 
-        self.mz = knn.predict_proba(self.mX)[:, len(path2)].reshape(self.nmesh, self.nmesh)
-        plt.gca(xlim=[self.X2[:, 0].min(), self.X2[:, 0].max()], ylim=[self.X2[:, 1].min(), self.X2[:, 1].max()],
-                aspect=1)
-        plt.contourf(self.mx, self.my, self.mz, alpha=0.1, cmap='rainbow')
-        plt.contour(self.mx, self.my, self.mz, colors='#222222')
-        plt.scatter(self.X2[:, 0], self.X2[:, 1], c=self.z2, edgecolor='k', cmap='rainbow')
-        plt.show()
 
         import pickle
         f = open('knn.pkl', 'wb')
-        pickle.dump(knn, f)
+        pickle.dump(knn_best, f)
         f.close()
 
-        # print(u'%s: %.3f วินาที' % (al, time.time() - t1))
-        # k = knn.kneighbors(X)
-        # print(k[0])
-        # print(k[1])
-        # for i in range(8):
-        #     print(', '.join(['%d > %.2f' % (k[1][i][j], k[0][i][j]) for j in range(3)]))
 
 
 ###################################################################################
@@ -351,13 +382,18 @@ class D_tree:
         self.mx = self.mx
         self.my = self.my
         self.mX = self.mX
-
+        self.khanaen_fuek = []
+        self.khanaen_truat = []
     def d_tree(self):
-        rafo = Rafo(n_estimators=100)
-        rafo = rafo.fit(self.X, self.z)
-        print(len(rafo.estimators_))
-        print(rafo.estimators_[0])
         nmesh = 2000
+        for i in range(1, 21):
+            rafo = Rafo(n_estimators=100,max_depth=i)
+            rafo = rafo.fit(self.X, self.z)
+            self.khanaen_fuek.append(rafo.score(self.X, self.z))
+            self.khanaen_truat.append(rafo.score(self.X2, self.z2))
+        self.mz  = rafo.predict(self.X2)
+        print(classification_report(self.z2, self.mz))
+
         self.mx, self.my = np.meshgrid(np.linspace(self.X2[:, 0].min(), self.X2[:, 0].max(), nmesh),
                                        np.linspace(self.X2[:, 1].min(), self.X2[:, 1].max(), nmesh))
         self.mX = np.stack([self.mx.ravel(), self.my.ravel()], 1)
@@ -371,19 +407,29 @@ class D_tree:
     def plottassimo(self, X, z, mx, my, mz):
         plt.figure().gca(aspect=1, xlim=[mx.min(), mx.max()], ylim=[my.min(), my.max()])
         plt.scatter(X[:, 0], X[:, 1], alpha=0.6, c=z, edgecolor='k', cmap='rainbow')
+        plt.title("decision tree ")
         plt.contourf(mx, my, mz, alpha=0.4, cmap='rainbow', zorder=0)
         plt.show()
+
+        plt.plot(range(1, 21), self.khanaen_fuek, '#771133')
+        plt.plot(range(1, 21), self.khanaen_truat, '#117733')
+        plt.legend([u'Training', u'Test'], prop={'family': 'Tacoma'})
+        plt.show()
+
+
+
 
 
 ###################################################################################
 if __name__ == '__main__':
     print(__name__)
-    # knn_v1 = Knn_v1(X=X, z=z, X2=X2, z2=z2)
-    # knn_v1.Knn_v1()
-    nn_v1 = Nn_v1(X, z, X2, z2)
-    nn_v1.nn_v1()
-    # d_tree = D_tree(X, z, X2, z2)
+    knn_v1 = Knn_v1(X_train, z_train, X_test, z_test)
+    knn_v1.Knn_v1()
+    # nn_v1 = Nn_v1(X, z, X2, z2)
+    # nn_v1.nn_v1()
+    # d_tree = D_tree(X_train, z_train, X_test, z_test)
     # d_tree.d_tree()
-    # tuni(knn_v1.mz, 'Knn')
-    # tuni(nn_v1.mz, 'Nn')
+
+    # # tuni(knn_v1.mz, 'Knn')
+    # # tuni(nn_v1.mz, 'Nn')
     # tuni(d_tree.mz, 'd_t')

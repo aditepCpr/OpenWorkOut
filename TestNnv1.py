@@ -1,4 +1,4 @@
-from createData import CreateData as cd
+from ReadData import CreateData as cd
 import numpy as np
 import time
 import matplotlib.pyplot as plt
@@ -13,8 +13,8 @@ cam = cd('dataSet/cam')
 # target_names = np.array(['curl','pushup', 'squat', 'deadlift'], dtype='<U10')
 target_names = np.array(['squat', 'curl', 'pushup', 'dumbbellShoulderPress', 'deadlift'], dtype='<U10')
 
-path = [squat, curl,pushup, dumbbellShoulderPress, deadlift]
-# path = [squat, curl]
+# path = [squat, curl,pushup, dumbbellShoulderPress, deadlift]
+path = [cam]
 idc = 0
 nxy, z = cd.allpath(path, idc)
 xxx = cd.xx(nxy)

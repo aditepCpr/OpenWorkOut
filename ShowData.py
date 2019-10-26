@@ -1,4 +1,4 @@
-from createData import CreateData as cd
+from ReadData import CreateData as cd
 import numpy as np
 import time
 import matplotlib.pyplot as plt

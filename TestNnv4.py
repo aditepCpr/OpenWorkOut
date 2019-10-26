@@ -1,10 +1,85 @@
-from createData import CreateData as cd
 import numpy as np
-import time
+import pickle
 import matplotlib.pyplot as plt
-from sklearn.neighbors import KNeighborsClassifier as Knn
-from unagi import Affin, Sigmoid, Relu, Softmax_entropy, Sigmoid_entropy, ha_1h
-from sklearn.linear_model import LogisticRegression as Lori
+from ReadData import CreateData as cd
+
+
+class D_tree:
+    mz = []
+    mx = []
+    my = []
+    mX = []
+
+    def __init__(self, X, z):
+
+        self.X = X
+        self.z = z
+        self.mz = self.mz
+        self.mx = self.mx
+        self.my = self.my
+        self.mX = self.mX
+
+    def d_tree(self):
+        try:
+            file_model = open('d_t.pkl', 'rb')
+            stored_d_t = pickle.load(file_model)
+            file_model.close()
+        except IOError as e:
+            print(e)
+        nmesh = 2000
+        self.mx, self.my = np.meshgrid(np.linspace(self.X[:, 0].min(), self.X[:, 0].max(), nmesh),
+                                       np.linspace(self.X[:, 1].min(), self.X[:, 1].max(), nmesh))
+        self.mX = np.stack([self.mx.ravel(), self.my.ravel()], 1)
+        self.mz = stored_d_t.predict(self.mX).reshape(nmesh, nmesh)
+        self.plottassimo(self.X, self.z, self.mx, self.my, self.mz)
+
+
+    def plottassimo(self, X, z, mx, my, mz):
+        plt.figure().gca(aspect=1, xlim=[mx.min(), mx.max()], ylim=[my.min(), my.max()])
+        plt.scatter(X[:, 0], X[:, 1], alpha=0.6, c=z, edgecolor='k', cmap='rainbow')
+        plt.title("decision tree ")
+        plt.contourf(mx, my, mz, alpha=0.4, cmap='rainbow', zorder=0)
+        plt.show()
+
+def tuni(mz, name):
+    print(name)
+    x0 = 0
+    x1 = 0
+    x2 = 0
+    x3 = 0
+    x4 = 0
+
+    for h in mz:
+
+        for h1 in h:
+            if h1 == 0:
+                x0 += 1
+            elif h1 == 1:
+                x1 += 1
+            elif h1 == 2:
+                x2 += 1
+            elif h1 == 3:
+                x3 += 1
+            elif h1 == 4:
+                x4 += 1
+
+    max_h = max(x0, x1, x2, x3, x4)
+    print(name, target_names[0], 'x0', x0)
+    print(name, target_names[1], 'x1', x1)
+    print(name, target_names[2], 'x2', x2)
+    print(name, target_names[3], 'x3', x3)
+    print(name, target_names[4], 'x4', x4)
+    if x0 == max_h:
+        print(target_names[0])
+    if x1 == max_h:
+        print(target_names[1])
+    if x2 == max_h:
+        print(target_names[2])
+    if x3 == max_h:
+        print(target_names[3])
+    if x4 == max_h:
+        print(target_names[4])
+
 
 squat = cd("dataSet/Squat")
 curl = cd("dataSet/Barbell Curl")
@@ -12,13 +87,10 @@ pushup = cd('dataSet/Push Ups')
 dumbbellShoulderPress = cd('dataSet/Dumbbell Shoulder Press')
 deadlift = cd('dataSet/Deadlift')
 cam = cd('dataSet/cam')
-# target_names = np.array(['curl','pushup', 'squat', 'deadlift'], dtype='<U10')
 target_names = np.array(['squat', 'curl', 'pushup', 'dumbbellShoulderPress', 'deadlift'], dtype='<U10')
-# target_names = np.array(['squat', 'pushup', 'pushup', 'dumbbellShoulderPress', 'deadlift'], dtype='<U10')
 
-path = [squat, curl,pushup, dumbbellShoulderPress, deadlift]
 
-# path = [squat, curl]
+path = [squat]
 idc = 0
 nxy, z = cd.allpath(path, idc)
 x = cd.xx(nxy)
@@ -26,40 +98,19 @@ y = cd.yy(nxy)
 z = cd.cen_z(z)
 X = np.stack((x, y), axis=1)
 z = np.array(z)
+xy_sta = (X-X.mean(0))/X.std(0)
+print(xy_sta)
 print('Showdata OK...')
-plt.scatter(X[:, 0], X[:, 1], 50, c=z, edgecolor='k', cmap='rainbow')
-plt.show()
-
-path2 = [cam]
-idc2 = 0
-nxy2, z2 = cd.allpath(path2, idc2)
-x2 = cd.xx(nxy2)
-y2 = cd.yy(nxy2)
-z2 = cd.cen_z(z2)
-X2 = np.stack((x2, y2), axis=1)
-plt.scatter(X2[:, 0], X2[:, 1], 50, c=z2, edgecolor='k', cmap='rainbow')
+plt.scatter(xy_sta[:, 0], xy_sta[:, 1], 50, c=z, edgecolor='k', cmap='rainbow')
 plt.show()
 
 
-lori = Lori()
-lori.fit(X,z)
+print('Showdata OK...')
 
-z2 = lori.predict(X2)
-plt.gca(aspect=1)
-plt.scatter(X[:,0],X[:,1],c=z,s=30,alpha=0.3,edgecolor='k',cmap='brg')
-plt.scatter(X2[:,0],X2[:,1],c=z2,s=700,marker='*',edgecolor='k',cmap='brg')
-plt.show()
 
-nmesh = 1000 # สร้างจุดที่จะให้ทำนาย เป็นตาราง 100x100 รอบบริเวณนี้
-mx,my = np.meshgrid(np.linspace(X[:,0].min(),X[:,0].max(),nmesh),
-                    np.linspace(X[:,1].min(),X[:,1].max(),nmesh))
+if __name__ == '__main__':
+    print(__name__)
 
-# ปรับให้เรียงต่อกันเป็นอาเรย์หนึ่งมิติ แล้วรวมค่า x และ y เข้าเป็นอาเรย์เดียว
-mX = np.stack([mx.ravel(),my.ravel()],1)
-mz = lori.predict(mX) # ทำการทำนาย
-mz = mz.reshape(nmesh,nmesh) # เปลี่ยนรูปกลับเป็นอาเรย์สองมิติ
-plt.figure()
-plt.gca(aspect=1)
-plt.pcolormesh(mx,my,mz,alpha=0.6,cmap='brg') # วาดสีพื้น
-plt.scatter(X[:,0],X[:,1],c=z,s=30,edgecolor='k',cmap='brg') # วาดจุดข้อมูล
-plt.show()
+    d_tree = D_tree(X, z)
+    d_tree.d_tree()
+    tuni(d_tree.mz, 'decision tree')

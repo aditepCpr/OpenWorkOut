@@ -1,7 +1,7 @@
 from body.KeyPoints import *
 import codecs, json
 import numpy as np
-
+import os
 
 class CreateJson():
 
@@ -9,7 +9,7 @@ class CreateJson():
         self.kp = kp
         self.img_id = img_id
         self.nameEx = nameEx
-        z = 0
+
         # print(KeyPoints.getBodyKeypoints(self.kp))
 
         BodyKey = np.array([[KeyPoints.getNeck1(kp), KeyPoints.getNeck2(kp)],
@@ -29,12 +29,11 @@ class CreateJson():
         # print(BodyKey)
         # print(BodyKey.shape)
         try:
+
             # json
             b = BodyKey.tolist()
-            print('Write__>>', self.nameEx+'/keypose',+self.img_id)
+            print('Write__>>', self.nameEx + '/keypose', + self.img_id)
             file_path = ('dataSet/' + str(self.nameEx) + '/keypose.' + str(self.img_id) + ".json")
-            # file_path = ('dataSet/squat/keypose.' + str(self.img_id) + ".json")
-            # file_path = ('dataSet/pushup/keypose.' + str(self.img_id) + ".json")
             json.dump(b, codecs.open(file_path, 'w', encoding='utf-8'), separators=(',', ':'), sort_keys=True,
                       indent=4)
             # key = open('keypose.json','a')
