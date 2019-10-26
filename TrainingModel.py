@@ -162,30 +162,32 @@ def show_Data(X, z, mx, my, mz, name, target_names, mz_):
     plt.contourf(mx, my, mz, alpha=0.4, cmap='rainbow', zorder=0)
     plt.show()
 
-squat = cd("dataSet/Squat")
-curl = cd("dataSet/Barbell Curl")
-pushup = cd('dataSet/Push Ups')
-dumbbellShoulderPress = cd('dataSet/Dumbbell Shoulder Press')
-deadlift = cd('dataSet/Deadlift')
-cam = cd('dataSet/cam')
-target_names = np.array(['squat', 'curl', 'pushup', 'dumbbellShoulderPress', 'deadlift'], dtype='<U10')
-
-path = [squat, curl, pushup, dumbbellShoulderPress, deadlift]
-idc = 0
-nxy, z = cd.allpath(path, idc)
-x = cd.xx(nxy)
-y = cd.yy(nxy)
-z = cd.cen_z(z)
-X = np.stack((x, y), axis=1)
-z = np.array(z)
-X = (X - X.mean(0)) / X.std(0)
-X_train, X_test, z_train, z_test = train_test_split(X, z, test_size=0.2)
-print('Showdata OK...')
-# plt.scatter(X[:, 0], X[:, 1], 50, c=z, edgecolor='k', cmap='rainbow')
-# plt.show()
-
 if __name__ == '__main__':
-    print(__name__)
+    try:
+        squat = cd("dataSet/Squat")
+        curl = cd("dataSet/Barbell Curl")
+        pushup = cd('dataSet/Push Ups')
+        dumbbellShoulderPress = cd('dataSet/Dumbbell Shoulder Press')
+        deadlift = cd('dataSet/Deadlift')
+        cam = cd('dataSet/cam')
+        target_names = np.array(['squat', 'curl', 'pushup', 'dumbbellShoulderPress', 'deadlift'], dtype='<U10')
+
+        path = [squat, curl, pushup, dumbbellShoulderPress, deadlift]
+        idc = 0
+        nxy, z = cd.allpath(path, idc)
+        x = cd.xx(nxy)
+        y = cd.yy(nxy)
+        z = cd.cen_z(z)
+        X = np.stack((x, y), axis=1)
+        z = np.array(z)
+        X = (X - X.mean(0)) / X.std(0)
+        X_train, X_test, z_train, z_test = train_test_split(X, z, test_size=0.2)
+        print('Showdata OK...')
+        # plt.scatter(X[:, 0], X[:, 1], 50, c=z, edgecolor='k', cmap='rainbow')
+        # plt.show()
+    except Exception as e:
+        print(e)
+
     knn = Knn_(X_train,z_train,X_test, z_test,target_names)
     knn.knn()
     dt = DecisionTree(X_train,z_train,X_test, z_test,target_names)

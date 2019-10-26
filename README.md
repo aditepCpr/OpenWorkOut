@@ -10,4 +10,5 @@
   - 20/10/2019.01 ทดลองใช้ knn และ unsupervised learning decomposition
   - 21/10/2019.01 ทดลองใช้ nn,decision tree
   - 22/10/2019.01 ทดลองใช้ nn activation function แบบต่างๆ 'Lrelu', 'Elu', 'Selu', 'Tanh', 'Softsign', 'Softplus' , 'Relu'
-  - 26/1082019.01 ทดลองใช้ knn แบบปรับพารามิติเอง และแสดงค่าความผิดพลาด
+  - 26/10/2019.01 ทดลองใช้ knn แบบปรับพารามิติเอง และแสดงค่าความผิดพลาด
+  - 29/10/2019.02 ปรับโครงสร้าง code ใหม่
