@@ -3,7 +3,7 @@
 import cv2
 from body.KeyPoints import KeyPoints
 import CreateJson as Cjson
-
+from Predict_Data import Knn_
 
 def draw_boundary(img, bodyKeypoints, color, kp):
     # แขนขวา
@@ -54,3 +54,5 @@ def detect_body(img, bodyKeypoints, img_id, nameEx):
 
     # create Json file
     Cjson.CreateJson(kp, img_id, nameEx)
+
+

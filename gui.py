@@ -4,7 +4,7 @@ from tkinter import Button, Menu
 from tkinter import filedialog
 from tkinter import ttk
 import OpenWorkout as Owk
-import ShowData as sd
+
 
 selectionnFilename = None
 
