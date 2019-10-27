@@ -90,6 +90,24 @@ class Knn_:
         self.mz_, self.mx, self.my, self.mX, self.mz = predict_Data(self.X, stored_knn, self.nmesh)
         show_Data(self.X, self.z, self.mx, self.my, self.mz, self.name, self.target_names, self.mz_)
 
+class SVC_:
+    mz = []
+    mz_ = []
+
+    def __init__(self, X, z, target_names):
+        self.X = X
+        self.z = z
+        self.mz = self.mz
+        self.mz_ = self.mz_
+        self.target_names = target_names
+        self.nmesh = 200
+        self.name = 'support vector machine'
+        self.fileName = 'Svc'
+
+    def svc(self):
+        stored_svc = load_Data(self.fileName)
+        self.mz_, self.mx, self.my, self.mX, self.mz = predict_Data(self.X, stored_svc, self.nmesh)
+        show_Data(self.X, self.z, self.mx, self.my, self.mz, self.name, self.target_names, self.mz_)
 
 def predict_Data(X, model, nmesh):
     mz_ = model.predict(X)
@@ -173,14 +191,16 @@ if __name__ == '__main__':
         # plt.show()
     except Exception as e:
         print(e)
-    knn = Knn_(X, z, target_names)
-    knn.knn()
-    dt = DecisionTree(X, z, target_names)
-    dt.decisionTree()
-    randomforest = RandomForest(X, z, target_names)
-    randomforest.randomforest()
-    lori = Lori(X, z, target_names)
-    lori.lori()
+    # knn = Knn_(X, z, target_names)
+    # knn.knn()
+    # dt = DecisionTree(X, z, target_names)
+    # dt.decisionTree()
+    # randomforest = RandomForest(X, z, target_names)
+    # randomforest.randomforest()
+    # lori = Lori(X, z, target_names)
+    # lori.lori()
+    svc = SVC_(X, z, target_names)
+    svc.svc()
     # print(knn.mz_)
     # tuni(knn.mz_,knn.name)
-    # tuni(knn.mz_,knn.name)
+    tuni(svc.mz_,svc.name)

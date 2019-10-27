@@ -9,6 +9,7 @@ from sklearn.tree import DecisionTreeClassifier as Ditri
 from sklearn.ensemble import RandomForestClassifier as Rafo
 from StackData import DataModel
 from StackData import StackData
+from sklearn.svm import SVC
 
 
 class DecisionTree:
@@ -130,6 +131,53 @@ class Knn_:
         show_Data(self.X2, self.z2, self.mx, self.my, self.mz, self.name, self.target_names, self.mz_)
         dump_Data(self.fileName, knn_best)
 
+from sklearn.model_selection import validation_curve
+class SVC_:
+    mz = []
+    mz_ = []
+
+    def __init__(self, X, z, X2, z2, target_names):
+        self.X = X
+        self.z = z
+        self.X2 = X2
+        self.z2 = z2
+        self.mz = self.mz
+        self.target_names = target_names
+        self.nmesh = 200
+        self.name = 'support vector machine'
+        self.mz_ = self.mz_
+        self.fileName = 'Svc'
+
+    def svc(self):
+        # ccc = 10 ** np.linspace(-5, 5, 41)
+        # khanaen_fuek, khanaen_truat = validation_curve(SVC(gamma=1), self.X, self.z, 'C', ccc, cv=5)
+
+        svc = SVC(kernel='rbf', C=150, gamma=10.0)
+        svc = svc.fit(self.X, self.z)
+        self.mz_, self.mx, self.my, self.mX, self.mz = predict_Data(self.X2, svc, self.nmesh)
+        show_Data(self.X2, self.z2, self.mx, self.my, self.mz, self.name, self.target_names, self.mz_)
+        dump_Data(self.fileName, svc)
+
+        # plt.figure(figsize=[4.5, 6])
+        # plt.subplot(211, aspect=1)
+        # plt.scatter(self.X2[:, 0], self.X2[:, 1], c=self.z2, edgecolor='k', cmap='rainbow')
+        # plt.subplot(212, xscale='log', xlabel='C')
+        # plt.plot(ccc, np.mean(khanaen_fuek, 1), color='#992255')
+        # plt.plot(ccc, np.mean(khanaen_truat, 1), color='#448965')
+        # plt.legend([u'ฝึกฝน', u'ตรวจสอบ'], prop={'family': 'Tahoma'})
+        # plt.show()
+        # from sklearn.model_selection import validation_curve
+        #
+        # ccc = 10 ** np.linspace(-5, 5, 41)
+        # khanaen_fuek, khanaen_truat = validation_curve(SVC(gamma=1), self.X, self.z, 'C', ccc, cv=5)
+        # plt.figure(figsize=[4.5, 6])
+        # plt.subplot(211, aspect=1)
+        # plt.scatter(self.X[:, 0], self.X[:, 1], c=self.z, edgecolor='k', cmap='rainbow')
+        # plt.subplot(212, xscale='log', xlabel='C')
+        # plt.plot(ccc, np.mean(khanaen_fuek, 1), color='#992255')
+        # plt.plot(ccc, np.mean(khanaen_truat, 1), color='#448965')
+        # plt.legend([u'ฝึกฝน', u'ตรวจสอบ'], prop={'family': 'Tahoma'})
+        # plt.show()
 
 def dump_Data(fileName, model):
     try:
@@ -182,12 +230,14 @@ if __name__ == '__main__':
     except Exception as e:
         print(e)
 
-    knn = Knn_(X_train, z_train, X_test, z_test, target_names)
-    knn.knn()
-    dt = DecisionTree(X_train, z_train, X_test, z_test, target_names)
-    dt.decisionTree()
-    randomforest = RandomForest(X_train, z_train, X_test, z_test, target_names)
-    randomforest.randomforest()
-    lori = Lori(X_train, z_train, X_test, z_test, target_names)
-    lori.lori()
+    # knn = Knn_(X_train, z_train, X_test, z_test, target_names)
+    # knn.knn()
+    # dt = DecisionTree(X_train, z_train, X_test, z_test, target_names)
+    # dt.decisionTree()
+    # randomforest = RandomForest(X_train, z_train, X_test, z_test, target_names)
+    # randomforest.randomforest()
+    # lori = Lori(X_train, z_train, X_test, z_test, target_names)
+    # lori.lori()
+    svc = SVC_(X_train, z_train, X_test, z_test, target_names)
+    svc.svc()
     # # tuni(d_tree.mz, 'decision tree')
