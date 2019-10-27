@@ -1,10 +1,8 @@
 import numpy as np
 import pickle
 import matplotlib.pyplot as plt
-from ReadData import CreateData as cd
-from sklearn.metrics import classification_report, accuracy_score
-from sklearn.model_selection import train_test_split
-
+from StackData import DataModel
+from StackData import StackData
 
 class DecisionTree:
     mz = []
@@ -162,64 +160,14 @@ def tuni(mz, name):
         print(target_names[4])
 
 
-class DataModel:
-    def __init__(self):
-        self.squat = cd("dataSet/Squat")
-        self.curl = cd("dataSet/Barbell Curl")
-        self.pushup = cd('dataSet/Push Ups')
-        self.dumbbellShoulderPress = cd('dataSet/Dumbbell Shoulder Press')
-        self.deadlift = cd('dataSet/Deadlift')
-        self.cam = cd('dataSet/cam')
-        self.target_names = np.array(['squat', 'curl', 'pushup', 'dumbbellShoulderPress', 'deadlift'], dtype='<U10')
-
-    def getSquat(self):
-        return self.squat
-
-    def getCurl(self):
-        return self.curl
-
-    def getPushup(self):
-        return self.pushup
-
-    def getDumbbellShoulderPress(self):
-        return self.dumbbellShoulderPress
-
-    def getDeadlift(self):
-        return self.deadlift
-
-    def getCam(self):
-        return self.cam
-
-    def getTargetNames(self):
-        return self.target_names
-
-
-class StackData:
-    def __init__(self, path):
-        self.path = path
-
-    def stackData(self):
-        idc = 0
-        nxy, z = cd.allpath(self.path, idc)
-        x = cd.xx(nxy)
-        y = cd.yy(nxy)
-        z = cd.cen_z(z)
-        X = np.stack((x, y), axis=1)
-        z = np.array(z)
-        X = (X - X.mean(0)) / X.std(0)
-        return X, z
-
-
 if __name__ == '__main__':
-    # path = [squat, curl, pushup, dumbbellShoulderPress, deadlift]
     try:
         dm = DataModel()
         cam = dm.getCam()
         target_names = dm.getTargetNames()
         path = [cam]
         data = StackData(path)
-        X, z = data.stackData()
-        # X_train, X_test, z_train, z_test = train_test_split(X, z, test_size=0.2)
+        X, z = data.stackData_Predict()
         print('DataSet OK...')
         # plt.scatter(X[:, 0], X[:, 1], 50, c=z, edgecolor='k', cmap='rainbow')
         # plt.show()
