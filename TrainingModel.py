@@ -131,7 +131,10 @@ class Knn_:
         show_Data(self.X2, self.z2, self.mx, self.my, self.mz, self.name, self.target_names, self.mz_)
         dump_Data(self.fileName, knn_best)
 
+
 from sklearn.model_selection import validation_curve
+
+
 class SVC_:
     mz = []
     mz_ = []
@@ -179,6 +182,7 @@ class SVC_:
         # plt.legend([u'ฝึกฝน', u'ตรวจสอบ'], prop={'family': 'Tahoma'})
         # plt.show()
 
+
 def dump_Data(fileName, model):
     try:
         f = open(fileName + '.pkl', 'wb')
@@ -209,7 +213,8 @@ def show_Data(X, z, mx, my, mz, name, target_names, mz_):
     plt.contourf(mx, my, mz, alpha=0.4, cmap='rainbow', zorder=0)
     plt.show()
 
-if __name__ == '__main__':
+
+def data():
     try:
 
         dataModel = DataModel()
@@ -230,14 +235,71 @@ if __name__ == '__main__':
     except Exception as e:
         print(e)
 
-    # knn = Knn_(X_train, z_train, X_test, z_test, target_names)
-    # knn.knn()
+    return X_train, X_test, z_train, z_test, target_names
+
+def training_knn():
+    print('Training_knn Start..')
+    X_train, X_test, z_train, z_test, target_names = data()
+    knn = Knn_(X_train, z_train, X_test, z_test, target_names)
+    knn.knn()
+    print('Training_knn Finish..')
+
+def training_DecisionTree():
+    print('training_DecisionTree Start..')
+    X_train, X_test, z_train, z_test, target_names = data()
+    dt = DecisionTree(X_train, z_train, X_test, z_test, target_names)
+    dt.decisionTree()
+    print('training_DecisionTree Finish..')
+
+def training_RandomForest():
+    print('training_RandomForest Start..')
+    X_train, X_test, z_train, z_test, target_names = data()
+    randomforest = RandomForest(X_train, z_train, X_test, z_test, target_names)
+    randomforest.randomforest()
+    print('training_RandomForest Finish..')
+
+def training_Lori():
+    print('training_Lori Start..')
+    X_train, X_test, z_train, z_test, target_names = data()
+    lori = Lori(X_train, z_train, X_test, z_test, target_names)
+    lori.lori()
+    print('training_Lori Finish..')
+
+def training_Svc():
+    print('training_Svc Start..')
+    X_train, X_test, z_train, z_test, target_names = data()
+    svc = SVC_(X_train, z_train, X_test, z_test, target_names)
+    svc.svc()
+    print('training_Svc Finish..')
+
+# if __name__ == '__main__':
+    # try:
+    #
+    #     dataModel = DataModel()
+    #     squat = dataModel.getSquat()
+    #     curl = dataModel.getCurl()
+    #     pushup = dataModel.getPushup()
+    #     dumbbellShoulderPress = dataModel.getDumbbellShoulderPress()
+    #     deadlift = dataModel.getDeadlift()
+    #     cam = dataModel.getCam()
+    #     target_names = dataModel.getTargetNames()
+    #
+    #     path = [squat, curl, pushup, dumbbellShoulderPress, deadlift]
+    #     sd = StackData(path)
+    #     X_train, X_test, z_train, z_test = sd.stackData_Train()
+    #     print('DataSet OK...')
+    #     # plt.scatter(X[:, 0], X[:, 1], 50, c=z, edgecolor='k', cmap='rainbow')
+    #     # plt.show()
+    # except Exception as e:
+    #     print(e)
+    #
+    #
     # dt = DecisionTree(X_train, z_train, X_test, z_test, target_names)
     # dt.decisionTree()
     # randomforest = RandomForest(X_train, z_train, X_test, z_test, target_names)
     # randomforest.randomforest()
     # lori = Lori(X_train, z_train, X_test, z_test, target_names)
     # lori.lori()
-    svc = SVC_(X_train, z_train, X_test, z_test, target_names)
-    svc.svc()
-    # # tuni(d_tree.mz, 'decision tree')
+    # svc = SVC_(X_train, z_train, X_test, z_test, target_names)
+    # svc.svc()
+    # # # tuni(d_tree.mz, 'decision tree')

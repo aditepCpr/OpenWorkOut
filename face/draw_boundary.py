@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*- 
 import cv2
 def draw_boundary(img, classifier, scaleFactor, minNeighbors, color, clf):
+    print('draw_boundary')
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     features = classifier.detectMultiScale(gray, scaleFactor, minNeighbors)
 
@@ -13,7 +14,7 @@ def draw_boundary(img, classifier, scaleFactor, minNeighbors, color, clf):
         # id กับ ค่าความผิดพลาด
         id, con = clf.predict(gray[y:y + h, x:x + w])
 
-        if con <= 100:
+        if con <= 80:
             cv2.putText(img, 'TOP', (x, y - 4), cv2.FONT_HERSHEY_SIMPLEX, 0.8, color, 1)
         else:
             cv2.putText(img, 'unKnow', (x, y - 4), cv2.FONT_HERSHEY_SIMPLEX, 0.8, color, 1)
@@ -29,6 +30,7 @@ def draw_boundary(img, classifier, scaleFactor, minNeighbors, color, clf):
     return img, coords
 
 def detect_face(img, faceCascade, img_id, clf):
+    print('detect_face')
     img, coords = draw_boundary(img, faceCascade, 1.1, 10, (0, 0, 255), clf)
 
     # ตรวจจับเฉพาะหน้า

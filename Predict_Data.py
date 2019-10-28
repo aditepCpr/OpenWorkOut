@@ -141,6 +141,8 @@ def load_Data(fileName):
 
 
 def tuni(mz, name):
+    X,z,target_names = data()
+
     print(name)
     x0 = 0
     x1 = 0
@@ -177,8 +179,37 @@ def tuni(mz, name):
     if x4 == max_h:
         print(target_names[4])
 
+def predict_knn():
+    X, z, target_names = data()
+    knn = Knn_(X, z, target_names)
+    knn.knn()
+    tuni(knn.mz_,knn.name)
 
-if __name__ == '__main__':
+def predict_DecisionTree():
+    X, z, target_names = data()
+    dt = DecisionTree(X, z, target_names)
+    dt.decisionTree()
+    tuni(dt.mz_, dt.name)
+
+def predict_RandomForest():
+    X, z, target_names = data()
+    rt = RandomForest(X, z, target_names)
+    rt.randomforest()
+    tuni(rt.mz_, rt.name)
+
+def predict_Lori():
+    X, z, target_names = data()
+    lori = Lori(X, z, target_names)
+    lori.lori()
+    tuni(lori.mz_, lori.name)
+
+def predict_Svc():
+    X, z, target_names = data()
+    svc = SVC_(X, z, target_names)
+    svc.svc()
+    tuni(svc.mz_, svc.name)
+
+def data():
     try:
         dm = DataModel()
         cam = dm.getCam()
@@ -191,16 +222,4 @@ if __name__ == '__main__':
         # plt.show()
     except Exception as e:
         print(e)
-    # knn = Knn_(X, z, target_names)
-    # knn.knn()
-    # dt = DecisionTree(X, z, target_names)
-    # dt.decisionTree()
-    # randomforest = RandomForest(X, z, target_names)
-    # randomforest.randomforest()
-    # lori = Lori(X, z, target_names)
-    # lori.lori()
-    svc = SVC_(X, z, target_names)
-    svc.svc()
-    # print(knn.mz_)
-    # tuni(knn.mz_,knn.name)
-    tuni(svc.mz_,svc.name)
+    return X,z,target_names

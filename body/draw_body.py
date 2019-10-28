@@ -3,11 +3,10 @@
 import cv2
 from body.KeyPoints import KeyPoints
 import CreateJson as Cjson
-from Predict_Data import Knn_
+import Predict_Live
 
 def draw_boundary(img, bodyKeypoints, color, kp):
     # แขนขวา
-
     if (kp.getRShoulder1() != 0):
         cv2.line(img, (kp.getNeck1(), kp.getNeck2()), (kp.getRShoulder1(), kp.getRShoulder2()),
                  (0, 0, 255), 10)
@@ -51,8 +50,10 @@ def detect_body(img, bodyKeypoints, img_id, nameEx):
 
     color = (0, 0, 255)
     img = draw_boundary(img, bodyKeypoints, color, kp)
+    Predict_Live.Live(kp)
 
     # create Json file
     Cjson.CreateJson(kp, img_id, nameEx)
+    return img
 
 

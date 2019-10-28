@@ -71,23 +71,25 @@ class OpenWorkpout:
                 opWrapper.emplaceAndPop([datum])
                 bodyKeypoints = datum.poseKeypoints
                 try:
-                    detect_body(frame, bodyKeypoints, img_id, self.nameEx)
+                   detect_body(frame, bodyKeypoints, img_id, self.nameEx)
                 except Exception as e:
                     print(e)
 
                 # print("Body keypoints: \n" + str(datum.poseKeypoints))
 
                 cv2.imshow('OpenWorkOut', f1)
+                # cv2.imshow('OpenWorkOut')
                 img_id += 1
                 if (cv2.waitKey(1) & 0xFF == ord('q')):
                     break
-            imageToProcess.release()
-            cv2.destroyAllWindows()
 
 
-        except IOError as e:
+        except Exception as e:
             print(e)
             sys.exit(-1)
+
+        imageToProcess.release()
+        cv2.destroyAllWindows()
 
 # test
 # if __name__ == '__main__':

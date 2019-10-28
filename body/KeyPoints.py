@@ -153,3 +153,20 @@ class KeyPoints:
 
     def getBodyKeypoints(self):
         return self.bkp
+
+    def getAllKeypoints(self):
+        BodyKey = np.array([[self.getNeck1(), self.getNeck2()],
+                            [self.getRShoulder1(), self.getRShoulder2()],
+                            [self.getRElbow1(), self.getRElbow1()],
+                            [self.getRWrist1(), self.getRWrist2()],
+                            [self.getLShoulder1(), self.getLShoulder2()],
+                            [self.getLElbow1(), self.getLElbow2()],
+                            [self.getLWrist1(), self.getLWrist2()],
+                            [self.getMidHip1(), self.getMidHip2()],
+                            [self.getRHip1(), self.getRHip2()],
+                            [self.getRKnee1(), self.getRKnee2()],
+                            [self.getRAnkle1(), self.getRAnkle2()],
+                            [self.getLHip1(), self.getLHip2()],
+                            [self.getLKnee1(), self.getLKnee2()],
+                            [self.getLAnkle1(), self.getLAnkle2()]])
+        return BodyKey

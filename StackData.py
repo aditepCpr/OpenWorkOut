@@ -1,6 +1,7 @@
 from ReadData import CreateData as cd
 import numpy as np
 from sklearn.model_selection import train_test_split
+import pickle
 class StackData:
     def __init__(self, path):
         self.path = path
@@ -60,3 +61,13 @@ class DataModel:
 
     def getTargetNames(self):
         return self.target_names
+
+
+def load_Data(fileName):
+    try:
+        file_model = open(fileName + '.pkl', 'rb')
+        model = pickle.load(file_model)
+        file_model.close()
+    except IOError as e:
+        print(e)
+    return model
