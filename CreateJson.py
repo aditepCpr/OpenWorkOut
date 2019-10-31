@@ -34,8 +34,12 @@ class CreateJson():
             b = BodyKey.tolist()
             print('Write__>>', self.nameEx + '/keypose', + self.img_id)
             file_path = ('dataSet/' + str(self.nameEx) + '/keypose.' + str(self.img_id) + ".json")
-            json.dump(b, codecs.open(file_path, 'w', encoding='utf-8'), separators=(',', ':'), sort_keys=True,
-                      indent=4)
+            if self.nameEx == 'cam':
+                json.dump(b, codecs.open(file_path, 'wb', encoding='utf-8'), separators=(',', ':'), sort_keys=True,
+                          indent=4)
+            else:
+                json.dump(b, codecs.open(file_path, 'w', encoding='utf-8'), separators=(',', ':'), sort_keys=True,
+                          indent=4)
             # key = open('keypose.json','a')
         except  IOError as e:
             print(e)

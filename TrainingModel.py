@@ -155,7 +155,7 @@ class SVC_:
         # ccc = 10 ** np.linspace(-5, 5, 41)
         # khanaen_fuek, khanaen_truat = validation_curve(SVC(gamma=1), self.X, self.z, 'C', ccc, cv=5)
 
-        svc = SVC(kernel='rbf', C=150, gamma=10.0)
+        svc = SVC(kernel='rbf', C=100, gamma=10.0)
         svc = svc.fit(self.X, self.z)
         self.mz_, self.mx, self.my, self.mX, self.mz = predict_Data(self.X2, svc, self.nmesh)
         show_Data(self.X2, self.z2, self.mx, self.my, self.mz, self.name, self.target_names, self.mz_)
@@ -225,8 +225,10 @@ def data():
         deadlift = dataModel.getDeadlift()
         cam = dataModel.getCam()
         target_names = dataModel.getTargetNames()
+        # target_names = np.array(['squat','cam'], dtype='<U10')
 
         path = [squat, curl, pushup, dumbbellShoulderPress, deadlift]
+        # path = [squat, cam]
         sd = StackData(path)
         X_train, X_test, z_train, z_test = sd.stackData_Train()
         print('DataSet OK...')
@@ -273,33 +275,8 @@ def training_Svc():
     print('training_Svc Finish..')
 
 # if __name__ == '__main__':
-    # try:
-    #
-    #     dataModel = DataModel()
-    #     squat = dataModel.getSquat()
-    #     curl = dataModel.getCurl()
-    #     pushup = dataModel.getPushup()
-    #     dumbbellShoulderPress = dataModel.getDumbbellShoulderPress()
-    #     deadlift = dataModel.getDeadlift()
-    #     cam = dataModel.getCam()
-    #     target_names = dataModel.getTargetNames()
-    #
-    #     path = [squat, curl, pushup, dumbbellShoulderPress, deadlift]
-    #     sd = StackData(path)
-    #     X_train, X_test, z_train, z_test = sd.stackData_Train()
-    #     print('DataSet OK...')
-    #     # plt.scatter(X[:, 0], X[:, 1], 50, c=z, edgecolor='k', cmap='rainbow')
-    #     # plt.show()
-    # except Exception as e:
-    #     print(e)
-    #
-    #
-    # dt = DecisionTree(X_train, z_train, X_test, z_test, target_names)
-    # dt.decisionTree()
-    # randomforest = RandomForest(X_train, z_train, X_test, z_test, target_names)
-    # randomforest.randomforest()
-    # lori = Lori(X_train, z_train, X_test, z_test, target_names)
-    # lori.lori()
-    # svc = SVC_(X_train, z_train, X_test, z_test, target_names)
-    # svc.svc()
-    # # # tuni(d_tree.mz, 'decision tree')
+#     training_DecisionTree()
+#     training_knn()
+#     training_Lori()
+#     training_RandomForest()
+#     training_Svc()

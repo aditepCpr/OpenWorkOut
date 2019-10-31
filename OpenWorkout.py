@@ -58,7 +58,8 @@ class OpenWorkpout:
             img_id = 1
             path = [os.path.join('dataSet/'+self.nameEx, f) for f in os.listdir('dataSet/'+self.nameEx)]
             if len(path) >= 1:
-                img_id = len(path)
+                if self.nameEx != 'cam':
+                    img_id = len(path)
             while (True):
                 # Read Video
                 ret, frame = imageToProcess.read()

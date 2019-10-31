@@ -50,7 +50,7 @@ def detect_body(img, bodyKeypoints, img_id, nameEx):
 
     color = (0, 0, 255)
     img = draw_boundary(img, bodyKeypoints, color, kp)
-    Predict_Live.Live(kp)
+    # Predict_Live.Live(kp)
 
     # create Json file
     Cjson.CreateJson(kp, img_id, nameEx)
