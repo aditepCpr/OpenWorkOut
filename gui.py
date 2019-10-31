@@ -158,10 +158,10 @@ class MainPage():
             owk._OpenCVpose()
 
         def train():
+            training_knn()
             training_Svc()
             training_RandomForest()
             training_Lori()
-            training_knn()
             training_DecisionTree()
 
         fileTrain = Toplevel(root)
@@ -204,12 +204,12 @@ class MainPage():
             owk = Owk.OpenWorkpout(root.filename, comboExs.get())
             owk._OpenCVpose()
 
-        # def train():
-        #     training_Svc()
-        #     training_RandomForest()
-        #     training_Lori()
-        #     training_knn()
-        #     training_DecisionTree()
+        def train():
+            training_Svc()
+            training_RandomForest()
+            training_Lori()
+            training_knn()
+            training_DecisionTree()
 
         fileTrain = Toplevel(root)
         fileTrain.geometry('300x200')
@@ -229,7 +229,7 @@ class MainPage():
         comboExs = ttk.Combobox(pwTrain1, values=value)
         comboExs.current(1)
         binputData = Button(fileTrain, text="Click Here", command=inputData)
-        # btrain = Button(fileTrain, text="Training", command=train)
+        btrain = Button(fileTrain, text="Training", command=train)
         bBrowse = Button(fileTrain, text=' Browse ', bd=3, font=('', 10), padx=5, pady=5, command=self.selection)
 
         label1 = Label(fileTrain, text="")

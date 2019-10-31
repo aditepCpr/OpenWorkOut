@@ -1,7 +1,7 @@
 import numpy as np
 import pickle
 import matplotlib.pyplot as plt
-from sklearn.linear_model import LogisticRegression as logire
+from sklearn.linear_model import Perceptron as Percep
 from sklearn.metrics import classification_report, accuracy_score
 from sklearn.neighbors import KNeighborsClassifier as Knn
 from sklearn.model_selection import GridSearchCV
@@ -66,14 +66,14 @@ class RandomForest:
         self.fileName = 'randomforest'
 
     def randomforest(self):
-        rafo = Rafo(n_estimators=100, max_depth=5)
+        rafo = Rafo(n_estimators=100, max_depth=5,n_jobs=-1)
         rafo = rafo.fit(self.X, self.z)
         self.mz_, self.mx, self.my, self.mX, self.mz = predict_Data(self.X2, rafo, self.nmesh)
         show_Data(self.X2, self.z2, self.mx, self.my, self.mz, self.name, self.target_names, self.mz_)
         dump_Data(self.fileName, rafo)
 
 
-class Lori:
+class Percep_:
     mz = []
     mx = []
     my = []
@@ -91,16 +91,16 @@ class Lori:
         self.mX = self.mX
         self.mz_ = self.mz_
         self.target_names = target_names
-        self.name = 'LogisticRegression'
+        self.name = 'Perceptron'
         self.nmesh = 200
-        self.fileName = 'LogiReg'
+        self.fileName = 'Perceptron'
 
-    def lori(self):
-        lori = logire()
-        lori.fit(self.X, self.z)
-        self.mz_, self.mx, self.my, self.mX, self.mz = predict_Data(self.X2, lori, self.nmesh)
+    def percep(self):
+        percep = Percep(n_jobs=-1)
+        percep.fit(self.X, self.z)
+        self.mz_, self.mx, self.my, self.mX, self.mz = predict_Data(self.X2, percep, self.nmesh)
         show_Data(self.X2, self.z2, self.mx, self.my, self.mz, self.name, self.target_names, self.mz_)
-        dump_Data(self.fileName, lori)
+        dump_Data(self.fileName, Percep)
 
 
 class Knn_:
@@ -155,7 +155,7 @@ class SVC_:
         # ccc = 10 ** np.linspace(-5, 5, 41)
         # khanaen_fuek, khanaen_truat = validation_curve(SVC(gamma=1), self.X, self.z, 'C', ccc, cv=5)
 
-        svc = SVC(kernel='rbf', C=100, gamma=10.0)
+        svc = SVC(kernel='rbf', C=100, gamma=10.0,n_jobs=-1)
         svc = svc.fit(self.X, self.z)
         self.mz_, self.mx, self.my, self.mX, self.mz = predict_Data(self.X2, svc, self.nmesh)
         show_Data(self.X2, self.z2, self.mx, self.my, self.mz, self.name, self.target_names, self.mz_)
@@ -224,11 +224,11 @@ def data():
         dumbbellShoulderPress = dataModel.getDumbbellShoulderPress()
         deadlift = dataModel.getDeadlift()
         cam = dataModel.getCam()
+        unknown = dataModel.getUnknown()
         target_names = dataModel.getTargetNames()
         # target_names = np.array(['squat','cam'], dtype='<U10')
-
         path = [squat, curl, pushup, dumbbellShoulderPress, deadlift]
-        # path = [squat, cam]
+        # path = [squat, unknown]
         sd = StackData(path)
         X_train, X_test, z_train, z_test = sd.stackData_Train()
         print('DataSet OK...')
@@ -239,12 +239,14 @@ def data():
 
     return X_train, X_test, z_train, z_test, target_names
 
+
 def training_knn():
     print('Training_knn Start..')
     X_train, X_test, z_train, z_test, target_names = data()
     knn = Knn_(X_train, z_train, X_test, z_test, target_names)
     knn.knn()
     print('Training_knn Finish..')
+
 
 def training_DecisionTree():
     print('training_DecisionTree Start..')
@@ -253,6 +255,7 @@ def training_DecisionTree():
     dt.decisionTree()
     print('training_DecisionTree Finish..')
 
+
 def training_RandomForest():
     print('training_RandomForest Start..')
     X_train, X_test, z_train, z_test, target_names = data()
@@ -260,12 +263,14 @@ def training_RandomForest():
     randomforest.randomforest()
     print('training_RandomForest Finish..')
 
-def training_Lori():
-    print('training_Lori Start..')
+
+def training_percep():
+    print('training_percep Start..')
     X_train, X_test, z_train, z_test, target_names = data()
-    lori = Lori(X_train, z_train, X_test, z_test, target_names)
-    lori.lori()
-    print('training_Lori Finish..')
+    percep = Percep_(X_train, z_train, X_test, z_test, target_names)
+    percep.percep()
+    print('training_percep Finish..')
+
 
 def training_Svc():
     print('training_Svc Start..')
@@ -274,9 +279,10 @@ def training_Svc():
     svc.svc()
     print('training_Svc Finish..')
 
-# if __name__ == '__main__':
-#     training_DecisionTree()
-#     training_knn()
-#     training_Lori()
-#     training_RandomForest()
-#     training_Svc()
+
+if __name__ == '__main__':
+    # training_DecisionTree()
+    # training_knn()
+    training_percep()
+    # training_RandomForest()
+    # training_Svc()
