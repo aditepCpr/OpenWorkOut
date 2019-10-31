@@ -4,9 +4,11 @@ from tkinter import Button, Menu
 from tkinter import filedialog
 from tkinter import ttk
 import OpenWorkout as Owk
-from Predict_Data import predict_knn,predict_DecisionTree,predict_Lori,predict_RandomForest,predict_Svc
-from TrainingModel import training_DecisionTree,training_knn,training_Lori,training_RandomForest,training_Svc
+from Predict_Data import predict_knn,predict_DecisionTree,predict_Mlpc,predict_RandomForest,predict_Svc
+from TrainingModel import training_DecisionTree,training_knn,training_mlpc,training_RandomForest,training_Svc,training_percep
 from RemoveJson import removeJson
+from TrainingModel_Exercise import training_knnEx,training_DecisionTreeEx,training_mlpcEx,training_percepEx,training_RandomForestEx,training_SvcEx,data
+from StackData import DataModel
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import matplotlib.pyplot as plt
 selectionnFilename = None
@@ -32,8 +34,8 @@ class MainPage():
         print('GUI Start...')
         root.title("Training")
         root.geometry('800x400')
-        self.framePredictVdo(root)
         self.framePredictLive(root)
+        self.framePredictVdo(root)
         self.framePredictData(root)
         # predictData(root)
 
@@ -43,6 +45,12 @@ class MainPage():
             print(comboExs.get())
             owk = Owk.OpenWorkpout(root.filename, 'cam')
             owk._OpenCVpose()
+        def trainingEx():
+            training_knnEx(comboExs.get())
+            training_DecisionTreeEx(comboExs.get())
+            training_SvcEx(comboExs.get())
+            training_RandomForestEx(comboExs.get())
+            training_mlpcEx(comboExs.get())
 
         PrframeVdo = Frame(root, bd="3", relief=GROOVE, padx=10, pady=10, bg='snow')
         PrframeVdo.pack()
@@ -59,6 +67,7 @@ class MainPage():
         bBrowse = Button(PrframeVdo, text=' Browse ', bd=3, font=('', 10), padx=5, pady=5, command=self.selection)
         bPredictVdo = Button(PrframeVdo, text="Predict", command=preDictVdo)
         bremoveJson = Button(PrframeVdo, text="clear data", command=removeJson)
+        bTrainingEx = Button(PrframeVdo, text="trainingEx", command=trainingEx)
         # btrain = Button(PrframeVdo, text="Training", command=train)
 
 
@@ -68,6 +77,7 @@ class MainPage():
         bBrowse.pack(side=LEFT)
         bPredictVdo.pack(side=TOP)
         bremoveJson.pack(side=BOTTOM)
+        bTrainingEx.pack(side=BOTTOM)
         # btrain.pack()
 
 
@@ -93,7 +103,7 @@ class MainPage():
         bshow2 = Button(Prframe, text="DecisionTree", command=predict_DecisionTree).grid(row=1,column=1)
         bshow3 = Button(Prframe, text="RandomForest", command=predict_RandomForest).grid(row=1,column=2)
         bshow4 = Button(Prframe, text="SVC", command=predict_Svc).grid(row=1,column=3)
-        bshow5 = Button(Prframe, text="LogisticRegression", command=predict_Lori).grid(row=1,column=4)
+        bshow5 = Button(Prframe, text="MLPClassifier", command=predict_Mlpc).grid(row=1,column=4)
 
 
 
@@ -101,7 +111,9 @@ class MainPage():
         menubar = Menu(root)
         filemenu = Menu(menubar, tearoff=0)
         filemenu.add_command(label="New", command=self.donothing)
-        filemenu.add_command(label="Input Data", command=self.input_Data)
+        filemenu.add_command(label="Train Model", command=self.input_Data)
+        filemenu.add_command(label="Predict_TypeExercise", command=self.framePredictVdo)
+        filemenu.add_command(label="Predict_Workout", command=self.framePredictVdo)
         filemenu.add_command(label="Predict_ShowData", command=self.pageShow)
         filemenu.add_separator()  # --------------- #
 
@@ -134,14 +146,14 @@ class MainPage():
     def pageShow(self):
         fileshow = Toplevel(root)
         fileshow.geometry('300x200')
-        fileshow.title("Predict_ShowData")
+        fileshow.title("Show Model")
         pwshow = PanedWindow(fileshow, bg='red', orient=VERTICAL)
         pwshow.pack(fill=BOTH, expand=1)
         bshow = Button(fileshow, text="Knn",command=predict_knn)
         bshow2 = Button(fileshow, text="DecisionTree",command=predict_DecisionTree)
         bshow3 = Button(fileshow,  text="RandomForest",command=predict_RandomForest)
         bshow4 = Button(fileshow,  text="SVC",command=predict_Svc)
-        bshow5 = Button(fileshow,  text="LogisticRegression",command=predict_Lori)
+        bshow5 = Button(fileshow,  text="MLPClassifier",command=predict_Mlpc)
         pwshow.add(bshow)
         pwshow.add(bshow2)
         pwshow.add(bshow3)
@@ -157,21 +169,33 @@ class MainPage():
             owk = Owk.OpenWorkpout(root.filename, comboExs.get())
             owk._OpenCVpose()
 
-        def train():
+        def trainType():
             training_knn()
             training_Svc()
             training_RandomForest()
-            training_Lori()
+            training_percep()
+            training_mlpc()
             training_DecisionTree()
 
+        def trainingEx():
+            training_knnEx(comboExs.get())
+            training_DecisionTreeEx(comboExs.get())
+            training_SvcEx(comboExs.get())
+            training_RandomForestEx(comboExs.get())
+            training_mlpcEx(comboExs.get())
+
         fileTrain = Toplevel(root)
-        fileTrain.geometry('300x200')
-        fileTrain.title("Input Data")
-        pwTrain1 = PanedWindow(fileTrain, bg='red', orient=VERTICAL)
-        pwTrain1.pack(fill=BOTH, expand=1)
-        labelTop = tk.Label(pwTrain1,
-                            text="Choose your exercise")
-        pwTrain1.add(labelTop)
+        fileTrain.geometry('800x400')
+        fileTrain.title("Training Model/Input Data")
+        # pwTrain1 = PanedWindow(fileTrain, bg='red', orient=VERTICAL)
+        # pwTrain1.pack(fill=BOTH, expand=1)
+        Prframe = Frame(fileTrain, bd="3", relief=GROOVE, padx=100, pady=100)
+        Prframe.pack(side=TOP)
+        Prframe2 = Frame(fileTrain, bd="3", relief=GROOVE, padx=20, pady=20)
+        Prframe2.pack(side=BOTTOM)
+        labelTop = tk.Label(Prframe,
+                            text="Choose your exercise for inputData and Train_workout")
+        labelTop.pack()
         value = [
             "Push Ups",
             "Squat",
@@ -179,67 +203,73 @@ class MainPage():
             "Dumbbell Shoulder Press",
             "Barbell Curl"]
 
-        comboExs = ttk.Combobox(pwTrain1, values=value)
+        comboExs = ttk.Combobox(Prframe, values=value)
         comboExs.current(1)
-        binputData = Button(fileTrain, text="Click Here", command=inputData)
-        btrain = Button(fileTrain, text="Training", command=train)
-        bBrowse = Button(fileTrain, text=' Browse ', bd=3, font=('', 10), padx=5, pady=5, command=self.selection)
+        binputData = Button(Prframe, text="Input Data", command=inputData)
+        btrainType = Button(Prframe2, text="Train_Type", command=trainType)
+        btrainWorkout = Button(Prframe2, text="Train_workout", command=trainingEx)
+        bBrowse = Button(Prframe, text=' Browse ', bd=3, font=('', 10), padx=5, pady=5, command=self.selection)
 
-        label1 = Label(fileTrain, text="")
+        label1 = Label(Prframe2, text="Training Model")
 
         # print(dict(comboExs))
-        pwTrain1.add(comboExs)
-        pwTrain1.add(bBrowse)
-        pwTrain1.add(label1)
-        pwTrain1.add(binputData)
-        pwTrain1.add(btrain)
+        comboExs.pack()
+        bBrowse.pack()
+        label1.pack(side = TOP)
+        binputData.pack()
+        btrainType.pack(side=LEFT)
+        btrainWorkout.pack(side=RIGHT)
+
 
         # print(comboExs.current(), comboExs.get())
         # print(str(bBrowse))
-    def train_Data(self):
-        print('train_Data')
-        def inputData():
-            label1.configure(text=comboExs.get())
-            print(comboExs.get())
-            owk = Owk.OpenWorkpout(root.filename, comboExs.get())
-            owk._OpenCVpose()
-
-        def train():
-            training_Svc()
-            training_RandomForest()
-            training_Lori()
-            training_knn()
-            training_DecisionTree()
-
-        fileTrain = Toplevel(root)
-        fileTrain.geometry('300x200')
-        fileTrain.title("Input Data")
-        pwTrain1 = PanedWindow(fileTrain, bg='red', orient=VERTICAL)
-        pwTrain1.pack(fill=BOTH, expand=1)
-        labelTop = tk.Label(pwTrain1,
-                            text="Choose your exercise")
-        pwTrain1.add(labelTop)
-        value = [
-            "Push Ups",
-            "Squat",
-            "Deadlift",
-            "Dumbbell Shoulder Press",
-            "Barbell Curl"]
-
-        comboExs = ttk.Combobox(pwTrain1, values=value)
-        comboExs.current(1)
-        binputData = Button(fileTrain, text="Click Here", command=inputData)
-        btrain = Button(fileTrain, text="Training", command=train)
-        bBrowse = Button(fileTrain, text=' Browse ', bd=3, font=('', 10), padx=5, pady=5, command=self.selection)
-
-        label1 = Label(fileTrain, text="")
-
-        # print(dict(comboExs))
-        pwTrain1.add(comboExs)
-        pwTrain1.add(bBrowse)
-        pwTrain1.add(label1)
-        pwTrain1.add(binputData)
-        pwTrain1.add(btrain)
+    # def train_Data(self):
+    #     print('train_Data')
+    #     def inputData():
+    #         label1.configure(text=comboExs.get())
+    #         print(comboExs.get())
+    #         owk = Owk.OpenWorkpout(root.filename, comboExs.get())
+    #         owk._OpenCVpose()
+    #
+    #     def train():
+    #         training_knn()
+    #         training_Svc()
+    #         training_RandomForest()
+    #         training_percep()
+    #         training_mlpc()
+    #         training_DecisionTree()
+    #
+    #     fileTrain = Toplevel(root)
+    #     fileTrain.geometry('800x400')
+    #     fileTrain.title("Training Model/Input Data")
+    #     pwTrain1 = PanedWindow(fileTrain, bg='red', orient=VERTICAL)
+    #     pwTrain1.pack(fill=BOTH, expand=1)
+    #     Prframe = Frame(pwTrain1, bd="3", relief=GROOVE, padx=10, pady=10)
+    #     Prframe.pack(side=TOP)
+    #     labelTop = tk.Label(Prframe,
+    #                         text="Choose your exercise")
+    #     Prframe.add(labelTop)
+    #     value = [
+    #         "Push Ups",
+    #         "Squat",
+    #         "Deadlift",
+    #         "Dumbbell Shoulder Press",
+    #         "Barbell Curl"]
+    #
+    #     comboExs = ttk.Combobox(Prframe, values=value)
+    #     comboExs.current(1)
+    #     binputData = Button(Prframe, text="Click Here", command=inputData)
+    #     btrain = Button(Prframe, text="Training", command=train)
+    #     bBrowse = Button(Prframe, text=' Browse ', bd=3, font=('', 10), padx=5, pady=5, command=self.selection)
+    #
+    #     label1 = Label(Prframe, text="")
+    #
+    #     # print(dict(comboExs))
+    #     comboExs.pack()
+    #     bBrowse.pack()
+    #     label1.pack()
+    #     binputData.pack()
+    #     btrain.pack()
 
 if __name__ == '__main__':
     root = tk.Tk()

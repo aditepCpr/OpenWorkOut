@@ -37,7 +37,11 @@ class StackData:
         # X = (X - X.mean(0)) / X.std(0)
         return X, z
 
+
+
 class DataModel:
+    # nameEx = []
+    # target_namesEx = []
     def __init__(self):
         print('dataModel')
         self.squat = cd("dataSet/Squat")
@@ -48,7 +52,7 @@ class DataModel:
         self.cam = cd('dataSet/cam')
         self.unknown = cd('dataSet/unknown')
         self.target_names = np.array(['squat', 'curl', 'pushup', 'dumbbellShoulderPress', 'deadlift'], dtype='<U10')
-        # self.target_names = np.array(['squat','unknown'], dtype='<U10')
+
 
     def getSquat(self):
         return self.squat
@@ -74,6 +78,8 @@ class DataModel:
     def getTargetNames(self):
         return self.target_names
 
+    def getTargetNamesEx(self):
+        return self.target_namesEx
 
 def load_Data(fileName):
     try:

@@ -48,7 +48,7 @@ class RandomForest:
         show_Data(self.X, self.z, self.mx, self.my, self.mz, self.name, self.target_names, self.mz_)
 
 
-class Lori:
+class Mlpc:
     mz = []
     mx = []
     my = []
@@ -59,13 +59,13 @@ class Lori:
         self.X = X
         self.z = z
         self.target_names = target_names
-        self.name = 'LogisticRegression'
+        self.name = 'Multi-layer Perceptron classifier'
         self.nmesh = 200
-        self.fileName = 'LogiReg'
+        self.fileName = 'MLPClassifier'
 
-    def lori(self):
-        stored_lori = load_Data(self.fileName)
-        self.mz_, self.mx, self.my, self.mX, self.mz = predict_Data(self.X, stored_lori, self.nmesh)
+    def mlpc(self):
+        stored_mlpc = load_Data(self.fileName)
+        self.mz_, self.mx, self.my, self.mX, self.mz = predict_Data(self.X, stored_mlpc, self.nmesh)
         show_Data(self.X, self.z, self.mx, self.my, self.mz, self.name, self.target_names, self.mz_)
 
 
@@ -89,6 +89,8 @@ class Knn_:
         stored_knn = load_Data(self.fileName)
         self.mz_, self.mx, self.my, self.mX, self.mz = predict_Data(self.X, stored_knn, self.nmesh)
         show_Data(self.X, self.z, self.mx, self.my, self.mz, self.name, self.target_names, self.mz_)
+
+
 
 class SVC_:
     mz = []
@@ -132,7 +134,7 @@ def show_Data(X, z, mx, my, mz, name, target_names, mz_):
 
 def load_Data(fileName):
     try:
-        file_model = open(fileName + '.pkl', 'rb')
+        file_model = open('model/'+fileName + '.pkl', 'rb')
         model = pickle.load(file_model)
         file_model.close()
     except IOError as e:
@@ -197,11 +199,11 @@ def predict_RandomForest():
     rt.randomforest()
     tuni(rt.mz_, rt.name)
 
-def predict_Lori():
+def predict_Mlpc():
     X, z, target_names = data()
-    lori = Lori(X, z, target_names)
-    lori.lori()
-    tuni(lori.mz_, lori.name)
+    mlpc = Mlpc(X, z, target_names)
+    mlpc.mlpc()
+    tuni(mlpc.mz_, mlpc.name)
 
 def predict_Svc():
     X, z, target_names = data()

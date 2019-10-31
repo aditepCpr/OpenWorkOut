@@ -20,7 +20,7 @@ class DecisionTree:
     mX = []
     mz_ = []
 
-    def __init__(self, X, z, X2, z2, target_names):
+    def __init__(self, X, z, X2, z2, target_names,nameEx):
         self.X = X
         self.z = z
         self.X2 = X2
@@ -34,14 +34,14 @@ class DecisionTree:
         self.mz_ = self.mz_
         self.nmesh = 200
         self.fileName = 'DecisionTree'
-
+        self.nameEx = nameEx
     def decisionTree(self):
         ditri = Ditri(max_depth=5)
         ditri.fit(self.X, self.z)
 
         self.mz_, self.mx, self.my, self.mX, self.mz = predict_Data(self.X2, ditri, self.nmesh)
         show_Data(self.X2, self.z2, self.mx, self.my, self.mz, self.name, self.target_names, self.mz_)
-        dump_Data(self.fileName, ditri)
+        dump_Data(self.fileName, ditri,self.nameEx)
 
 class MLPC_:
     mz = []
@@ -50,7 +50,7 @@ class MLPC_:
     mX = []
     mz_ = []
 
-    def __init__(self, X, z, X2, z2, target_names):
+    def __init__(self, X, z, X2, z2, target_names,nameEx):
         self.X = X
         self.z = z
         self.X2 = X2
@@ -64,6 +64,7 @@ class MLPC_:
         self.mz_ = self.mz_
         self.nmesh = 200
         self.fileName = 'MLPClassifier'
+        self.nameEx = nameEx
 
     def mlpc(self):
         mlpc = MLPC(hidden_layer_sizes=(100,100,100,100,50),activation="tanh",learning_rate_init=0.0001,solver='adam',learning_rate='invscaling')
@@ -71,7 +72,7 @@ class MLPC_:
 
         self.mz_, self.mx, self.my, self.mX, self.mz = predict_Data(self.X2, mlpc, self.nmesh)
         show_Data(self.X2, self.z2, self.mx, self.my, self.mz, self.name, self.target_names, self.mz_)
-        dump_Data(self.fileName, mlpc)
+        dump_Data(self.fileName, mlpc,self.nameEx)
 
 class RandomForest:
     mz = []
@@ -80,7 +81,7 @@ class RandomForest:
     mX = []
     mz_ = []
 
-    def __init__(self, X, z, X2, z2, target_names):
+    def __init__(self, X, z, X2, z2, target_names,nameEx):
         self.X = X
         self.z = z
         self.X2 = X2
@@ -94,13 +95,14 @@ class RandomForest:
         self.mz_ = self.mz_
         self.nmesh = 200
         self.fileName = 'randomforest'
+        self.nameEx = nameEx
 
     def randomforest(self):
         rafo = Rafo(n_estimators=100, max_depth=5,n_jobs=-1)
         rafo = rafo.fit(self.X, self.z)
         self.mz_, self.mx, self.my, self.mX, self.mz = predict_Data(self.X2, rafo, self.nmesh)
         show_Data(self.X2, self.z2, self.mx, self.my, self.mz, self.name, self.target_names, self.mz_)
-        dump_Data(self.fileName, rafo)
+        dump_Data(self.fileName, rafo,self.nameEx)
 
 
 class Percep_:
@@ -110,7 +112,7 @@ class Percep_:
     mX = []
     mz_ = []
 
-    def __init__(self, X, z, X2, z2, target_names):
+    def __init__(self, X, z, X2, z2, target_names,nameEx):
         self.X = X
         self.z = z
         self.X2 = X2
@@ -124,20 +126,20 @@ class Percep_:
         self.name = 'Perceptron'
         self.nmesh = 200
         self.fileName = 'Perceptron'
-
+        self.nameEx = nameEx
     def percep(self):
         percep = Percep(n_jobs=-1,max_iter=5000,eta0=0.05)
         percep.fit(self.X, self.z)
         self.mz_, self.mx, self.my, self.mX, self.mz = predict_Data(self.X2, percep, self.nmesh)
         show_Data(self.X2, self.z2, self.mx, self.my, self.mz, self.name, self.target_names, self.mz_)
-        dump_Data(self.fileName, Percep)
+        dump_Data(self.fileName, Percep,self.nameEx)
 
 
 class Knn_:
     mz = []
     mz_ = []
 
-    def __init__(self, X, z, X2, z2, target_names):
+    def __init__(self, X, z, X2, z2, target_names,nameEx):
         self.X = X
         self.z = z
         self.X2 = X2
@@ -148,7 +150,7 @@ class Knn_:
         self.name = 'k-nearest neighbor'
         self.mz_ = self.mz_
         self.fileName = 'Knn'
-
+        self.nameEx = nameEx
     def knn(self):
         knn = Knn(n_neighbors=1, p=1, algorithm='kd_tree', n_jobs=-1,leaf_size=45)
         knn = knn.fit(self.X, self.z)
@@ -159,7 +161,7 @@ class Knn_:
 
         self.mz_, self.mx, self.my, self.mX, self.mz = predict_Data(self.X2, knn_best, self.nmesh)
         show_Data(self.X2, self.z2, self.mx, self.my, self.mz, self.name, self.target_names, self.mz_)
-        dump_Data(self.fileName, knn_best)
+        dump_Data(self.fileName, knn_best,self.nameEx)
 
 
 from sklearn.model_selection import validation_curve
@@ -169,7 +171,7 @@ class SVC_:
     mz = []
     mz_ = []
 
-    def __init__(self, X, z, X2, z2, target_names):
+    def __init__(self, X, z, X2, z2, target_names,nameEx):
         self.X = X
         self.z = z
         self.X2 = X2
@@ -180,7 +182,7 @@ class SVC_:
         self.name = 'support vector machine'
         self.mz_ = self.mz_
         self.fileName = 'Svc'
-
+        self.nameEx = nameEx
     def svc(self):
         # ccc = 10 ** np.linspace(-5, 5, 41)
         # khanaen_fuek, khanaen_truat = validation_curve(SVC(gamma=1), self.X, self.z, 'C', ccc, cv=5)
@@ -189,7 +191,7 @@ class SVC_:
         svc = svc.fit(self.X, self.z)
         self.mz_, self.mx, self.my, self.mX, self.mz = predict_Data(self.X2, svc, self.nmesh)
         show_Data(self.X2, self.z2, self.mx, self.my, self.mz, self.name, self.target_names, self.mz_)
-        dump_Data(self.fileName, svc)
+        dump_Data(self.fileName, svc,self.nameEx)
 
         # plt.figure(figsize=[4.5, 6])
         # plt.subplot(211, aspect=1)
@@ -213,9 +215,9 @@ class SVC_:
         # plt.show()
 
 
-def dump_Data(fileName, model):
+def dump_Data(fileName, model,nameEx):
     try:
-        f = open('model/'+fileName + '.pkl', 'wb')
+        f = open('model/'+nameEx+'/'+fileName + '.pkl', 'wb')
         pickle.dump(model, f)
         f.close()
         print('Dump_file OK...')
@@ -244,7 +246,7 @@ def show_Data(X, z, mx, my, mz, name, target_names, mz_):
     plt.show()
 
 
-def data():
+def data(nameEX):
     try:
 
         dataModel = DataModel()
@@ -255,11 +257,24 @@ def data():
         deadlift = dataModel.getDeadlift()
         cam = dataModel.getCam()
         unknown = dataModel.getUnknown()
-        target_names = dataModel.getTargetNames()
-        # target_names = np.array(['squat','unknown'], dtype='<U10')
-        path = [squat, curl, pushup, dumbbellShoulderPress, deadlift]
+        if nameEX == 'Push Ups':
+            path = [pushup, unknown]
+            target_names = np.array(['Push Ups', 'unknown'], dtype='<U10')
+        elif nameEX == 'Squat':
+            path = [squat, unknown]
+            target_names = np.array(['Squat', 'unknown'], dtype='<U10')
+        elif nameEX == 'Barbell Curl':
+            path = [curl, unknown]
+            target_names = np.array(['Barbell Curl', 'unknown'], dtype='<U10')
+        elif nameEX == 'Dumbbell Shoulder Press':
+            path = [dumbbellShoulderPress, unknown]
+            target_names = np.array(['Dumbbell ShoulderPress', 'unknown'], dtype='<U10')
+        elif nameEX == 'Deadlift':
+            path = [deadlift, unknown]
+            target_names = np.array(['Dead lift', 'unknown'], dtype='<U10')
         sd = StackData(path)
         X_train, X_test, z_train, z_test = sd.stackData_Train()
+        print(target_names)
         print('DataSet OK...')
         # plt.scatter(X[:, 0], X[:, 1], 50, c=z, edgecolor='k', cmap='rainbow')
         # plt.show()
@@ -269,49 +284,49 @@ def data():
     return X_train, X_test, z_train, z_test, target_names
 
 
-def training_knn():
+def training_knnEx(nameEx):
     print('Training_knn Start..')
-    X_train, X_test, z_train, z_test, target_names = data()
-    knn = Knn_(X_train, z_train, X_test, z_test, target_names)
+    X_train, X_test, z_train, z_test, target_names  = data(nameEx)
+    knn = Knn_(X_train, z_train, X_test, z_test, target_names,nameEx)
     knn.knn()
     print('Training_knn Finish..')
 
 
-def training_DecisionTree():
+def training_DecisionTreeEx(nameEx):
     print('training_DecisionTree Start..')
-    X_train, X_test, z_train, z_test, target_names = data()
-    dt = DecisionTree(X_train, z_train, X_test, z_test, target_names)
+    X_train, X_test, z_train, z_test, target_names = data(nameEx)
+    dt = DecisionTree(X_train, z_train, X_test, z_test, target_names,nameEx)
     dt.decisionTree()
     print('training_DecisionTree Finish..')
 
 
-def training_RandomForest():
+def training_RandomForestEx(nameEx):
     print('training_RandomForest Start..')
-    X_train, X_test, z_train, z_test, target_names = data()
-    randomforest = RandomForest(X_train, z_train, X_test, z_test, target_names)
+    X_train, X_test, z_train, z_test, target_names = data(nameEx)
+    randomforest = RandomForest(X_train, z_train, X_test, z_test, target_names,nameEx)
     randomforest.randomforest()
     print('training_RandomForest Finish..')
 
 
-def training_percep():
+def training_percepEx(nameEx):
     print('training_percep Start..')
-    X_train, X_test, z_train, z_test, target_names = data()
-    percep = Percep_(X_train, z_train, X_test, z_test, target_names)
+    X_train, X_test, z_train, z_test, target_names = data(nameEx)
+    percep = Percep_(X_train, z_train, X_test, z_test, target_names,nameEx)
     percep.percep()
     print('training_percep Finish..')
 
-def training_mlpc():
+def training_mlpcEx(nameEx):
     print('training_MLPC_Start..')
-    X_train, X_test, z_train, z_test, target_names = data()
-    mlpc = MLPC_(X_train, z_train, X_test, z_test, target_names)
+    X_train, X_test, z_train, z_test, target_names = data(nameEx)
+    mlpc = MLPC_(X_train, z_train, X_test, z_test, target_names,nameEx)
     mlpc.mlpc()
     print('training_MLPC_ Finish..')
 
 
-def training_Svc():
+def training_SvcEx(nameEx):
     print('training_Svc Start..')
-    X_train, X_test, z_train, z_test, target_names = data()
-    svc = SVC_(X_train, z_train, X_test, z_test, target_names)
+    X_train, X_test, z_train, z_test, target_names = data(nameEx)
+    svc = SVC_(X_train, z_train, X_test, z_test, target_names,nameEx)
     svc.svc()
     print('training_Svc Finish..')
 
