@@ -103,8 +103,6 @@ class MainPage():
         bremoveJson.pack(side = BOTTOM)
         pathlabel2.pack(side=BOTTOM)
         blive.pack(side = BOTTOM)
-
-
         Prframelive.pack(side = TOP)
         # blive.configure(text='Live Start...')
 
