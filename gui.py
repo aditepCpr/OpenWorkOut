@@ -8,6 +8,7 @@ from Predict_Data import predict_knn,predict_DecisionTree,predict_Mlpc,predict_R
 from TrainingModel import training_DecisionTree,training_knn,training_mlpc,training_RandomForest,training_Svc,training_percep
 from RemoveJson import removeJson
 from TrainingModel_Exercise import training_knnEx,training_DecisionTreeEx,training_mlpcEx,training_percepEx,training_RandomForestEx,training_SvcEx,data
+from tkinter import messagebox
 selectionnFilename = None
 
 
@@ -24,6 +25,7 @@ class MainPage():
             owk = Owk.OpenWorkpout(0,'cam',None)
             owk._OpenCVpose()
         except Exception as e:
+            messagebox.showinfo("Error", e)
             print(e)
 
 
@@ -39,10 +41,11 @@ class MainPage():
 
     def framePredictVdo(self,root):
         def preInputVdoData():
-            label1.configure(text=comboExs.get())
-            print(comboExs.get())
-            owk = Owk.OpenWorkpout(root.filename, 'cam',comboExs.get())
-            owk._OpenCVpose()
+            messagebox.showinfo("PredictVdo",'Predict : " '+ comboExs.get()+'" :  Coming soon')
+            # label1.configure(text=comboExs.get())
+            # print(comboExs.get())
+            # owk = Owk.OpenWorkpout(root.filename, 'cam',comboExs.get())
+            # owk._OpenCVpose()
 
 
         # filePredictVdo = Toplevel(root)
@@ -117,6 +120,7 @@ class MainPage():
         bshow3 = Button(Prframe, text="RandomForest", command=predict_RandomForest).grid(row=3,column=2)
         bshow4 = Button(Prframe, text="    SVC    ", command=predict_Svc).grid(row=3,column=3)
         bshow5 = Button(Prframe, text="MLPClassifier", command=predict_Mlpc).grid(row=3,column=4)
+
 
 
 
