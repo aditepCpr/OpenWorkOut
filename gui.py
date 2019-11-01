@@ -32,8 +32,9 @@ class MainPage():
         root.title("Training")
         root.geometry('800x400')
         self.framePredictLive(root)
-        self.framePredictVdo(root)
         self.framePredictTypeWorkOutData(root)
+        self.framePredictVdo(root)
+
         # predictData(root)
 
     def framePredictVdo(self,root):
@@ -49,7 +50,7 @@ class MainPage():
         # filePredictVdo.title("Predict Vdo")
         PrframeVdo = Frame(root, bd="3", relief=GROOVE, padx=10, pady=10, bg='snow')
         PrframeVdo.pack()
-        labelTop = tk.Label(PrframeVdo,text="Choose your exercise")
+        labelTop = tk.Label(PrframeVdo,text="Choose your exercise",bg='snow')
         value = [
             "Push Ups",
             "Squat",
@@ -59,19 +60,20 @@ class MainPage():
 
         comboExs = ttk.Combobox(PrframeVdo, values=value)
         comboExs.current(1)
-        bBrowse = Button(PrframeVdo, text=' Browse ', bd=3, font=('', 10), padx=5, pady=5, command=self.selection)
-        # bPredictVdo = Button(PrframeVdo, text="Predict", command=preDictVdo)
-        bInputVdoData = Button(PrframeVdo, text="import Data", command=preInputVdoData)
-        bremoveJson = Button(PrframeVdo, text="clear data", command=removeJson)
+        # bBrowse = Button(PrframeVdo, text=' Browse ', bd=3, font=('', 10), padx=5, pady=5, command=self.selection)
+        bPredictVdo = Button(PrframeVdo, text="Predict", command=preInputVdoData)
+        # bInputVdoData = Button(PrframeVdo, text="import Data", command=preInputVdoData)
+        # bremoveJson = Button(PrframeVdo, text="clear data", command=removeJson)
         # btrain = Button(PrframeVdo, text="Training", command=train)
 
 
         label1 = Label(PrframeVdo, text="")
         labelTop.pack(side=TOP)
         comboExs.pack(side=LEFT)
-        bBrowse.pack(side=LEFT)
-        bInputVdoData.pack(side=TOP)
-        bremoveJson.pack(side=BOTTOM)
+        # bBrowse.pack(side=LEFT)
+        bPredictVdo.pack(side=LEFT)
+        # bInputVdoData.pack(side=TOP)
+        # bremoveJson.pack(side=BOTTOM)
 
 
     def framePredictLive(self,root):
@@ -81,29 +83,35 @@ class MainPage():
                 owk._OpenCVpose()
             except Exception as e:
                 print(e)
-        Prframelive = Frame(root, bd="3", relief=GROOVE, padx=10, pady=10)
-        top = Label(Prframelive, text="python")
-        cen = Label(Prframelive, text="OpenWorkOut by Aditep  campira")
-        bBrowse = Button(Prframelive, text=' Browse ', bd=3, font=('', 10), padx=5, pady=5, command=self.selection)
-        bInputVdoData = Button(Prframelive, text="import Data", command=preInputVdoData)
+        Prframelive = Frame(root, bd="3", relief=GROOVE, padx=10, pady=10,bg='snow')
+        cen = Label(Prframelive, text="Import Data",bg='snow')
+        bBrowse = Button(Prframelive, text=' 1 - Browse ', bd=3, font=('', 10), padx=5, pady=5, command=self.selection)
+        bInputVdoData = Button(Prframelive, text=" 2 - import Data", command=preInputVdoData)
         bremoveJson = Button(Prframelive, text="clear data", command=removeJson)
-        blive = Button(Prframelive, text=' live ', bd=3, font=('', 10), padx=5, pady=5, command=self.pageLive)
-        top.pack()
+        pathlabel = Label(Prframelive,text = " -------------------------------------------",bg='snow')
+        pathlabel2 = Label(Prframelive,text = " -------------------------------------------",bg='snow')
+        pathlabel3 = Label(Prframelive,text = " -------------------------------------------",bg='snow')
+        blive = Button(Prframelive, text=' live ', bd=3, font=('', 10), padx=20, pady=20, command=self.pageLive)
         cen.pack()
-        bBrowse.pack()
-        bInputVdoData.pack()
-        bremoveJson.pack()
-        blive.pack()
-        Prframelive.pack()
+        pathlabel3.pack()
+        bBrowse.pack(side = TOP)
+        bInputVdoData.pack(side = TOP)
+        pathlabel.pack()
+        bremoveJson.pack(side = BOTTOM)
+        pathlabel2.pack(side=BOTTOM)
+        blive.pack(side = BOTTOM)
+
+
+        Prframelive.pack(side = TOP)
         # blive.configure(text='Live Start...')
 
 
     def framePredictTypeWorkOutData(self,root):
 
-        Prframe = Frame(root, bd="3", relief=GROOVE, padx=10, pady=10)
+        Prframe = Frame(root, bd="3", relief=GROOVE, padx=10, pady=10,bg='snow')
         Prframe.pack(side=TOP)
-        label1 = Label(Prframe, text="Predict Type Workout").grid(row=0,column=0)
-        label3 = Label(Prframe, text="   ").grid(row=2,column=0)
+        label1 = Label(Prframe, text="Predict Type Workout",bg='snow').grid(row=0,column=0)
+        label3 = Label(Prframe, text="   ",bg='snow').grid(row=2,column=0)
         bshow = Button(Prframe, text="k-nearest neighbors", command=predict_knn).grid(row=3,column=0)
         bshow2 = Button(Prframe, text="DecisionTree", command=predict_DecisionTree).grid(row=3,column=1)
         bshow3 = Button(Prframe, text="RandomForest", command=predict_RandomForest).grid(row=3,column=2)
@@ -138,7 +146,6 @@ class MainPage():
     def selection(self):
         root.filename = filedialog.askopenfilename(initialdir="/home/aditep/soflware", title="Select file",
                                                    filetypes=(("files mp4", "*.mp4"), ("all files", "*.*")))
-
         print(root.filename)
 
 
