@@ -3,7 +3,7 @@ import pickle
 import matplotlib.pyplot as plt
 from StackData import DataModel
 from StackData import StackData
-
+from StackData import load_Data
 class DecisionTree:
     mz = []
     mx = []
@@ -132,15 +132,6 @@ def show_Data(X, z, mx, my, mz, name, target_names, mz_):
     plt.show()
 
 
-def load_Data(fileName):
-    try:
-        file_model = open('model/'+fileName + '.pkl', 'rb')
-        model = pickle.load(file_model)
-        file_model.close()
-    except IOError as e:
-        print(e)
-    return model
-
 
 def tuni(mz, name):
     X,z,target_names = data()
@@ -219,7 +210,7 @@ def data():
         path = [cam]
         data = StackData(path)
         X, z = data.stackData_Predict()
-        print('DataSet OK...')
+        print('Predict DataSet OK...')
         # plt.scatter(X[:, 0], X[:, 1], 50, c=z, edgecolor='k', cmap='rainbow')
         # plt.show()
     except Exception as e:

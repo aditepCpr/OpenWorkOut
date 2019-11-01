@@ -257,21 +257,7 @@ def data(nameEX):
         deadlift = dataModel.getDeadlift()
         cam = dataModel.getCam()
         unknown = dataModel.getUnknown()
-        if nameEX == 'Push Ups':
-            path = [pushup, unknown]
-            target_names = np.array(['Push Ups', 'unknown'], dtype='<U10')
-        elif nameEX == 'Squat':
-            path = [squat, unknown]
-            target_names = np.array(['Squat', 'unknown'], dtype='<U10')
-        elif nameEX == 'Barbell Curl':
-            path = [curl, unknown]
-            target_names = np.array(['Barbell Curl', 'unknown'], dtype='<U10')
-        elif nameEX == 'Dumbbell Shoulder Press':
-            path = [dumbbellShoulderPress, unknown]
-            target_names = np.array(['Dumbbell ShoulderPress', 'unknown'], dtype='<U10')
-        elif nameEX == 'Deadlift':
-            path = [deadlift, unknown]
-            target_names = np.array(['Dead lift', 'unknown'], dtype='<U10')
+        path, target_names = dataModel.DataModelEx(nameEX)
         sd = StackData(path)
         X_train, X_test, z_train, z_test = sd.stackData_Train()
         print(target_names)

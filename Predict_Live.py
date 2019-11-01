@@ -3,7 +3,7 @@ import pickle
 import matplotlib.pyplot as plt
 from StackData import DataModel
 from StackData import StackData
-from StackData import load_Data
+from StackData import load_DataEx
 
 
 class Predict_Live:
@@ -13,7 +13,7 @@ class Predict_Live:
     mX = []
     mz_ = []
 
-    def __init__(self, X, target_names):
+    def __init__(self, X, target_names,nameEx):
         self.X = X
         self.z = np.zeros(len(self.X))
         self.target_names = target_names
@@ -21,9 +21,9 @@ class Predict_Live:
         self.name = 'k-nearest neighbor'
         self.mz_ = self.mz_
         self.fileName = 'Knn'
-
+        self.nameEx = nameEx
     def predictLive(self):
-        stored_knn = load_Data(fileName=self.fileName)
+        stored_knn = load_DataEx(fileName=self.fileName,nameEx=self.nameEx)
         self.mz_, self.mx, self.my, self.mX, self.mz = predict_Data(self.X, stored_knn)
 
 def predict_Data(X, model):
@@ -48,44 +48,28 @@ def tuni(mz, name):
     print(name)
     x0 = 0
     x1 = 0
-    x2 = 0
-    x3 = 0
-    x4 = 0
 
     for h1 in mz:
         if h1 == 0:
             x0 += 1
         elif h1 == 1:
             x1 += 1
-        elif h1 == 2:
-            x2 += 1
-        elif h1 == 3:
-            x3 += 1
-        elif h1 == 4:
-            x4 += 1
 
-    max_h = max(x0, x1, x2, x3, x4)
+    max_h = max(x0, x1)
     print(name, target_names[0], 'x0', x0)
     print(name, target_names[1], 'x1', x1)
-    print(name, target_names[2], 'x2', x2)
-    print(name, target_names[3], 'x3', x3)
-    print(name, target_names[4], 'x4', x4)
     if x0 == max_h:
         print(target_names[0])
     if x1 == max_h:
         print(target_names[1])
-    if x2 == max_h:
-        print(target_names[2])
-    if x3 == max_h:
-        print(target_names[3])
-    if x4 == max_h:
-        print(target_names[4])
+
 
 from body.KeyPoints import KeyPoints
-def Live(kp):
+def Live(kp,nameEx):
     dm = DataModel()
-    target_names = dm.getTargetNames()
-    X_n = KeyPoints.getAllKeypoints(kp)
-    pl = Predict_Live(X_n,target_names)
-    pl.predictLive()
-    tuni(pl.mz_,'KNN')
+    path,target_names = dm.DataModelEx(nameEx)
+    # X_n = KeyPoints.getAllKeypoints(kp)
+    # pl = Predict_Live(X_n,target_names,nameEx)
+    # pl.predictLive()
+    # tuni(pl.mz_,'KNN')
+

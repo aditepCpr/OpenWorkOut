@@ -52,7 +52,7 @@ class DataModel:
         self.cam = cd('dataSet/cam')
         self.unknown = cd('dataSet/unknown')
         self.target_names = np.array(['squat', 'curl', 'pushup', 'dumbbellShoulderPress', 'deadlift'], dtype='<U10')
-
+        self.path = []
 
     def getSquat(self):
         return self.squat
@@ -78,12 +78,36 @@ class DataModel:
     def getTargetNames(self):
         return self.target_names
 
-    def getTargetNamesEx(self):
-        return self.target_namesEx
+    def DataModelEx(self,nameEX):
+        if nameEX == 'Push Ups':
+            self.path = [self.pushup, self.unknown]
+            self.target_names = np.array(['Push Ups', 'unknown'], dtype='<U10')
+        elif nameEX == 'Squat':
+            self.path = [self.squat, self.unknown]
+            self.target_names = np.array(['Squat', 'unknown'], dtype='<U10')
+        elif nameEX == 'Barbell Curl':
+            self.path = [self.curl, self.unknown]
+            self.target_names = np.array(['Barbell Curl', 'unknown'], dtype='<U10')
+        elif nameEX == 'Dumbbell Shoulder Press':
+            self.path = [self.dumbbellShoulderPress, self.unknown]
+            self.target_names = np.array(['Dumbbell ShoulderPress', 'unknown'], dtype='<U10')
+        elif nameEX == 'Deadlift':
+            self.path = [self.deadlift, self.unknown]
+            self.target_names = np.array(['Dead lift', 'unknown'], dtype='<U10')
+        return self.path,self.target_names
 
 def load_Data(fileName):
     try:
-        file_model = open(fileName + '.pkl', 'rb')
+        file_model = open('model/'+fileName + '.pkl', 'rb')
+        model = pickle.load(file_model)
+        file_model.close()
+    except IOError as e:
+        print(e)
+    return model
+
+def load_DataEx(fileName,nameEx):
+    try:
+        file_model = open('model/'+nameEx+'/'+fileName + '.pkl', 'rb')
         model = pickle.load(file_model)
         file_model.close()
     except IOError as e:

@@ -28,9 +28,10 @@ except ImportError as e:
 class OpenWorkpout:
     print('OpenWorkout Ok...')
 
-    def __init__(self, filename, nameEx):
+    def __init__(self, filename, nameEx,nameEx2):
         self.filename = filename
         self.nameEx = nameEx
+        self.nameEx2 = nameEx2
 
     def _OpenCVpose(self):
         print(type(self.filename), self.filename)
@@ -72,7 +73,7 @@ class OpenWorkpout:
                 opWrapper.emplaceAndPop([datum])
                 bodyKeypoints = datum.poseKeypoints
                 try:
-                   detect_body(frame, bodyKeypoints, img_id, self.nameEx)
+                   detect_body(frame, bodyKeypoints, img_id, self.nameEx,self.nameEx2)
                 except Exception as e:
                     print(e)
 
@@ -91,7 +92,6 @@ class OpenWorkpout:
 
         imageToProcess.release()
         cv2.destroyAllWindows()
-
 # test
 # if __name__ == '__main__':
 #     opw = OpenWorkpout(0,'cam')
