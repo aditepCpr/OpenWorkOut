@@ -50,7 +50,7 @@ class OpenWorkpout:
         clf.read("face/model/classifier.xml")
         try:
             if self.nameEx == 'predictVdo':
-                file_model = open('model/'+self.nameEx2+'/Knn.pkl', 'rb')
+                file_model = open('model/'+self.nameEx2+'/MLPClassifier.pkl', 'rb')
                 # file_model = open('model/MLPClassifier.pkl', 'rb')
                 self.model = pickle.load(file_model)
                 file_model.close()
