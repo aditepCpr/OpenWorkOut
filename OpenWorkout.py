@@ -1,10 +1,12 @@
+import pickle
 import cv2
 import os
 from sys import platform
 from face.draw_boundary import detect_face
-from body.draw_body import detect_body
+from body.draw_body import detect_body as dBody
+from body.predict_drowBody import detect_body as pdBody
 from tkinter import *
-
+import gui
 # Import Openpose (Windows/Ubuntu/OSX)
 dir_path = os.path.dirname(os.path.realpath(__file__))
 try:
@@ -25,10 +27,11 @@ except ImportError as e:
         'Error: OpenPose library could not be found. Did you enable `BUILD_PYTHON` in CMake and have this Python script in the right folder?')
     raise e
 
+
 class OpenWorkpout:
     print('OpenWorkout Ok...')
 
-    def __init__(self, filename, nameEx,nameEx2):
+    def __init__(self, filename, nameEx, nameEx2):
         self.filename = filename
         self.nameEx = nameEx
         self.nameEx2 = nameEx2
@@ -46,6 +49,14 @@ class OpenWorkpout:
         clf = cv2.face.LBPHFaceRecognizer_create()
         clf.read("face/model/classifier.xml")
         try:
+            if self.nameEx == 'predictVdo':
+                file_model = open('model/'+self.nameEx2+'/MLPClassifier.pkl', 'rb')
+                self.model = pickle.load(file_model)
+                file_model.close()
+        except IOError as e:
+            print(e)
+
+        try:
             # Starting OpenPose
             opWrapper = op.WrapperPython()
             opWrapper.configure(params)
@@ -57,15 +68,16 @@ class OpenWorkpout:
 
             imageToProcess = cv2.VideoCapture(self.filename)
             img_id = 1
-            path = [os.path.join('dataSet/'+self.nameEx, f) for f in os.listdir('dataSet/'+self.nameEx)]
-            if len(path) >= 1:
-                if self.nameEx != 'cam':
-                    img_id = len(path)
-            while (True):
+            if self.nameEx != 'predictVdo':
+                path = [os.path.join('dataSet/' + self.nameEx, f) for f in os.listdir('dataSet/' + self.nameEx)]
+                if len(path) >= 1:
+                    if self.nameEx != 'cam':
+                        img_id = len(path)
+            while (imageToProcess.isOpened()):
                 # Read Video
                 ret, frame = imageToProcess.read()
                 # face
-                f1 = detect_face(frame, faceCascade, img_id, clf)
+                # f1 = detect_face(ret, frame, faceCascade, img_id, clf)
 
                 # datum.openpose input data
 
@@ -73,7 +85,10 @@ class OpenWorkpout:
                 opWrapper.emplaceAndPop([datum])
                 bodyKeypoints = datum.poseKeypoints
                 try:
-                   detect_body(frame, bodyKeypoints, img_id, self.nameEx,self.nameEx2)
+                    if self.nameEx == 'predictVdo':
+                        f1 = pdBody(frame, bodyKeypoints, img_id, self.nameEx, self.nameEx2,self.model)
+                    if self.nameEx != 'predictVdo':
+                        f1 = dBody(frame, bodyKeypoints, img_id, self.nameEx)
                 except Exception as e:
                     print(e)
 
@@ -88,12 +103,15 @@ class OpenWorkpout:
 
         except Exception as e:
             print(e)
-            sys.exit(-1)
+            imageToProcess.release()
+            cv2.destroyAllWindows()
+            # sys.exit(-1)
 
         imageToProcess.release()
         cv2.destroyAllWindows()
-# test
+
 # if __name__ == '__main__':
-#     opw = OpenWorkpout(0,'cam')
-#     opw._OpenCVpose()
 #
+#     opw = OpenWorkpout(0, 'cam', 'Dumbbell Shoulder Press')
+#     opw._OpenCVpose()
+# #

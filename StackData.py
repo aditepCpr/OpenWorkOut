@@ -3,6 +3,8 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 import pickle
 from sklearn.preprocessing import StandardScaler as Sta
+
+
 class StackData:
     def __init__(self, path):
         self.path = path
@@ -21,7 +23,6 @@ class StackData:
         # X = sta.transform(X)
         X_train, X_test, z_train, z_test = train_test_split(X, z, test_size=0.2)
         return X_train, X_test, z_train, z_test
-
 
     def stackData_Predict(self):
         idc = 0
@@ -78,7 +79,7 @@ class DataModel:
     def getTargetNames(self):
         return self.target_names
 
-    def DataModelEx(self,nameEX):
+    def DataModelEx(self, nameEX):
         if nameEX == 'Push Ups':
             self.path = [self.pushup, self.unknown]
             self.target_names = np.array(['Push Ups', 'unknown'], dtype='<U10')
@@ -94,22 +95,21 @@ class DataModel:
         elif nameEX == 'Deadlift':
             self.path = [self.deadlift, self.unknown]
             self.target_names = np.array(['Dead lift', 'unknown'], dtype='<U10')
-        return self.path,self.target_names
+        return self.path, self.target_names
+
 
 def load_Data(fileName):
     try:
-        file_model = open('model/'+fileName + '.pkl', 'rb')
+        file_model = open('model/' + fileName + '.pkl', 'rb')
         model = pickle.load(file_model)
         file_model.close()
     except IOError as e:
         print(e)
     return model
 
-def load_DataEx(fileName,nameEx):
-    try:
-        file_model = open('model/'+nameEx+'/'+fileName + '.pkl', 'rb')
-        model = pickle.load(file_model)
-        file_model.close()
-    except IOError as e:
-        print(e)
-    return model
+
+def stackData_PredictEx(kp):
+    PredictEx_x = cd.xxEx(kp)
+    PredictEx_y = cd.yyEx(kp)
+    PredictEx_X_ = np.stack((PredictEx_x, PredictEx_y), axis=1)
+    return PredictEx_X_

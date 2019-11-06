@@ -41,11 +41,11 @@ class MainPage():
 
     def framePredictVdo(self,root):
         def preInputVdoData():
-            messagebox.showinfo("PredictVdo",'Predict : " '+ comboExs.get()+'" :  Coming soon')
-            # label1.configure(text=comboExs.get())
-            # print(comboExs.get())
-            # owk = Owk.OpenWorkpout(root.filename, 'cam',comboExs.get())
-            # owk._OpenCVpose()
+            # messagebox.showinfo("PredictVdo",'Predict : " '+ comboExs.get()+'" :  Coming soon')
+            label1.configure(text=comboExs.get())
+            print(comboExs.get())
+            owk = Owk.OpenWorkpout(0, 'predictVdo',comboExs.get())
+            owk._OpenCVpose()
 
 
         # filePredictVdo = Toplevel(root)
@@ -146,7 +146,7 @@ class MainPage():
         exit()
 
     def selection(self):
-        root.filename = filedialog.askopenfilename(initialdir="/home/aditep/soflware", title="Select file",
+        root.filename = filedialog.askopenfilename(initialdir="/home/aditep/soflware/OpenWorkOut/vdo", title="Select file",
                                                    filetypes=(("files mp4", "*.mp4"), ("all files", "*.*")))
         print(root.filename)
 
@@ -236,10 +236,10 @@ class MainPage():
 
 
 
+# def gui():
 
 if __name__ == '__main__':
     root = tk.Tk()
     # content = Frame(root)
     MainPage(root)
     root.mainloop()  # Start GUI
-

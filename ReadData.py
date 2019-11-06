@@ -32,6 +32,7 @@ class CreateData:
         for x in xy:
             npx = np.array(x)
             x = npx[:, 0:1]
+            # print(x)
             for x1 in x:
                 for x2 in x1:
                     xx.append(x2)
@@ -50,6 +51,19 @@ class CreateData:
                     # print(y2)
         return yy
 
+    def xxEx(xy):
+        xxEx_X = []
+        for x in xy:
+            xxEx_npx = np.array(x)
+            xxEx_X.append(xxEx_npx[0])
+        return xxEx_X
+
+    def yyEx(xy):
+        yyEx_Y = []
+        for y in xy:
+            yyEx_npy = np.array(y)
+            yyEx_Y.append(yyEx_npy[1])
+        return yyEx_Y
 
     def c(xx,yy,idc):
         xy = np.stack((xx, yy), axis=1)

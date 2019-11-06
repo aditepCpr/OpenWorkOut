@@ -66,7 +66,8 @@ class MLPC_:
         self.fileName = 'MLPClassifier'
 
     def mlpc(self):
-        mlpc = MLPC(hidden_layer_sizes=(100,100,100,100,50),activation="tanh",learning_rate_init=0.0001,solver='adam',learning_rate='invscaling')
+        mlpc = MLPC(hidden_layer_sizes=(100,100,100,100,100,100,100,100,100),activation="tanh",learning_rate_init=0.0001
+                    ,solver='adam',learning_rate='invscaling',max_iter=500)
         mlpc.fit(self.X, self.z)
 
         self.mz_, self.mx, self.my, self.mX, self.mz = predict_Data(self.X2, mlpc, self.nmesh)
@@ -185,7 +186,7 @@ class SVC_:
         # ccc = 10 ** np.linspace(-5, 5, 41)
         # khanaen_fuek, khanaen_truat = validation_curve(SVC(gamma=1), self.X, self.z, 'C', ccc, cv=5)
 
-        svc = SVC(kernel='rbf', C=100, gamma=10.0)
+        svc = SVC(kernel='rbf', C=10, gamma=10.0)
         svc = svc.fit(self.X, self.z)
         self.mz_, self.mx, self.my, self.mX, self.mz = predict_Data(self.X2, svc, self.nmesh)
         show_Data(self.X2, self.z2, self.mx, self.my, self.mz, self.name, self.target_names, self.mz_)

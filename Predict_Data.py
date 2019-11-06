@@ -4,6 +4,8 @@ import matplotlib.pyplot as plt
 from StackData import DataModel
 from StackData import StackData
 from StackData import load_Data
+
+
 class DecisionTree:
     mz = []
     mx = []
@@ -91,7 +93,6 @@ class Knn_:
         show_Data(self.X, self.z, self.mx, self.my, self.mz, self.name, self.target_names, self.mz_)
 
 
-
 class SVC_:
     mz = []
     mz_ = []
@@ -110,6 +111,7 @@ class SVC_:
         stored_svc = load_Data(self.fileName)
         self.mz_, self.mx, self.my, self.mX, self.mz = predict_Data(self.X, stored_svc, self.nmesh)
         show_Data(self.X, self.z, self.mx, self.my, self.mz, self.name, self.target_names, self.mz_)
+
 
 def predict_Data(X, model, nmesh):
     mz_ = model.predict(X)
@@ -132,9 +134,8 @@ def show_Data(X, z, mx, my, mz, name, target_names, mz_):
     plt.show()
 
 
-
 def tuni(mz, name):
-    X,z,target_names = data()
+    X, z, target_names = data()
 
     print(name)
     x0 = 0
@@ -172,11 +173,13 @@ def tuni(mz, name):
     if x4 == max_h:
         print(target_names[4])
 
+
 def predict_knn():
     X, z, target_names = data()
     knn = Knn_(X, z, target_names)
     knn.knn()
-    tuni(knn.mz_,knn.name)
+    tuni(knn.mz_, knn.name)
+
 
 def predict_DecisionTree():
     X, z, target_names = data()
@@ -184,11 +187,13 @@ def predict_DecisionTree():
     dt.decisionTree()
     tuni(dt.mz_, dt.name)
 
+
 def predict_RandomForest():
     X, z, target_names = data()
     rt = RandomForest(X, z, target_names)
     rt.randomforest()
     tuni(rt.mz_, rt.name)
+
 
 def predict_Mlpc():
     X, z, target_names = data()
@@ -196,11 +201,13 @@ def predict_Mlpc():
     mlpc.mlpc()
     tuni(mlpc.mz_, mlpc.name)
 
+
 def predict_Svc():
     X, z, target_names = data()
     svc = SVC_(X, z, target_names)
     svc.svc()
     tuni(svc.mz_, svc.name)
+
 
 def data():
     try:
@@ -215,4 +222,4 @@ def data():
         # plt.show()
     except Exception as e:
         print(e)
-    return X,z,target_names
+    return X, z, target_names
