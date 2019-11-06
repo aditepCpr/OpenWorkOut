@@ -4,16 +4,20 @@ from tkinter import Button, Menu
 from tkinter import filedialog
 from tkinter import ttk
 import OpenWorkout as Owk
-from Predict_Data import predict_knn,predict_DecisionTree,predict_Mlpc,predict_RandomForest,predict_Svc
-from TrainingModel import training_DecisionTree,training_knn,training_mlpc,training_RandomForest,training_Svc,training_percep
+from Predict_Data import predict_knn, predict_DecisionTree, predict_Mlpc, predict_RandomForest, predict_Svc
+from TrainingModel import training_DecisionTree, training_knn, training_mlpc, training_RandomForest, training_Svc, \
+    training_percep
 from RemoveJson import removeJson
-from TrainingModel_Exercise import training_knnEx,training_DecisionTreeEx,training_mlpcEx,training_percepEx,training_RandomForestEx,training_SvcEx,data
+from TrainingModel_Exercise import training_knnEx, training_DecisionTreeEx, training_mlpcEx, training_percepEx, \
+    training_RandomForestEx, training_SvcEx, data
 from tkinter import messagebox
+
 selectionnFilename = None
 
 
 class MainPage():
     print('MainPage Ok...')
+
     def __init__(self, root):
         self.root = root
         self.pageMain()
@@ -22,12 +26,11 @@ class MainPage():
 
     def pageLive(self):
         try:
-            owk = Owk.OpenWorkpout(0,'cam',None)
+            owk = Owk.OpenWorkpout(0, 'cam', None)
             owk._OpenCVpose()
         except Exception as e:
             messagebox.showinfo("Error", e)
             print(e)
-
 
     def pageMain(self):
         print('GUI Start...')
@@ -39,21 +42,20 @@ class MainPage():
 
         # predictData(root)
 
-    def framePredictVdo(self,root):
+    def framePredictVdo(self, root):
         def preInputVdoData():
             # messagebox.showinfo("PredictVdo",'Predict : " '+ comboExs.get()+'" :  Coming soon')
             label1.configure(text=comboExs.get())
             print(comboExs.get())
-            owk = Owk.OpenWorkpout(0, 'predictVdo',comboExs.get())
+            owk = Owk.OpenWorkpout(0, 'predictVdo', comboExs.get())
             owk._OpenCVpose()
-
 
         # filePredictVdo = Toplevel(root)
         # filePredictVdo.geometry('800x400')
         # filePredictVdo.title("Predict Vdo")
         PrframeVdo = Frame(root, bd="3", relief=GROOVE, padx=10, pady=10, bg='snow')
         PrframeVdo.pack()
-        labelTop = tk.Label(PrframeVdo,text="Choose your exercise",bg='snow')
+        labelTop = tk.Label(PrframeVdo, text="Choose your exercise", bg='snow')
         value = [
             "Push Ups",
             "Squat",
@@ -69,7 +71,6 @@ class MainPage():
         # bremoveJson = Button(PrframeVdo, text="clear data", command=removeJson)
         # btrain = Button(PrframeVdo, text="Training", command=train)
 
-
         label1 = Label(PrframeVdo, text="")
         labelTop.pack(side=TOP)
         comboExs.pack(side=LEFT)
@@ -78,49 +79,45 @@ class MainPage():
         # bInputVdoData.pack(side=TOP)
         # bremoveJson.pack(side=BOTTOM)
 
-
-    def framePredictLive(self,root):
+    def framePredictLive(self, root):
         def preInputVdoData():
             try:
                 owk = Owk.OpenWorkpout(root.filename, 'cam', None)
                 owk._OpenCVpose()
             except Exception as e:
                 print(e)
-        Prframelive = Frame(root, bd="3", relief=GROOVE, padx=10, pady=10,bg='snow')
-        cen = Label(Prframelive, text="Import Data",bg='snow')
+
+        Prframelive = Frame(root, bd="3", relief=GROOVE, padx=10, pady=10, bg='snow')
+        cen = Label(Prframelive, text="Import Data", bg='snow')
         bBrowse = Button(Prframelive, text=' 1 - Browse ', bd=3, font=('', 10), padx=5, pady=5, command=self.selection)
         bInputVdoData = Button(Prframelive, text=" 2 - import Data", command=preInputVdoData)
         bremoveJson = Button(Prframelive, text="clear data", command=removeJson)
-        pathlabel = Label(Prframelive,text = " -------------------------------------------",bg='snow')
-        pathlabel2 = Label(Prframelive,text = " -------------------------------------------",bg='snow')
-        pathlabel3 = Label(Prframelive,text = " -------------------------------------------",bg='snow')
+        pathlabel = Label(Prframelive, text=" -------------------------------------------", bg='snow')
+        pathlabel2 = Label(Prframelive, text=" -------------------------------------------", bg='snow')
+        pathlabel3 = Label(Prframelive, text=" -------------------------------------------", bg='snow')
         blive = Button(Prframelive, text=' live ', bd=3, font=('', 10), padx=20, pady=20, command=self.pageLive)
         cen.pack()
         pathlabel3.pack()
-        bBrowse.pack(side = TOP)
-        bInputVdoData.pack(side = TOP)
+        bBrowse.pack(side=TOP)
+        bInputVdoData.pack(side=TOP)
         pathlabel.pack()
-        bremoveJson.pack(side = BOTTOM)
+        bremoveJson.pack(side=BOTTOM)
         pathlabel2.pack(side=BOTTOM)
-        blive.pack(side = BOTTOM)
-        Prframelive.pack(side = TOP)
+        blive.pack(side=BOTTOM)
+        Prframelive.pack(side=TOP)
         # blive.configure(text='Live Start...')
 
+    def framePredictTypeWorkOutData(self, root):
 
-    def framePredictTypeWorkOutData(self,root):
-
-        Prframe = Frame(root, bd="3", relief=GROOVE, padx=10, pady=10,bg='snow')
+        Prframe = Frame(root, bd="3", relief=GROOVE, padx=10, pady=10, bg='snow')
         Prframe.pack(side=TOP)
-        label1 = Label(Prframe, text="Predict Type Workout",bg='snow').grid(row=0,column=0)
-        label3 = Label(Prframe, text="   ",bg='snow').grid(row=2,column=0)
-        bshow = Button(Prframe, text="k-nearest neighbors", command=predict_knn).grid(row=3,column=0)
-        bshow2 = Button(Prframe, text="DecisionTree", command=predict_DecisionTree).grid(row=3,column=1)
-        bshow3 = Button(Prframe, text="RandomForest", command=predict_RandomForest).grid(row=3,column=2)
-        bshow4 = Button(Prframe, text="    SVC    ", command=predict_Svc).grid(row=3,column=3)
-        bshow5 = Button(Prframe, text="MLPClassifier", command=predict_Mlpc).grid(row=3,column=4)
-
-
-
+        label1 = Label(Prframe, text="Predict Type Workout", bg='snow').grid(row=0, column=0)
+        label3 = Label(Prframe, text="   ", bg='snow').grid(row=2, column=0)
+        bshow = Button(Prframe, text="k-nearest neighbors", command=predict_knn).grid(row=3, column=0)
+        bshow2 = Button(Prframe, text="DecisionTree", command=predict_DecisionTree).grid(row=3, column=1)
+        bshow3 = Button(Prframe, text="RandomForest", command=predict_RandomForest).grid(row=3, column=2)
+        bshow4 = Button(Prframe, text="    SVC    ", command=predict_Svc).grid(row=3, column=3)
+        bshow5 = Button(Prframe, text="MLPClassifier", command=predict_Mlpc).grid(row=3, column=4)
 
     def _createMenu(self):
         menubar = Menu(root)
@@ -146,16 +143,15 @@ class MainPage():
         exit()
 
     def selection(self):
-        root.filename = filedialog.askopenfilename(initialdir="/home/aditep/soflware/OpenWorkOut/vdo", title="Select file",
+        root.filename = filedialog.askopenfilename(initialdir="/home/aditep/soflware/OpenWorkOut/vdo",
+                                                   title="Select file",
                                                    filetypes=(("files mp4", "*.mp4"), ("all files", "*.*")))
         print(root.filename)
-
 
     def donothing(self):
         filewin = Toplevel(root)
         button = Button(filewin, text="Do nothing button")
         button.pack()
-
 
     def pageShow(self):
         fileshow = Toplevel(root)
@@ -163,25 +159,33 @@ class MainPage():
         fileshow.title("Show Model")
         pwshow = PanedWindow(fileshow, bg='red', orient=VERTICAL)
         pwshow.pack(fill=BOTH, expand=1)
-        bshow = Button(fileshow, text="Knn",command=predict_knn)
-        bshow2 = Button(fileshow, text="DecisionTree",command=predict_DecisionTree)
-        bshow3 = Button(fileshow,  text="RandomForest",command=predict_RandomForest)
-        bshow4 = Button(fileshow,  text="SVC",command=predict_Svc)
-        bshow5 = Button(fileshow,  text="MLPClassifier",command=predict_Mlpc)
+        bshow = Button(fileshow, text="Knn", command=predict_knn)
+        bshow2 = Button(fileshow, text="DecisionTree", command=predict_DecisionTree)
+        bshow3 = Button(fileshow, text="RandomForest", command=predict_RandomForest)
+        bshow4 = Button(fileshow, text="SVC", command=predict_Svc)
+        bshow5 = Button(fileshow, text="MLPClassifier", command=predict_Mlpc)
         pwshow.add(bshow)
         pwshow.add(bshow2)
         pwshow.add(bshow3)
         pwshow.add(bshow4)
         pwshow.add(bshow5)
 
-
     def input_Data(self):
         print('input_Data')
+
         def inputData():
             label1.configure(text=comboExs.get())
             print(comboExs.get())
-            owk = Owk.OpenWorkpout(root.filename, comboExs.get(),None)
+            owk = Owk.OpenWorkpout(root.filename, comboExs.get(), None)
             owk._OpenCVpose()
+
+        def InputLive():
+            try:
+                owk = Owk.OpenWorkpout(0, 'unknown', None)
+                owk._OpenCVpose()
+            except Exception as e:
+                messagebox.showinfo("Error", e)
+                print(e)
 
         def trainType():
             training_knn()
@@ -223,20 +227,18 @@ class MainPage():
         btrainType = Button(Prframe2, text="Train_Type", command=trainType)
         btrainWorkout = Button(Prframe2, text="Train_workout", command=trainingEx)
         bBrowse = Button(Prframe, text=' Browse ', bd=3, font=('', 10), padx=5, pady=5, command=self.selection)
-
+        blive = Button(Prframe, text=' live ', bd=3, font=('', 10), padx=20, pady=20, command=InputLive)
         label1 = Label(Prframe2, text="Training Model")
 
         # print(dict(comboExs))
         comboExs.pack()
         bBrowse.pack()
-        label1.pack(side = TOP)
+        label1.pack(side=TOP)
         binputData.pack()
+        # blive.pack()
         btrainType.pack(side=LEFT)
         btrainWorkout.pack(side=RIGHT)
 
-
-
-# def gui():
 
 if __name__ == '__main__':
     root = tk.Tk()

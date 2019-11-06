@@ -103,9 +103,20 @@ def draw_boundary(img, bodyKeypoints, kp, z, Z,nameEx2):
 
 def detect_body(img, bodyKeypoints, img_id, nameEx, nameEx2,model):
     kp = KeyPoints(bodyKeypoints)
-    predictLive = Predict_Live.Predict_Live(kp.getAllKeypoints(), nameEx2, model)
+    predictLive = Predict_Live.Predict_Live(kp.getAllKeypoints(), model)
     # 0 = squat : 1 =  curl :  2  =  pushup  : 3  =  dumbbellShoulderPress : 4  =  deadlift
-    img = draw_boundary(img, bodyKeypoints, kp, predictLive.predictLive(), 0,nameEx2)
+    Z = 0
+    # if nameEx2 == 'squat':
+    #     Z = 0
+    # elif nameEx2 == 'curl':
+    #     Z = 1
+    # elif nameEx2 == 'pushup':
+    #     Z = 2
+    # elif nameEx2 == 'dumbbellShoulderPress':
+    #     Z = 3
+    # elif nameEx2 == 'deadlift':
+    #     Z = 4
+    img = draw_boundary(img, bodyKeypoints, kp, predictLive.predictLive(), Z,nameEx2)
     print(predictLive.predictLive())
     # create Json file
     return img

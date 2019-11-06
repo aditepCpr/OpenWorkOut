@@ -6,13 +6,10 @@ class Predict_Live:
     mX = []
     mz_ = []
 
-    def __init__(self, X, nameEx,model):
+    def __init__(self, X,model):
         self.X = X
         self.model = model
-        self.nameEx = nameEx
-        self.name = 'Multi-layer Perceptron classifier'
         self.mz_ = self.mz_
-        self.fileName = 'MLPClassifier'
     def predictLive(self):
         X_ = stackData_PredictEx(self.X)
         self.mz_ = self.model.predict(X_)
