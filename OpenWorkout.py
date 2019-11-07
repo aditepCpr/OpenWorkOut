@@ -35,7 +35,9 @@ class OpenWorkpout:
         self.filename = filename
         self.nameEx = nameEx
         self.nameEx2 = nameEx2
-
+        print('filename = ',self.filename)
+        print('nameEx = ',self.nameEx)
+        print('nameEx2 = ',self.nameEx2)
     def _OpenCVpose(self):
         print(type(self.filename), self.filename)
         # Custom Params (refer to include/openpose/flags.hpp for more parameters)
@@ -77,6 +79,7 @@ class OpenWorkpout:
             while (imageToProcess.isOpened()):
                 # Read Video
                 ret, frame = imageToProcess.read()
+                # frame = cv2.flip(frame, -1)
                 # face
                 # f1 = detect_face(ret, frame, faceCascade, img_id, clf)
 
@@ -94,7 +97,7 @@ class OpenWorkpout:
                     print(e)
 
                 # print("Body keypoints: \n" + str(datum.poseKeypoints))
-
+                # f = cv2.flip(f1, 1)
                 cv2.imshow('OpenWorkOut', f1)
                 # cv2.imshow('OpenWorkOut')
                 img_id += 1

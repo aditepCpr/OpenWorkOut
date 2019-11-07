@@ -4,8 +4,9 @@ class KeyPoints:
 
     def __init__(self,bodyKeypoints):
         self.bkp = bodyKeypoints
+        if self.bkp.shape != (1, 25, 3):
+            self.bkp = np.zeros([1, 25, 3])
         self.x = np.array(self.bkp)
-
         # คอ
         self.Neck1 = self.x[0][1][0]
         self.Neck2 = self.x[0][1][1]
@@ -63,8 +64,6 @@ class KeyPoints:
         # ขาล่างซ้าย
         self.LAnkle1 = self.x[0][14][0]
         self.LAnkle2 = self.x[0][14][1]
-
-
 
 
     def getNeck1(self):

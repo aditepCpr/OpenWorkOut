@@ -97,7 +97,8 @@ def draw_boundary(img, bodyKeypoints, kp, z, Z,nameEx2):
         else:
             color = (0, 0, 255)
         img = cv2.line(img, (kp.getLKnee1(), kp.getLKnee2()), (kp.getLAnkle1(), kp.getLAnkle2()), color, 10)
-    cv2.putText(img, str(nameEx2), (10, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
+    cv2.putText(img, str(nameEx2), (10, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2,)
+
     return img
 
 
