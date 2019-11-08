@@ -11,7 +11,7 @@ from RemoveJson import removeJson
 from TrainingModel_Exercise import training_knnEx, training_DecisionTreeEx, training_mlpcEx, training_percepEx, \
     training_RandomForestEx, training_SvcEx, data
 from tkinter import messagebox
-
+from PIL import ImageTk, Image
 selectionnFilename = None
 
 
@@ -26,7 +26,7 @@ class MainPage():
 
     def pageLive(self):
         try:
-            owk = Owk.OpenWorkpout(0, 'cam', None)
+            owk = Owk.OpenWorkpout(0, 'cam', None, 'Live')
             owk._OpenCVpose()
         except Exception as e:
             messagebox.showinfo("Error", e)
@@ -37,18 +37,32 @@ class MainPage():
         root.title("Training")
         root.geometry('800x400')
         self.framePredictLive(root)
-        self.framePredictTypeWorkOutData(root)
+        # self.framePredictTypeWorkOutData(root)
         self.framePredictVdo(root)
 
         # predictData(root)
 
     def framePredictVdo(self, root):
-        def preInputVdoData():
+        def preInputLiveData():
+
             # messagebox.showinfo("PredictVdo",'Predict : " '+ comboExs.get()+'" :  Coming soon')
             label1.configure(text=comboExs.get())
             print(comboExs.get())
-            owk = Owk.OpenWorkpout(0, 'predictVdo', comboExs.get())
+            # self.showpic(comboExs.get())
+            # file = root.filename
+            owk = Owk.OpenWorkpout(0, 'predictVdo', comboExs.get(), 'Predict Workout Live')
             owk._OpenCVpose()
+        def preInputVdoData():
+            # messagebox.showinfo("PredictVdo",'Predict : " '+ comboExs.get()+'" :  Coming soon')
+            try:
+                self.selection()
+                label1.configure(text=comboExs.get())
+                # self.showpic(comboExs.get())
+                print(comboExs.get())
+                owk = Owk.OpenWorkpout(root.filename, 'predictVdo', comboExs.get(), 'Predict Workout VDO')
+                owk._OpenCVpose()
+            except AttributeError :
+                messagebox.showinfo('Import File VDO',"Import VDO ")
 
         # filePredictVdo = Toplevel(root)
         # filePredictVdo.geometry('800x400')
@@ -66,7 +80,8 @@ class MainPage():
         comboExs = ttk.Combobox(PrframeVdo, values=value)
         comboExs.current(1)
         # bBrowse = Button(PrframeVdo, text=' Browse ', bd=3, font=('', 10), padx=5, pady=5, command=self.selection)
-        bPredictVdo = Button(PrframeVdo, text="Predict", command=preInputVdoData)
+        bPredictVdo = Button(PrframeVdo, text="Predict VDO", command=preInputVdoData)
+        bPredictLive = Button(PrframeVdo, text="Predict Live", command=preInputLiveData)
         # bInputVdoData = Button(PrframeVdo, text="import Data", command=preInputVdoData)
         # bremoveJson = Button(PrframeVdo, text="clear data", command=removeJson)
         # btrain = Button(PrframeVdo, text="Training", command=train)
@@ -76,34 +91,59 @@ class MainPage():
         comboExs.pack(side=LEFT)
         # bBrowse.pack(side=LEFT)
         bPredictVdo.pack(side=LEFT)
+        bPredictLive.pack(side=RIGHT)
         # bInputVdoData.pack(side=TOP)
         # bremoveJson.pack(side=BOTTOM)
 
     def framePredictLive(self, root):
         def preInputVdoData():
             try:
-                owk = Owk.OpenWorkpout(root.filename, 'cam', None)
+                self.selection()
+                owk = Owk.OpenWorkpout(root.filename, 'cam', None, 'Import Vdo')
                 owk._OpenCVpose()
             except Exception as e:
                 print(e)
+        def predict():
+            names = predict_Mlpc()
+            messagebox.showinfo('Exercise', 'Predict Exercise posture :: " '+ str(names).upper() +' "')
+            self.showpic(names)
 
+        def remove_Json():
+            try:
+                MsgBox = tk.messagebox.askquestion('remove data',
+                                                   'Are you sure you want clear data', icon='warning')
+                if MsgBox == 'yes':
+                    removeJson()
+                    tk.messagebox.showinfo('Return', 'Clear Data finished')
+                else:
+                    tk.messagebox.showinfo('Return', 'You will now return to the application screen')
+            except Exception as e:
+                print(e)
         Prframelive = Frame(root, bd="3", relief=GROOVE, padx=10, pady=10, bg='snow')
         cen = Label(Prframelive, text="Import Data", bg='snow')
         bBrowse = Button(Prframelive, text=' 1 - Browse ', bd=3, font=('', 10), padx=5, pady=5, command=self.selection)
-        bInputVdoData = Button(Prframelive, text=" 2 - import Data", command=preInputVdoData)
-        bremoveJson = Button(Prframelive, text="clear data", command=removeJson)
-        pathlabel = Label(Prframelive, text=" -------------------------------------------", bg='snow')
-        pathlabel2 = Label(Prframelive, text=" -------------------------------------------", bg='snow')
-        pathlabel3 = Label(Prframelive, text=" -------------------------------------------", bg='snow')
+        bInputVdoData = Button(Prframelive, text=" Import File VDO", command=preInputVdoData)
+        bshowpredctWorkout = Button(Prframelive, text="Predict Exercise posture", command=predict)
+        bremoveJson = Button(Prframelive, text="clear data", command=remove_Json)
+        pathlabel = Label(Prframelive, text=" ------------------------------VDO------------------------------", bg='snow')
+        pathlabel2 = Label(Prframelive, text=" ------------------------------Live------------------------------", bg='snow')
+        pathlabel3 = Label(Prframelive, text=" Predict Exercise posture", bg='snow')
+        pathlabel6 = Label(Prframelive, text=" ---------------------------clear data---------------------------", bg='snow')
+        pathlabel4 = Label(Prframelive, text=" ----------------------------------------------------------------", bg='snow')
+        pathlabel5 = Label(Prframelive, text=" ----------------------------------------------------------------", bg='snow')
         blive = Button(Prframelive, text=' live ', bd=3, font=('', 10), padx=20, pady=20, command=self.pageLive)
         cen.pack()
-        pathlabel3.pack()
-        bBrowse.pack(side=TOP)
-        bInputVdoData.pack(side=TOP)
         pathlabel.pack()
-        bremoveJson.pack(side=BOTTOM)
-        pathlabel2.pack(side=BOTTOM)
-        blive.pack(side=BOTTOM)
+        # bBrowse.pack(side=TOP)
+        bInputVdoData.pack(side=TOP)
+        pathlabel2.pack()
+        blive.pack()
+        pathlabel6.pack()
+        bremoveJson.pack()
+        pathlabel4.pack()
+        pathlabel3.pack()
+        pathlabel5.pack()
+        bshowpredctWorkout.pack(side=BOTTOM)
         Prframelive.pack(side=TOP)
         # blive.configure(text='Live Start...')
 
@@ -122,7 +162,7 @@ class MainPage():
     def _createMenu(self):
         menubar = Menu(root)
         filemenu = Menu(menubar, tearoff=0)
-        filemenu.add_command(label="New", command=self.donothing)
+        # filemenu.add_command(label="New", command=self.donothing)
         filemenu.add_command(label="Train Model", command=self.input_Data)
         # filemenu.add_command(label="Predict_TypeExercise", command=self.framePredictVdo)
         # filemenu.add_command(label="Predict_Workout", command=self.framePredictVdo)
@@ -174,32 +214,44 @@ class MainPage():
         print('input_Data')
 
         def inputData():
-            label1.configure(text=comboExs.get())
-            print(comboExs.get())
-            owk = Owk.OpenWorkpout(root.filename, comboExs.get(), None)
-            owk._OpenCVpose()
+            try:
+                MsgBox = tk.messagebox.askquestion('Import File',
+                                                   'Are you sure you want import data for....   " '+comboExs.get()+' "', icon='warning')
+                if MsgBox == 'yes':
+                    self.selection()
+                    label1.configure(text=comboExs.get())
+                    print(comboExs.get())
+                    owk = Owk.OpenWorkpout(root.filename, comboExs.get(), None, 'Import Data Vdo')
+                    owk._OpenCVpose()
+
+            except UnboundLocalError as e:
+                messagebox.showinfo("Error", 'Import File VDO')
 
         def InputLive():
             try:
-                owk = Owk.OpenWorkpout(0, 'unknown', None)
-                owk._OpenCVpose()
+                MsgBox = tk.messagebox.askquestion('Import File',
+                                                   'Are you sure you want import data for....   " ' + comboExs.get() + ' "',
+                                                   icon='warning')
+                if MsgBox == 'yes':
+                    owk = Owk.OpenWorkpout(0, 'unknown', None, 'Import Data Live')
+                    owk._OpenCVpose()
             except Exception as e:
                 messagebox.showinfo("Error", e)
                 print(e)
 
         def trainType():
-            training_knn()
-            training_Svc()
-            training_RandomForest()
-            training_percep()
+            # training_knn()
+            # training_Svc()
+            # training_RandomForest()
+            # training_percep()
             training_mlpc()
-            training_DecisionTree()
+            # training_DecisionTree()
 
         def trainingEx():
-            training_knnEx(comboExs.get())
-            training_DecisionTreeEx(comboExs.get())
-            training_SvcEx(comboExs.get())
-            training_RandomForestEx(comboExs.get())
+            # training_knnEx(comboExs.get())
+            # training_DecisionTreeEx(comboExs.get())
+            # training_SvcEx(comboExs.get())
+            # training_RandomForestEx(comboExs.get())
             training_mlpcEx(comboExs.get())
 
         fileTrain = Toplevel(root)
@@ -207,12 +259,12 @@ class MainPage():
         fileTrain.title("Training Model/Input Data")
         # pwTrain1 = PanedWindow(fileTrain, bg='red', orient=VERTICAL)
         # pwTrain1.pack(fill=BOTH, expand=1)
-        Prframe = Frame(fileTrain, bd="3", relief=GROOVE, padx=100, pady=100)
+        Prframe = Frame(fileTrain, bd="3", relief=GROOVE, padx=100, pady=50,bg='snow')
         Prframe.pack(side=TOP)
-        Prframe2 = Frame(fileTrain, bd="3", relief=GROOVE, padx=20, pady=20)
-        Prframe2.pack(side=BOTTOM)
+        Prframe2 = Frame(fileTrain, bd="3", relief=GROOVE, padx=20, pady=20,bg='snow')
+        Prframe2.pack()
         labelTop = tk.Label(Prframe,
-                            text="Choose your exercise for inputData and Train_workout")
+                            text="Choose your exercise for inputData and Train_workout",bg='snow')
         labelTop.pack()
         value = [
             "Push Ups",
@@ -227,21 +279,37 @@ class MainPage():
         btrainType = Button(Prframe2, text="Train_Type", command=trainType)
         btrainWorkout = Button(Prframe2, text="Train_workout", command=trainingEx)
         bBrowse = Button(Prframe, text=' Browse ', bd=3, font=('', 10), padx=5, pady=5, command=self.selection)
+        pathlabel2 = Label(Prframe, text=" -----------------------Live-----------------------", bg='snow')
         blive = Button(Prframe, text=' live ', bd=3, font=('', 10), padx=20, pady=20, command=InputLive)
-        label1 = Label(Prframe2, text="Training Model")
+        label1 = Label(Prframe2, text="Training Model",bg='snow')
 
         # print(dict(comboExs))
         comboExs.pack()
-        bBrowse.pack()
+        # bBrowse.pack()
         label1.pack(side=TOP)
         binputData.pack()
-        # blive.pack()
+        pathlabel2.pack()
+        blive.pack()
         btrainType.pack(side=LEFT)
         btrainWorkout.pack(side=RIGHT)
+
+    def showpic(self,namepic):
+        showpic = Toplevel(root)
+        showpic.geometry('450x400')
+        showpic.title("Show Pic")
+        pwshow = PanedWindow(showpic, bg='snow', orient=VERTICAL)
+        pwshow.pack(fill=BOTH, expand=1)
+        load = Image.open('pic/'+namepic+'.jpg')
+        render = ImageTk.PhotoImage(load)
+        img = Label(pwshow, image=render)
+        img.image = render
+        img.place(x=0, y=0)
 
 
 if __name__ == '__main__':
     root = tk.Tk()
     # content = Frame(root)
     MainPage(root)
+
+
     root.mainloop()  # Start GUI

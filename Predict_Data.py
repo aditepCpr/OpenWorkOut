@@ -163,51 +163,58 @@ def tuni(mz, name):
     print(name, target_names[3], 'x3', x3)
     print(name, target_names[4], 'x4', x4)
     if x0 == max_h:
-        print(target_names[0])
+        # print(target_names[0])
+        names = target_names[0]
     if x1 == max_h:
-        print(target_names[1])
+        # print(target_names[1])
+        names = target_names[1]
     if x2 == max_h:
-        print(target_names[2])
+        # print(target_names[2])
+        names = target_names[2]
     if x3 == max_h:
-        print(target_names[3])
+        # print(target_names[3])
+        names = target_names[3]
     if x4 == max_h:
-        print(target_names[4])
+        # print(target_names[4])
+        names = target_names[4]
+    return names
 
 
 def predict_knn():
     X, z, target_names = data()
     knn = Knn_(X, z, target_names)
     knn.knn()
-    tuni(knn.mz_, knn.name)
-
+    names = tuni(knn.mz_, knn.name)
+    return names
 
 def predict_DecisionTree():
     X, z, target_names = data()
     dt = DecisionTree(X, z, target_names)
     dt.decisionTree()
-    tuni(dt.mz_, dt.name)
-
+    names = tuni(dt.mz_, dt.name)
+    return names
 
 def predict_RandomForest():
     X, z, target_names = data()
     rt = RandomForest(X, z, target_names)
     rt.randomforest()
-    tuni(rt.mz_, rt.name)
-
+    names = tuni(rt.mz_, rt.name)
+    return names
 
 def predict_Mlpc():
     X, z, target_names = data()
     mlpc = Mlpc(X, z, target_names)
     mlpc.mlpc()
-    tuni(mlpc.mz_, mlpc.name)
+    names = tuni(mlpc.mz_, mlpc.name)
+    return names
 
 
 def predict_Svc():
     X, z, target_names = data()
     svc = SVC_(X, z, target_names)
     svc.svc()
-    tuni(svc.mz_, svc.name)
-
+    names = tuni(svc.mz_, svc.name)
+    return names
 
 def data():
     try:

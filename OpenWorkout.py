@@ -18,7 +18,7 @@ try:
         import pyopenpose as op
     else:
         # Change these variables to point to the correct folder (Release/x64 etc.)
-        sys.path.append('/usr/local/python');
+        sys.path.append('/usr/local/python')
         # If you run `make install` (default path is `/usr/local/python` for Ubuntu), you can also access the OpenPose/python module from there. This will install OpenPose and the python library at your desired installation path. Ensure that this is in your python path in order to use it.
         # sys.path.append('/usr/local/python')
         from openpose import pyopenpose as op
@@ -31,10 +31,11 @@ except ImportError as e:
 class OpenWorkpout:
     print('OpenWorkout Ok...')
 
-    def __init__(self, filename, nameEx, nameEx2):
+    def __init__(self, filename, nameEx, nameEx2,typeWork):
         self.filename = filename
         self.nameEx = nameEx
         self.nameEx2 = nameEx2
+        self.typeWork  = typeWork
         print('filename = ',self.filename)
         print('nameEx = ',self.nameEx)
         print('nameEx2 = ',self.nameEx2)
@@ -79,7 +80,8 @@ class OpenWorkpout:
             while (imageToProcess.isOpened()):
                 # Read Video
                 ret, frame = imageToProcess.read()
-                # frame = cv2.flip(frame, -1)
+
+
                 # face
                 # f1 = detect_face(ret, frame, faceCascade, img_id, clf)
 
@@ -97,8 +99,14 @@ class OpenWorkpout:
                     print(e)
 
                 # print("Body keypoints: \n" + str(datum.poseKeypoints))
-                # f = cv2.flip(f1, 1)
-                cv2.imshow('OpenWorkOut', f1)
+                f = cv2.flip(f1, 1)
+
+                cv2.putText(f, str('close  =  "Q"'), (10, 70), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 255), 2, )
+                cv2.putText(f, str(self.typeWork), (10, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2, )
+                if self.nameEx == 'predictVdo':
+                    cv2.putText(f, str(self.nameEx2), (15, 125), cv2.FONT_HERSHEY_SIMPLEX, 1, (65, 166, 42), 2, )
+
+                cv2.imshow('OpenWorkOut', f)
                 # cv2.imshow('OpenWorkOut')
                 img_id += 1
                 if (cv2.waitKey(1) & 0xFF == ord('q')):

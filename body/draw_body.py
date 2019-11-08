@@ -24,7 +24,7 @@ def draw_boundary(img, bodyKeypoints, color, kp):
         cv2.line(img, (kp.getLElbow1(), kp.getLElbow2()), (kp.getLWrist1(), kp.getLWrist2()), color, 10)
 
     # ลำตัว
-    if (kp.getMidHip1() > 0):
+    if (kp.getNeck1() > 0 and kp.getMidHip2() > 0):
         cv2.line(img, (kp.getNeck1(), kp.getNeck2()), (kp.getMidHip1(), kp.getMidHip2()), color, 10)
 
     # ขาขวา
