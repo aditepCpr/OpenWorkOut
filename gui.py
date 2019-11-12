@@ -22,7 +22,7 @@ class MainPage():
     def __init__(self, root):
         self.root = root
         self.pageMain()
-        self._createMenu()
+        # self._createMenu()
         self.selectionnFilename = selectionnFilename
 
     def pageLive(self):
@@ -36,16 +36,37 @@ class MainPage():
     def pageMain(self):
         print('GUI Start...')
         root.title("Training")
-        root.geometry('800x400')
-        self.framePredictLive(root)
+        root.geometry('800x300')
+        root.configure(background='#22242A')
+
+
+        self.frameTap(root)
+        # self.framePredictLive(root)
+        # self.framePredictVdo(root)
         # self.framePredictTypeWorkOutData(root)
-        self.framePredictVdo(root)
-
-        # predictData(root)
 
 
-    def framePredictVdo(self, root):
+    def frameTap(self, root):
+        tab_control = ttk.Notebook(root)
+        tab1 = ttk.Frame(tab_control)
+        tab2 = ttk.Frame(tab_control)
+        tab_control.add(tab1, text='Predict Exercise')
+        tab_control.add(tab2, text='Predict Workout')
+        self.framePredictLive(tab1,root)
+        self.framePredictVdo(tab2,root)
+        tab_control.pack(expand=1, fill='both')
+        frameTap = Frame(root, bd=10, relief=FLAT, bg='#DD6161')
+
+        load_rainmodel = Image.open('pic/gui/trainmodel.png')
+        render_load_rainmodel = ImageTk.PhotoImage(load_rainmodel)
+        bInputVdoData = Button(root,image=render_load_rainmodel, relief=FLAT,command=self.input_Data)
+        bInputVdoData.image = render_load_rainmodel
+        bInputVdoData.pack()
+        frameTap.pack(fill=Y, side=LEFT)
+
+    def framePredictVdo(self,tabs,root):
         def preInputLiveData():
+            removeJson()
             label1.configure(text=comboExs.get())
             print(comboExs.get())
             owk = Owk.OpenWorkpout(0, 'predictVdo', comboExs.get(), 'Predict Workout Live')
@@ -60,11 +81,23 @@ class MainPage():
                 owk = Owk.OpenWorkpout(root.filename, 'predictVdo', comboExs.get(), 'Predict Workout VDO')
                 owk._OpenCVpose()
             except AttributeError:
-                messagebox.showinfo('Import File VDO', "Import VDO ")
+                messagebox.showinfo('Upload File VDO', "Upload VDO ")
 
-        PrframeVdo = Frame(root, bd="3", relief=GROOVE, padx=10, pady=10, bg='snow')
-        PrframeVdo.pack()
-        labelTop = tk.Label(PrframeVdo, text="Choose your exercise", bg='snow')
+        PrframeVdo = Frame(tabs, bd=10, relief=FLAT, padx=42.5, pady=10, bg='#444953')
+        PrframeVdo2 = Frame(PrframeVdo, relief=FLAT, padx=42.5, pady=10, bg='#444953')
+        PrframeVdo.pack(fill=X, expand=True)
+        PrframeVdo2.pack()
+        load_bpredictLive = Image.open('pic/gui/b_predictLive.png')
+        render_load_bpredictLive = ImageTk.PhotoImage(load_bpredictLive)
+        load_bpredictVDO = Image.open('pic/gui/b_predictVDO.png')
+        render_load_bpredictVDO = ImageTk.PhotoImage(load_bpredictVDO)
+        load_Lpredictworkout = Image.open('pic/gui/label_predictWorkout.png')
+        render_load_Lpredictworkou = ImageTk.PhotoImage(load_Lpredictworkout)
+
+        labelTop = tk.Label(PrframeVdo, bd=10, text="Choose your exercise", bg='#444953', font='Times 10 bold',
+                            fg='snow', image=render_load_Lpredictworkou)
+        labelTop.image = render_load_Lpredictworkou
+
         value = [
             "Push Ups",
             "Squat",
@@ -72,11 +105,13 @@ class MainPage():
             "Dumbbell Shoulder Press",
             "Barbell Curl"]
 
-        comboExs = ttk.Combobox(PrframeVdo, values=value)
+        comboExs = ttk.Combobox(PrframeVdo2, values=value)
         comboExs.current(1)
 
-        bPredictVdo = Button(PrframeVdo, text="Predict VDO", command=preInputVdoData)
-        bPredictLive = Button(PrframeVdo, text="Predict Live", command=preInputLiveData)
+        bPredictVdo = Button(PrframeVdo, text="Predict VDO", command=preInputVdoData, image=render_load_bpredictVDO)
+        bPredictLive = Button(PrframeVdo, text="Predict Live", command=preInputLiveData, image=render_load_bpredictLive)
+        bPredictLive.image = render_load_bpredictLive
+        bPredictVdo.image = render_load_bpredictVDO
 
         label1 = Label(PrframeVdo, text="")
         labelTop.pack(side=TOP)
@@ -84,7 +119,7 @@ class MainPage():
         bPredictVdo.pack(side=LEFT)
         bPredictLive.pack(side=RIGHT)
 
-    def framePredictLive(self, root):
+    def framePredictLive(self, tabs,root):
         def preInputVdoData():
             try:
                 removeJson()
@@ -112,43 +147,58 @@ class MainPage():
             except Exception as e:
                 print(e)
 
-        Prframelive = Frame(root, bd="3", relief=GROOVE, padx=10, pady=10, bg='snow')
-        cen = Label(Prframelive, text="Import Data", bg='snow')
-        bBrowse = Button(Prframelive, text=' 1 - Browse ', bd=3, font=('', 10), padx=5, pady=5, command=self.selection)
-        bInputVdoData = Button(Prframelive, text=" Import File VDO", command=preInputVdoData)
-        bshowpredctWorkout = Button(Prframelive, text="Predict Exercise posture", command=predict)
-        bremoveJson = Button(Prframelive, text="clear data", command=remove_Json)
-        pathlabel = Label(Prframelive, text=" ------------------------------VDO------------------------------",
-                          bg='snow')
-        pathlabel2 = Label(Prframelive, text=" ------------------------------Live------------------------------",
-                           bg='snow')
-        pathlabel3 = Label(Prframelive, text=" Predict Exercise posture", bg='snow')
-        pathlabel6 = Label(Prframelive, text=" ---------------------------clear data---------------------------",
-                           bg='snow')
-        pathlabel4 = Label(Prframelive, text=" ----------------------------------------------------------------",
-                           bg='snow')
-        pathlabel5 = Label(Prframelive, text=" ----------------------------------------------------------------",
-                           bg='snow')
+        Prframelive = Frame(tabs, relief=FLAT, bg='#444953')
+        Prframe_uplode = Frame(Prframelive, relief=RIDGE, bg='#444953')
+        Prframe_live = Frame(Prframe_uplode, relief=RIDGE, padx=10, pady=10, bg='#444953')
+        Prframe_vdo = Frame(Prframe_uplode, relief=RIDGE, padx=10, pady=10, bg='#444953')
+        Prframe_pre = Frame(Prframelive, relief=RIDGE, padx=10, pady=10, bg='#22242A')
 
-        blive = Button(Prframelive, text=' live ', bd=3, font=('', 10), padx=20, pady=20, command=self.pageLive)
-        cen.pack()
-        pathlabel.pack()
+        load_bupload = Image.open('pic/gui/b_upload.png')
+        render_load_bupload = ImageTk.PhotoImage(load_bupload)
+        load_brecord = Image.open('pic/gui/b_record.png')
+        render_load_brecord = ImageTk.PhotoImage(load_brecord)
+        load_bpredict = Image.open('pic/gui/b_predict.png')
+        render_load_bpredict = ImageTk.PhotoImage(load_bpredict)
+        load_Lpredict = Image.open('pic/gui/label_predictType.png')
+        render_load_Lpredict = ImageTk.PhotoImage(load_Lpredict)
+
+        cen = Label(Prframe_uplode, image=render_load_Lpredict)
+        cen.image = render_load_Lpredict
+        bBrowse = Button(Prframelive, text=' 1 - Browse ', bd=3, font=('', 10), padx=5, pady=5, command=self.selection)
+        bInputVdoData = Button(Prframe_vdo, text=" Upload File VDO", command=preInputVdoData,
+                               relief=FLAT, image=render_load_bupload, bg='#444953')
+        bInputVdoData.image = render_load_bupload
+        bshowpredctWorkout = Button(Prframe_pre, text="Predict Exercise posture", command=predict, bg='#22242A',
+                                    image=render_load_bpredict)
+        bshowpredctWorkout.image = render_load_bpredict
+
+        bremoveJson = Button(Prframe_uplode, text="clear data", command=remove_Json, bg='red')
+        pathlabel1 = Label(Prframe_uplode, text=" Predict Exercise posture", bg='#444953', font='Times 10 bold',
+                           fg='snow')
+        blive = Button(Prframe_live, relief=FLAT, command=self.pageLive, image=render_load_brecord, bg='#444953')
+        blive.image = render_load_brecord
+
+        Prframelive.pack(fill=X, expand=True)
+        Prframe_uplode.pack(side=LEFT)
+        # pathlabel1.pack(side=TOP)
+        cen.pack(side=TOP)
+        Prframe_vdo.pack(side=LEFT)
+        Prframe_live.pack(side=LEFT)
+
+        Prframe_pre.pack(fill=X)
+
+        # pathlabel1.pack()
         # bBrowse.pack(side=TOP)
         bInputVdoData.pack(side=TOP)
-        pathlabel2.pack()
         blive.pack()
-        pathlabel6.pack()
-        bremoveJson.pack()
-        pathlabel4.pack()
-        pathlabel3.pack()
-        pathlabel5.pack()
+        # bremoveJson.pack(side=BOTTOM)
         bshowpredctWorkout.pack(side=BOTTOM)
-        Prframelive.pack(side=TOP)
+
         # blive.configure(text='Live Start...')
 
     def framePredictTypeWorkOutData(self, root):
 
-        Prframe = Frame(root, bd="3", relief=GROOVE, padx=10, pady=10, bg='snow')
+        Prframe = Frame(root, bd="3", relief=GROOVE, padx=10, pady=10, bg='#444953')
         Prframe.pack(side=TOP)
         label1 = Label(Prframe, text="Predict Type Workout", bg='snow').grid(row=0, column=0)
         label3 = Label(Prframe, text="   ", bg='snow').grid(row=2, column=0)
@@ -159,7 +209,7 @@ class MainPage():
         bshow5 = Button(Prframe, text="MLPClassifier", command=predict_Mlpc).grid(row=3, column=4)
 
     def _createMenu(self):
-        menubar = Menu(root)
+        menubar = Menu(root, bg='#34383c', fg='snow')
         filemenu = Menu(menubar, tearoff=0)
         # filemenu.add_command(label="New", command=self.donothing)
         filemenu.add_command(label="Train Model", command=self.input_Data)
@@ -186,7 +236,6 @@ class MainPage():
                                                    title="Select file",
                                                    filetypes=(("files mp4", "*.mp4"), ("all files", "*.*")))
         print(root.filename)
-
 
     def input_Data(self):
         print('input_Data')
@@ -230,7 +279,7 @@ class MainPage():
 
         def trainingEx():
             MsgBox = tk.messagebox.askquestion('Import File',
-                                               'Are you sure you wan Training Model " ' + comboExs.get() +' "',
+                                               'Are you sure you wan Training Model " ' + comboExs.get() + ' "',
                                                icon='question')
             if MsgBox == 'yes':
                 # training_knnEx(comboExs.get())
@@ -239,6 +288,7 @@ class MainPage():
                 # training_RandomForestEx(comboExs.get())
                 training_mlpcEx(comboExs.get())
                 messagebox.showinfo("Traning", 'Training Model ' + comboExs.get() + ' finished')
+
         fileTrain = Toplevel(root)
         fileTrain.geometry('800x400')
         fileTrain.title("Training Model/Input Data")
@@ -283,7 +333,7 @@ class MainPage():
         showpic = Toplevel(root)
         showpic.geometry('450x400')
         showpic.title("Show Pic")
-        pwshow = PanedWindow(showpic, bg='snow', orient=VERTICAL)
+        pwshow = PanedWindow(showpic, bg='#444953', orient=VERTICAL)
         pwshow.pack(fill=BOTH, expand=1)
         load = Image.open('pic/' + namepic + '.jpg')
         render = ImageTk.PhotoImage(load)
