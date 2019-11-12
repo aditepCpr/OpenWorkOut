@@ -37,6 +37,7 @@ class MainPage():
         print('GUI Start...')
         root.title("Training")
         root.geometry('800x300')
+        root.resizable(0, 0)
         root.configure(background='#22242A')
 
 
