@@ -52,7 +52,7 @@ def draw_boundary(img, bodyKeypoints, kp, z, Z,nameEx2):
         cv2.line(img, (kp.getLElbow1(), kp.getLElbow2()), (kp.getLWrist1(), kp.getLWrist2()), color, 10)
 
     # ลำตัว
-    if (kp.getNeck1() > 0 and kp.getMidHip2() > 0):
+    if (kp.getNeck1() > 0 and kp.getMidHip2() > 0 and kp.getNeck2() > 0):
         if z[6] == Z and z[7] == Z:
             color = colors1
         else:

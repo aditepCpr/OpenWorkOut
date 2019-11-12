@@ -7,6 +7,7 @@ from body.draw_body import detect_body as dBody
 from body.predict_drowBody import detect_body as pdBody
 from tkinter import *
 import gui
+
 # Import Openpose (Windows/Ubuntu/OSX)
 dir_path = os.path.dirname(os.path.realpath(__file__))
 try:
@@ -54,6 +55,7 @@ class OpenWorkpout:
         try:
             if self.nameEx == 'predictVdo':
                 file_model = open('model/'+self.nameEx2+'/MLPClassifier.pkl', 'rb')
+                # file_model = open('model/'+self.nameEx2+'/Knn.pkl', 'rb')
                 # file_model = open('model/MLPClassifier.pkl', 'rb')
                 self.model = pickle.load(file_model)
                 file_model.close()
@@ -101,10 +103,10 @@ class OpenWorkpout:
                 # print("Body keypoints: \n" + str(datum.poseKeypoints))
                 f = cv2.flip(f1, 1)
 
-                cv2.putText(f, str('close  =  "Q"'), (10, 70), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 255), 2, )
-                cv2.putText(f, str(self.typeWork), (10, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2, )
+                cv2.putText(f, str('close  =  "Q"'), (10, 70), cv2.FONT_HERSHEY_DUPLEX, 1, (0, 255, 255), 1)
+                cv2.putText(f, str(self.typeWork), (10, 100), cv2.FONT_HERSHEY_DUPLEX, 1, (0, 0, 255), 1)
                 if self.nameEx == 'predictVdo':
-                    cv2.putText(f, str(self.nameEx2), (15, 125), cv2.FONT_HERSHEY_SIMPLEX, 1, (65, 166, 42), 2, )
+                    cv2.putText(f, str(self.nameEx2), (10, 125), cv2.FONT_HERSHEY_DUPLEX, 1, (65, 166, 42), 1)
 
                 cv2.imshow('OpenWorkOut', f)
                 # cv2.imshow('OpenWorkOut')
