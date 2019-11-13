@@ -35,7 +35,7 @@ class MainPage():
 
     def pageMain(self):
         print('GUI Start...')
-        root.title("OpenWorkOut by aditep campira v.1")
+        root.title("OpenWorkOut by aditep campira beta v1.0")
         root.geometry('800x330')
         root.resizable(0, 0)
         root.configure(background='#22242A')
