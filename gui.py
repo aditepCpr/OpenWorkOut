@@ -36,36 +36,39 @@ class MainPage():
     def pageMain(self):
         print('GUI Start...')
         root.title("Training")
-        root.geometry('800x300')
+        root.geometry('800x330')
         root.resizable(0, 0)
         root.configure(background='#22242A')
-
 
         self.frameTap(root)
         # self.framePredictLive(root)
         # self.framePredictVdo(root)
         # self.framePredictTypeWorkOutData(root)
 
-
     def frameTap(self, root):
         tab_control = ttk.Notebook(root)
         tab1 = ttk.Frame(tab_control)
         tab2 = ttk.Frame(tab_control)
-        tab_control.add(tab1, text='Predict Exercise')
-        tab_control.add(tab2, text='Predict Workout')
-        self.framePredictLive(tab1,root)
-        self.framePredictVdo(tab2,root)
+        load_tab1 = Image.open('pic/gui/tabs1.png')
+        render_load_tab1 = ImageTk.PhotoImage(load_tab1)
+        load_tab2 = Image.open('pic/gui/tabs2.png')
+        render_load_tab2 = ImageTk.PhotoImage(load_tab2)
+        tab_control.add(tab1, text='Predict Exercise', image=render_load_tab1)
+        tab_control.add(tab2, text='Predict Workout', image=render_load_tab2)
+        tab_control.image = render_load_tab2, render_load_tab1
+        self.framePredictLive(tab1, root)
+        self.framePredictVdo(tab2, root)
         tab_control.pack(expand=1, fill='both')
         frameTap = Frame(root, bd=10, relief=FLAT, bg='#DD6161')
 
         load_rainmodel = Image.open('pic/gui/trainmodel.png')
         render_load_rainmodel = ImageTk.PhotoImage(load_rainmodel)
-        bInputVdoData = Button(root,image=render_load_rainmodel, relief=FLAT,command=self.input_Data)
+        bInputVdoData = Button(root, image=render_load_rainmodel, relief=FLAT, command=self.input_Data)
         bInputVdoData.image = render_load_rainmodel
         bInputVdoData.pack()
         frameTap.pack(fill=Y, side=LEFT)
 
-    def framePredictVdo(self,tabs,root):
+    def framePredictVdo(self, tabs, root):
         def preInputLiveData():
             removeJson()
             label1.configure(text=comboExs.get())
@@ -86,7 +89,7 @@ class MainPage():
 
         PrframeVdo = Frame(tabs, bd=10, relief=FLAT, padx=42.5, pady=10, bg='#444953')
         PrframeVdo2 = Frame(PrframeVdo, relief=FLAT, padx=42.5, pady=10, bg='#444953')
-        PrframeVdo.pack(fill=X, expand=True)
+        PrframeVdo.pack(fill=X, expand=True,side=TOP)
         PrframeVdo2.pack()
         load_bpredictLive = Image.open('pic/gui/b_predictLive.png')
         render_load_bpredictLive = ImageTk.PhotoImage(load_bpredictLive)
@@ -94,9 +97,14 @@ class MainPage():
         render_load_bpredictVDO = ImageTk.PhotoImage(load_bpredictVDO)
         load_Lpredictworkout = Image.open('pic/gui/label_predictWorkout.png')
         render_load_Lpredictworkou = ImageTk.PhotoImage(load_Lpredictworkout)
+        load_label_traing_live = Image.open('pic/gui/label_traing_live.png')
+        render_load_label_traing_live = ImageTk.PhotoImage(load_label_traing_live)
 
-        labelTop = tk.Label(PrframeVdo, bd=10, text="Choose your exercise", bg='#444953', font='Times 10 bold',
-                            fg='snow', image=render_load_Lpredictworkou)
+        labelline = tk.Label(PrframeVdo, bd=10,  bg='#444953', image=render_load_label_traing_live)
+        labelline.image = render_load_label_traing_live
+
+
+        labelTop = tk.Label(PrframeVdo, bd=10, text="Choose your exercise", bg='#444953', font='Times 10 bold', image=render_load_Lpredictworkou)
         labelTop.image = render_load_Lpredictworkou
 
         value = [
@@ -115,12 +123,14 @@ class MainPage():
         bPredictVdo.image = render_load_bpredictVDO
 
         label1 = Label(PrframeVdo, text="")
-        labelTop.pack(side=TOP)
+
         comboExs.pack(side=LEFT)
+        labelline.pack(side=TOP)
+        labelTop.pack(side=TOP)
         bPredictVdo.pack(side=LEFT)
         bPredictLive.pack(side=RIGHT)
 
-    def framePredictLive(self, tabs,root):
+    def framePredictLive(self, tabs, root):
         def preInputVdoData():
             try:
                 removeJson()
@@ -148,7 +158,7 @@ class MainPage():
             except Exception as e:
                 print(e)
 
-        Prframelive = Frame(tabs, relief=FLAT, bg='#444953')
+        Prframelive = Frame(tabs, relief=FLAT, bg='#353F53')
         Prframe_uplode = Frame(Prframelive, relief=RIDGE, bg='#444953')
         Prframe_live = Frame(Prframe_uplode, relief=RIDGE, padx=10, pady=10, bg='#444953')
         Prframe_vdo = Frame(Prframe_uplode, relief=RIDGE, padx=10, pady=10, bg='#444953')
@@ -293,14 +303,30 @@ class MainPage():
         fileTrain = Toplevel(root)
         fileTrain.geometry('800x400')
         fileTrain.title("Training Model/Input Data")
+        fileTrain.resizable(0, 0)
+        fileTrain.configure(background='#22242A')
         # pwTrain1 = PanedWindow(fileTrain, bg='red', orient=VERTICAL)
         # pwTrain1.pack(fill=BOTH, expand=1)
-        Prframe = Frame(fileTrain, bd="3", relief=GROOVE, padx=100, pady=50, bg='snow')
+
+        load_b_train_typeEx = Image.open('pic/gui/b_train_typeEx.png')
+        render_load_b_train_typeEx = ImageTk.PhotoImage(load_b_train_typeEx)
+        load_b_train_workout = Image.open('pic/gui/b_train_workout.png')
+        render_load_b_train_workout = ImageTk.PhotoImage(load_b_train_workout)
+        load_label_traing = Image.open('pic/gui/label_traing.png')
+        render_load_label_traing = ImageTk.PhotoImage(load_label_traing)
+        load_label_traing_live = Image.open('pic/gui/label_traing_live.png')
+        render_load_label_traing_live = ImageTk.PhotoImage(load_label_traing_live)
+        load_brecord = Image.open('pic/gui/b_record.png')
+        render_load_brecord = ImageTk.PhotoImage(load_brecord)
+
+        Prframe = Frame(fileTrain, bd="3", relief=FLAT, padx=100, pady=50, bg='snow')
         Prframe.pack(side=TOP)
-        Prframe2 = Frame(fileTrain, bd="3", relief=GROOVE, padx=20, pady=20, bg='snow')
+        Prframe2 = Frame(fileTrain, bd="3", relief=FLAT, padx=20, pady=20, bg='snow')
         Prframe2.pack()
         labelTop = tk.Label(Prframe,
-                            text="Choose your exercise for inputData and Train_workout", bg='snow')
+                            text="Choose your exercise for inputData and Train_workout", bg='snow',
+                            image=render_load_label_traing)
+        labelTop.image = render_load_label_traing
         labelTop.pack()
         value = [
             "Push Ups",
@@ -309,24 +335,33 @@ class MainPage():
             "Dumbbell Shoulder Press",
             "Barbell Curl",
             "unknown"]
+        load_b_upload = Image.open('pic/gui/b_upload.png')
+        render_load_b_upload = ImageTk.PhotoImage(load_b_upload)
 
         comboExs = ttk.Combobox(Prframe, values=value)
         comboExs.current(1)
-        binputData = Button(Prframe, text="Input Data", command=inputData)
-        btrainType = Button(Prframe2, text="Train_Type", command=trainType)
-        btrainWorkout = Button(Prframe2, text="Train_workout", command=trainingEx)
+        binputData = Button(Prframe, text="Input Data", command=inputData, image=render_load_b_upload)
+        binputData.image = render_load_b_upload
+        btrainType = Button(Prframe2, text="Train_Type", command=trainType, image=render_load_b_train_typeEx)
+        btrainType.image = render_load_b_train_typeEx
+        btrainWorkout = Button(Prframe2, text="Train_workout", command=trainingEx, image=render_load_b_train_workout)
+        btrainWorkout.image = render_load_b_train_workout
         bBrowse = Button(Prframe, text=' Browse ', bd=3, font=('', 10), padx=5, pady=5, command=self.selection)
-        pathlabel2 = Label(Prframe, text=" -----------------------Live-----------------------", bg='snow')
-        blive = Button(Prframe, text=' live ', bd=3, font=('', 10), padx=20, pady=20, command=InputLive)
+        pathlabel2 = Label(Prframe, text=" -----------------------Live-----------------------", bg='snow',
+                           image=render_load_label_traing_live)
+        pathlabel2.image = render_load_label_traing_live
+        blive = Button(Prframe, text=' live ', bd=3, font=('', 10), padx=20, pady=20, command=InputLive,
+                       image=render_load_brecord)
+        blive.image = render_load_brecord
         label1 = Label(Prframe2, text="Training Model", bg='snow')
 
         # print(dict(comboExs))
         comboExs.pack()
         # bBrowse.pack()
-        label1.pack(side=TOP)
-        binputData.pack()
+        # label1.pack(side=TOP)
         pathlabel2.pack()
-        blive.pack()
+        binputData.pack(side=LEFT, expand=True)
+        blive.pack(side=LEFT, expand=True)
         btrainType.pack(side=LEFT)
         btrainWorkout.pack(side=RIGHT)
 
