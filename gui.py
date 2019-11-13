@@ -35,11 +35,22 @@ class MainPage():
 
     def pageMain(self):
         print('GUI Start...')
-        root.title("Training")
+        root.title("OpenWorkOut by aditep campira v.1")
         root.geometry('800x330')
         root.resizable(0, 0)
         root.configure(background='#22242A')
+        style = ttk.Style()
 
+        style.theme_create("AditepStyle", parent="alt", settings={
+            "TNotebook": {"configure": {"tabmargins": [2, 5, 2, 0]}},
+            "TNotebook.Tab": {
+                "configure": {"padding": [5, 1], "background": '#22242A'},
+                "map": {"background": [("selected", '#f0b22a')],
+                        "expand": [("selected", [1, 1, 1, 0])]}},
+            "TFrame": {"configure": {"background": '#22242A'}}
+        })
+
+        style.theme_use("AditepStyle")
         self.frameTap(root)
         # self.framePredictLive(root)
         # self.framePredictVdo(root)
@@ -56,6 +67,7 @@ class MainPage():
         tab_control.add(tab1, text='Predict Exercise', image=render_load_tab1)
         tab_control.add(tab2, text='Predict Workout', image=render_load_tab2)
         tab_control.image = render_load_tab2, render_load_tab1
+
         self.framePredictLive(tab1, root)
         self.framePredictVdo(tab2, root)
         tab_control.pack(expand=1, fill='both')
@@ -87,10 +99,9 @@ class MainPage():
             except AttributeError:
                 messagebox.showinfo('Upload File VDO', "Upload VDO ")
 
-        PrframeVdo = Frame(tabs, bd=10, relief=FLAT, padx=42.5, pady=10, bg='#444953')
-        PrframeVdo2 = Frame(PrframeVdo, relief=FLAT, padx=42.5, pady=10, bg='#444953')
-        PrframeVdo.pack(fill=X, expand=True,side=TOP)
-        PrframeVdo2.pack()
+        PrframeVdo = Frame(tabs, bd=10, relief=FLAT, padx=42.5, pady=10, bg='#353F53')
+        PrframeVdo2 = Frame(PrframeVdo, relief=FLAT, padx=42.5, pady=10, bg='#353F53')
+        PrframeVdo.pack(fill=X, expand=True, side=TOP)
         load_bpredictLive = Image.open('pic/gui/b_predictLive.png')
         render_load_bpredictLive = ImageTk.PhotoImage(load_bpredictLive)
         load_bpredictVDO = Image.open('pic/gui/b_predictVDO.png')
@@ -100,11 +111,11 @@ class MainPage():
         load_label_traing_live = Image.open('pic/gui/label_traing_live.png')
         render_load_label_traing_live = ImageTk.PhotoImage(load_label_traing_live)
 
-        labelline = tk.Label(PrframeVdo, bd=10,  bg='#444953', image=render_load_label_traing_live)
+        labelline = tk.Label(PrframeVdo, bd=10, bg='#353F53', image=render_load_label_traing_live)
         labelline.image = render_load_label_traing_live
 
-
-        labelTop = tk.Label(PrframeVdo, bd=10, text="Choose your exercise", bg='#444953', font='Times 10 bold', image=render_load_Lpredictworkou)
+        labelTop = tk.Label(PrframeVdo, bd=10, text="Choose your exercise", bg='#444953', font='Times 10 bold',
+                            image=render_load_Lpredictworkou)
         labelTop.image = render_load_Lpredictworkou
 
         value = [
@@ -117,8 +128,8 @@ class MainPage():
         comboExs = ttk.Combobox(PrframeVdo2, values=value)
         comboExs.current(1)
 
-        bPredictVdo = Button(PrframeVdo, text="Predict VDO", command=preInputVdoData, image=render_load_bpredictVDO)
-        bPredictLive = Button(PrframeVdo, text="Predict Live", command=preInputLiveData, image=render_load_bpredictLive)
+        bPredictVdo = Button(PrframeVdo, relief=FLAT,text="Predict VDO", command=preInputVdoData, image=render_load_bpredictVDO)
+        bPredictLive = Button(PrframeVdo, relief=FLAT,text="Predict Live", command=preInputLiveData, image=render_load_bpredictLive)
         bPredictLive.image = render_load_bpredictLive
         bPredictVdo.image = render_load_bpredictVDO
 
@@ -129,6 +140,7 @@ class MainPage():
         labelTop.pack(side=TOP)
         bPredictVdo.pack(side=LEFT)
         bPredictLive.pack(side=RIGHT)
+        PrframeVdo2.pack()
 
     def framePredictLive(self, tabs, root):
         def preInputVdoData():
