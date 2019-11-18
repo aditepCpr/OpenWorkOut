@@ -317,9 +317,9 @@ def training_Svc():
     print('training_Svc Finish..')
 
 
-if __name__ == '__main__':
+# if __name__ == '__main__':
 #     training_DecisionTree()
-    training_knn()
+#     training_knn()
 #     training_percep()
 #     training_mlpc()
 #     training_RandomForest()

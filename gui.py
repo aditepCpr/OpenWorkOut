@@ -296,7 +296,7 @@ class MainPage():
             # training_Svc()
             # training_RandomForest()
             # training_percep()
-            training_mlpc()
+            # training_mlpc()
             # training_DecisionTree()
             messagebox.showinfo("Traning", 'Training Model finished')
 
