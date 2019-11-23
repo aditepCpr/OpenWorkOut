@@ -1,5 +1,5 @@
 # OpenWorkOut
-[OpenWorkOut](https://github.com/topkoka/Project1-2 "OpenWorkOut")
+[Project1-2](https://github.com/topkoka/Project1-2 "OpenWorkOut")
 
 ## Update New
   - 29/6/2019.01 อ่านไฟล์ json จากหลาย Path นำข้อมูลมารวมกันและแบ่งกลุ่ม แล้วนำไปเขียนกราฟ และ ทดสอบเรียนรู้ด้วย Knn 
