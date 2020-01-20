@@ -25,4 +25,16 @@
   - 8/11/2019.01 **update GUI
   - 13/11/2019.01 ปรับปรุง GUI เอาปุ่ม ลบข้อมูลออก แก้หน้าตาใหม่
   - 13/11/2019.02 ปรับปรุง UI
-  
+
+**GUI**
+	
+![enter image description here](https://bitbucket.org/topkoka/openworkout/raw/a171160af8f364d6796d4ba29120588e95cf4670/pic/screenshot/predictexe/predictexe.png)![enter image description here](https://bitbucket.org/topkoka/openworkout/raw/a171160af8f364d6796d4ba29120588e95cf4670/pic/screenshot/predictworkout/predictworkout.png)
+
+![enter image description here](https://bitbucket.org/topkoka/openworkout/raw/a171160af8f364d6796d4ba29120588e95cf4670/pic/screenshot/trainmodel/trainmodel.png)
+
+**Presict Workout Live**
+
+![Artboard 1@2x](https://bitbucket.org/topkoka/openworkout/raw/a171160af8f364d6796d4ba29120588e95cf4670/pic/screenshot/predictworkout/livewk.png)
+
+
+![enter image description here](https://bitbucket.org/topkoka/openworkout/raw/a171160af8f364d6796d4ba29120588e95cf4670/pic/screenshot/predictworkout/vdowk.png)
