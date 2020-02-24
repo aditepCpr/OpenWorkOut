@@ -29,7 +29,7 @@
   
   
 ![enter image description here]
-(https://github.com/topkoka/OpenWorkOut/blob/master/pic/code.png?raw=true)
+(https://github.com/topkoka/OpenWorkOut/blob/master/pic/code.png)
 
 **GUI**
 	
