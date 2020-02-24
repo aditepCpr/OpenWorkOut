@@ -26,6 +26,10 @@
   - 13/11/2019.01 ปรับปรุง GUI เอาปุ่ม ลบข้อมูลออก แก้หน้าตาใหม่
   - 13/11/2019.02 ปรับปรุง UI
   - 20/01/2020.01 update readme
+  
+  
+![enter image description here]
+(https://github.com/topkoka/OpenWorkOut/blob/master/pic/code.png?raw=true)
 
 **GUI**
 	
