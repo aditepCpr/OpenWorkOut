@@ -28,8 +28,7 @@
   - 20/01/2020.01 update readme
   
   
-![enter image description here]
-(https://github.com/topkoka/OpenWorkOut/blob/master/pic/code.png)
+![Artboard 1@2x](https://github.com/topkoka/OpenWorkOut/blob/master/pic/code.png)
 
 **GUI**
 	
